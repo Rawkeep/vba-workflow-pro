@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Claude_Preview__preview_start",
+      "Bash(npx --version)",
+      "Bash(curl -sL \"https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js\" -o xlsx.min.js)",
+      "Bash(curl -sL \"https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js\" -o mammoth.min.js)",
+      "Bash(curl -sL \"https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js\" -o chart.min.js)",
+      "Bash(curl -sL \"https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js\" -o jspdf.min.js)",
+      "Bash(curl -sL \"https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js\" -o jspdf-autotable.min.js)",
+      "Bash(ls -la *.js)",
+      "Bash(mkdir -p \"/Users/z_rkb/Downloads/VBA BEAST/fonts\")",
+      "Bash(curl -sL \"https://fonts.gstatic.com/s/ibmplexmono/v19/-F63fjptAgt5VM-kVkqdyU8n5iQ.woff2\" -o ibm-plex-mono-400.woff2)",
+      "Bash(curl -sL \"https://fonts.gstatic.com/s/ibmplexmono/v19/-F6qfjptAgt5VM-kVkqdyU8n3oQ.woff2\" -o ibm-plex-mono-500.woff2)",
+      "Bash(curl -sL \"https://fonts.gstatic.com/s/ibmplexmono/v19/-F6qfjptAgt5VM-kVkqdyU8n1oc.woff2\" -o ibm-plex-mono-600.woff2)",
+      "Bash(curl -sL \"https://fonts.gstatic.com/s/ibmplexmono/v19/-F6qfjptAgt5VM-kVkqdyU8n8oY.woff2\" -o ibm-plex-mono-700.woff2)",
+      "Bash(curl -sL \"https://fonts.gstatic.com/s/dmsans/v15/rP2tp2ywxg089UriI5-g4vlH9VoD8CmcqZG40F9JadbnoEwA.woff2\" -o dm-sans-var.woff2)",
+      "Bash(xxd)",
+      "Bash(curl -sL -A \"Mozilla/5.0 \\(Macintosh; Intel Mac OS X 10_15_7\\) AppleWebKit/537.36 \\(KHTML, like Gecko\\) Chrome/120.0.0.0 Safari/537.36\" \"https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap\" -o fonts.css)",
+      "Bash(curl -sL -A \"Mozilla/5.0 \\(Macintosh; Intel Mac OS X 10_15_7\\) AppleWebKit/537.36\" \"https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap\" -o fonts.css)",
+      "Bash(curl -sL \"https://fonts.gstatic.com/s/dmsans/v17/rP2Yp2ywxg089UriI5-g4vlH9VoD8CmcqYu28qmR9A.woff2\" -o dm-sans.woff2)",
+      "Bash(curl -sL \"https://fonts.gstatic.com/s/ibmplexmono/v20/-F63fjptAgt5VM-kVkqdyU8n5i0g0F9l.woff2\" -o ibm-plex-mono-400.woff2)",
+      "Bash(curl -sL \"https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3twJ8lJPheIV.woff2\" -o ibm-plex-mono-500.woff2)",
+      "Bash(curl -sL \"https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3vAO8lJPheIV.woff2\" -o ibm-plex-mono-600.woff2)",
+      "Bash(curl -sL \"https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3pQP8lJPheIV.woff2\" -o ibm-plex-mono-700.woff2)",
+      "Bash(rm -f fonts.css)",
+      "Bash(ls -la *.woff2)",
+      "Bash(gh auth:*)"
+    ]
+  }
+}

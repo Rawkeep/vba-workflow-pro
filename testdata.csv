@@ -1,0 +1,21 @@
+Name;Alter;Stadt;Gehalt;Abteilung;Eintrittsdatum;Bewertung;E-Mail
+Max Müller;34;Berlin;4500;Vertrieb;2020-03-15;A;max@firma.de
+Anna Schmidt;28;München;3800;Marketing;2021-07-01;B;anna@firma.de
+Peter König;45;Hamburg;5200;IT;2018-11-20;A;peter@firma.de
+Lisa Weber;31;Köln;4100;HR;2019-06-10;C;lisa@firma.de
+Thomas Bauer;52;Frankfurt;6000;Geschäftsführung;2015-01-05;A;thomas@firma.de
+Sandra Hoffmann;26;Stuttgart;3200;Marketing;2022-02-28;B;sandra@firma.de
+Michael Braun;39;Düsseldorf;4800;IT;2017-09-12;A;michael@firma.de
+Julia Fischer;33;Leipzig;3900;Vertrieb;2020-08-22;B;julia@firma.de
+Robert Wagner;47;Nürnberg;5500;IT;2016-04-18;A;robert@firma.de
+Katrin Schulz;29;Dresden;3600;HR;2021-03-30;C;katrin@firma.de
+Hans Zimmermann;55;Hannover;6500;Geschäftsführung;2012-07-01;A;hans@firma.de
+Monika Krause;36;Bremen;4200;Vertrieb;2019-11-15;B;monika@firma.de
+Stefan Lange;42;Essen;4900;IT;2017-02-08;A;stefan@firma.de
+Eva Hartmann;27;Dortmund;3400;Marketing;2022-05-20;B;eva@firma.de
+Klaus Werner;50;Mannheim;5800;Geschäftsführung;2014-10-01;A;klaus@firma.de
+Sabine Meyer;38;Augsburg;4300;HR;2018-08-14;B;sabine@firma.de
+Frank Richter;44;Wiesbaden;5100;Vertrieb;2017-06-25;A;frank@firma.de
+Nicole Böhm;30;Bonn;3700;Marketing;2021-01-12;C;nicole@firma.de
+Jürgen Schmitt;48;Freiburg;5400;IT;2016-12-03;A;juergen@firma.de
+Petra Lehmann;35;Mainz;4000;HR;2020-04-09;B;petra@firma.de
