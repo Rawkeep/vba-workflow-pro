@@ -1,0 +1,32 @@
+{
+  "name": "vba-workflow-pro",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Offline PWA for VBA Analysis and Workflow Automation with Chart.js Visualizations and PDF Export",
+  "author": "Rawkeep",
+  "license": "MIT",
+  "keywords": [
+    "vba",
+    "excel",
+    "automation",
+    "workflow",
+    "pwa",
+    "offline",
+    "chart",
+    "pdf-export"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "docker:build": "docker build -t vba-workflow-pro .",
+    "docker:up": "docker compose up -d"
+  },
+  "dependencies": {
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "express": "^4.21.0",
+    "helmet": "^8.0.0"
+  }
+}
