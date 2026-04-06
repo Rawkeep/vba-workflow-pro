@@ -3,6 +3,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
   root: '.',
+  base: process.env.GITHUB_ACTIONS ? '/vba-workflow-pro/' : '/',
   build: {
     outDir: 'dist',
     emptyOutDir: true,
