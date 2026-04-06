@@ -2,6 +2,7 @@
   "name": "vba-workflow-pro",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "description": "Offline PWA for VBA Analysis and Workflow Automation with Chart.js Visualizations and PDF Export",
   "author": "Rawkeep",
   "license": "MIT",
@@ -19,14 +20,30 @@
     "node": ">=18.0.0"
   },
   "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "start": "node server.js",
+    "cap:ios": "npx cap add ios && npx cap copy ios && npx cap open ios",
+    "cap:android": "npx cap add android && npx cap copy android && npx cap open android",
+    "cap:sync": "npx cap sync",
     "docker:build": "docker build -t vba-workflow-pro .",
     "docker:up": "docker compose up -d"
   },
   "dependencies": {
+    "@capacitor/android": "^8.3.0",
+    "@capacitor/cli": "^7.6.1",
+    "@capacitor/core": "^8.3.0",
+    "@capacitor/ios": "^8.3.0",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
+    "dotenv": "^17.4.1",
     "express": "^4.21.0",
-    "helmet": "^8.0.0"
+    "helmet": "^8.0.0",
+    "stripe": "^22.0.0"
+  },
+  "devDependencies": {
+    "vite": "^6.3.0",
+    "vite-plugin-pwa": "^1.2.0"
   }
 }

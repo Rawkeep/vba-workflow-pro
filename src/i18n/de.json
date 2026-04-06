@@ -1,0 +1,53 @@
+{
+  "app": {
+    "name": "VBA BEAST V3",
+    "tagline": "Excel-Automation Offline"
+  },
+  "nav": {
+    "excel": "Excel-Killer",
+    "word": "Word-Merge",
+    "doccenter": "Dok-Center",
+    "templates": "Vorlagen",
+    "dashboard": "Dashboard",
+    "email": "E-Mail",
+    "database": "Datenbank",
+    "settings": "Einstellungen"
+  },
+  "actions": {
+    "import": "Importieren",
+    "export": "Exportieren",
+    "save": "Speichern",
+    "delete": "Löschen",
+    "run": "Ausführen",
+    "cancel": "Abbrechen",
+    "close": "Schließen",
+    "copy": "Kopieren",
+    "upgrade": "Upgrade"
+  },
+  "entitlements": {
+    "free": "Free",
+    "pro": "PRO",
+    "ai": "AI PRO",
+    "upgrade_title": "PRO Feature",
+    "upgrade_cta": "Upgrade — €9,99/Mo",
+    "later": "Später"
+  },
+  "ai": {
+    "workflow": "Workflow Builder",
+    "profiler": "Daten-Profiler",
+    "formula": "Formel-Assistent",
+    "template": "Template Generator",
+    "settings": "AI Einstellungen",
+    "daily_limit": "Tageslimit erreicht",
+    "key_saved": "API-Key gespeichert",
+    "key_removed": "Key entfernt — Freemium aktiv",
+    "remaining": "{n} frei"
+  },
+  "toast": {
+    "saved": "Gespeichert",
+    "deleted": "Gelöscht",
+    "copied": "Kopiert",
+    "error": "Fehler",
+    "offline": "Offline-Modus"
+  }
+}

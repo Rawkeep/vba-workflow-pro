@@ -1,0 +1,14 @@
+export const VBA_BEAST_VERSION='3.1.0';
+export let S={xH:[],xD:[],xFn:'',xBak:null,wH:[],wD:[],wI:false,wPv:null,log:[],chart:null,filtered:false,
+calcCols:[],savedCases:[],savedIE:[],savedSW:[],macros:[],macRec:false,macSteps:[],pipelines:[],pipeSteps:[],
+selectedRows:new Set(),hiddenCols:new Set(),sortCol:-1,sortDir:'asc',undoStack:[],redoStack:[],
+// Hybrid: Workspace + Schreibtisch
+mode:'workspace', // 'desk' or 'workspace'
+usage:{},recentFiles:[],favorites:[],activeWS:null,_errLog:[]};
+// ══════ APP ERROR LOG ══════
+export function _appLog(msg){S._errLog.push({t:new Date().toISOString(),m:msg});if(S._errLog.length>100)S._errLog.shift();console.warn('[VBA-BEAST]',msg)}
+// ══════ PERFORMANCE: Type/Quality Cache ══════
+export let _typeCache=null,_typeCacheKey='';
+export let _qualCache=null,_qualCacheKey='';
+export function _cacheKey(){return S.xD.length+':'+S.xH.length+':'+S.undoStack.length+':'+(S.xD[0]?S.xD[0].join(','):'')}
+export const _origDetectColTypes_cache=null; // will be overridden after detectColTypes is defined

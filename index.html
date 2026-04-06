@@ -1,19 +1,1434 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="refresh" content="0;url=vba-beast-v3_z.html">
-  <meta name="description" content="VBA Workflow Pro — Offline PWA for VBA Analysis and Workflow Automation with Chart.js Visualizations and PDF Export.">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="VBA Workflow Pro — VBA Analysis & Automation">
-  <meta property="og:description" content="Analyze, visualize and automate VBA workflows. Chart.js dashboards, PDF export, fully offline.">
-  <meta property="og:url" content="https://rawkeep.github.io/vba-workflow-pro/">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="VBA Workflow Pro">
-  <title>VBA Workflow Pro — VBA Analysis & Automation</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="description" content="VBA BEAST V3 — Offline Excel-Automation mit SELECT CASE, IF/ELSE, Makros, Mail-Merge und Batch-Pipeline. 100% lokal, DSGVO-konform.">
+<meta name="author" content="Rawkeep">
+<meta property="og:title" content="VBA BEAST V3 — Excel-Automation Offline">
+<meta property="og:description" content="SELECT CASE · IF/ELSE · Makros · Pipeline · Mail-Merge — 25+ VBA-Features, 100% offline, DSGVO-konform.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#f0a500">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%25' stop-color='%23f0a500'/><stop offset='50%25' stop-color='%23ff453a'/><stop offset='100%25' stop-color='%23bf5af2'/></linearGradient></defs><rect width='100' height='100' rx='20' fill='url(%23g)'/><text x='50' y='68' text-anchor='middle' font-family='system-ui' font-weight='800' font-size='38' fill='white'>V3</text></svg>">
+<title>VBA BEAST V3 — SELECT CASE · IF/ELSE · Makros</title>
 </head>
 <body>
-  <p>Redirecting to <a href="vba-beast-v3_z.html">VBA Workflow Pro</a>...</p>
+<nav id="sb" aria-label="Hauptnavigation"><div id="sb-brand" onclick="T()"><div class="bico">V3</div><span class="btxt">BEAST V3</span></div><div id="sb-nav"></div><div class="mode-toggle" id="mode-toggle" title="Ansichtsmodus wechseln: Schreibtisch zeigt alle Seiten einzeln, Workspace gruppiert Aufgaben"><div class="mt-opt" data-mode="desk" onclick="setMode('desk')" title="Einzelseiten-Ansicht — jede Funktion separat">🗂 Schreibtisch</div><div class="mt-opt active" data-mode="workspace" onclick="setMode('workspace')" title="Projektbasiert — alle Funktionen an einem Ort">🧠 Workspace</div></div><div style="padding:6px 10px;display:none" id="sb-ws-btn"><div class="ni" onclick="toggleWSPanel()" style="padding:6px 0;border:none"><svg width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg><span class="nl">Workspaces</span></div></div><div id="sb-foot">25+ VBA Features<br>SELECT CASE · IF/ELSE<br>Makros · Pipeline<br>100% Offline · DSGVO<br>📖 Anleitung im Menü</div><div id="sb-sig">by Rawkeep</div></nav>
+<button id="mob" onclick="T()" aria-label="Menü öffnen">☰</button>
+<div id="nav-history"><button id="nav-back" onclick="navBack()" disabled title="Zurück (Alt+←)" aria-label="Zurück">◀</button><button id="nav-fwd" onclick="navForward()" disabled title="Vorwärts (Alt+→)" aria-label="Vorwärts">▶</button><span class="nav-crumb" id="nav-crumb"></span></div>
+<button id="theme-toggle" onclick="toggleTheme()" aria-label="Design wechseln">🌙 Dark</button><div id="toast" role="alert" aria-live="polite" aria-atomic="true"></div>
+<div id="ctx-menu"></div>
+<div id="col-filter-dd" class="col-filter-dd"></div>
+<div id="cell-tip" class="cell-tip" style="display:none"></div>
+<button class="fs-toggle" id="fs-toggle" onclick="toggleFullscreen()">⛶ Vollbild</button>
+
+<!-- Keyboard Shortcuts Overlay -->
+<div id="kb-overlay" onclick="if(event.target===this)this.classList.remove('show')">
+<div id="kb-box">
+<h2>⌨ Keyboard Shortcuts</h2>
+<div class="kb-group"><h4>Navigation</h4>
+<div class="kb-row"><span class="kb-desc">Zellen navigieren</span><div class="kb-keys"><kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd></div></div>
+<div class="kb-row"><span class="kb-desc">Zelle bearbeiten</span><div class="kb-keys"><kbd>F2</kbd></div></div>
+<div class="kb-row"><span class="kb-desc">Nächste Zeile / Bestätigen</span><div class="kb-keys"><kbd>Enter</kbd></div></div>
+<div class="kb-row"><span class="kb-desc">Tab zwischen Zellen</span><div class="kb-keys"><kbd>Tab</kbd></div></div>
+</div>
+<div class="kb-group"><h4>Aktionen</h4>
+<div class="kb-row"><span class="kb-desc">Rückgängig</span><div class="kb-keys"><kbd>Ctrl</kbd><kbd>Z</kbd></div></div>
+<div class="kb-row"><span class="kb-desc">Wiederholen</span><div class="kb-keys"><kbd>Ctrl</kbd><kbd>Y</kbd></div></div>
+<div class="kb-row"><span class="kb-desc">Suchen & Ersetzen</span><div class="kb-keys"><kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>F</kbd></div></div>
+<div class="kb-row"><span class="kb-desc">Fullscreen-Modus</span><div class="kb-keys"><kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>X</kbd></div></div>
+<div class="kb-row"><span class="kb-desc">Alle Spalten auto-fit</span><div class="kb-keys"><kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>A</kbd></div></div>
+<div class="kb-row"><span class="kb-desc">Drucken</span><div class="kb-keys"><kbd>Ctrl</kbd><kbd>P</kbd></div></div>
+<div class="kb-row"><span class="kb-desc">Seite zurück</span><div class="kb-keys"><kbd>Alt</kbd><kbd>←</kbd></div></div>
+<div class="kb-row"><span class="kb-desc">Seite vorwärts</span><div class="kb-keys"><kbd>Alt</kbd><kbd>→</kbd></div></div>
+</div>
+<div class="kb-group"><h4>Shortcuts</h4>
+<div class="kb-row"><span class="kb-desc">Diese Hilfe</span><div class="kb-keys"><kbd>Ctrl</kbd><kbd>?</kbd></div></div>
+<div class="kb-row"><span class="kb-desc">Overlay schließen</span><div class="kb-keys"><kbd>Esc</kbd></div></div>
+</div>
+<div style="text-align:center;margin-top:12px"><button class="b bo" onclick="$('kb-overlay').classList.remove('show')">Schließen</button></div>
+</div>
+</div>
+
+<!-- Column Stats Popup -->
+<div id="col-stats"></div>
+<div id="ctx-help-tip"></div>
+
+<!-- Guided Tour -->
+<div id="tour-overlay" class="tour-overlay" style="display:none" onclick="tourEnd()"></div>
+<div id="tour-spot" class="tour-spot" style="display:none"></div>
+<div id="tour-tip" class="tour-tip" style="display:none"></div>
+
+<!-- Drag & Drop Overlay -->
+<div id="drop-zone"><div class="dz-inner"><div class="dz-ico">📂</div><p>Datei hier ablegen</p><div class="dz-sub">XLSX · CSV · JSON · DOCX</div></div></div>
+
+<!-- Print Header / Footer -->
+<div class="print-header"><h2>VBA BEAST V3 — Datenexport</h2><div class="ph-meta" id="print-meta"></div></div>
+<div class="print-footer">VBA BEAST V3 — Erstellt am <span id="print-date"></span> — Seite <span class="print-page"></span></div>
+<div id="drop-zone"><div class="dz-box"><div class="dz-ico">📂</div><div class="dz-txt">Datei hier ablegen</div><div class="dz-sub">XLSX · CSV · TSV · XLS</div></div></div>
+<div id="qsearch"><span style="color:var(--acc)">🔍</span><input type="text" id="qs-input" placeholder="Suchen…" oninput="qSearch(this.value)"><span class="qs-info" id="qs-info"></span><span style="cursor:pointer;color:var(--tx2)" onclick="qSearchClose()">✕</span></div>
+<div id="shortcuts" onclick="if(event.target===this)this.classList.remove('show')"><div class="sk-box"><h3 style="color:var(--acc);margin-bottom:12px">Tastenkürzel</h3><div class="sk-row"><span class="sk-key">Ctrl + Z</span><span>Rückgängig</span></div><div class="sk-row"><span class="sk-key">Ctrl + Y</span><span>Wiederholen</span></div><div class="sk-row"><span class="sk-key">Ctrl + A</span><span>Alle Zeilen auswählen</span></div><div class="sk-row"><span class="sk-key">Ctrl + F</span><span>Schnellsuche</span></div><div class="sk-row"><span class="sk-key">Delete</span><span>Ausgewählte Zeilen löschen</span></div><div class="sk-row"><span class="sk-key">Escape</span><span>Auswahl / Menü schließen</span></div><div class="sk-row"><span class="sk-key">Tab / Shift+Tab</span><span>Nächste / Vorherige Zelle</span></div><div class="sk-row"><span class="sk-key">↑ / ↓</span><span>Zeile hoch / runter (in Zelle)</span></div><div class="sk-row"><span class="sk-key">Shift + Klick</span><span>Bereich auswählen</span></div><div class="sk-row"><span class="sk-key">Rechtsklick</span><span>Kontextmenü (Header / Zelle)</span></div><div class="sk-row"><span class="sk-key">?</span><span>Diese Hilfe anzeigen</span></div><div style="text-align:center;margin-top:14px"><button class="b bo" onclick="$('shortcuts').classList.remove('show')">Schließen</button></div></div></div>
+<div id="autosave-badge">💾 Gespeichert</div>
+<div id="ws-panel"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><h3 style="color:var(--acc);margin:0">Workspaces</h3><span style="cursor:pointer;color:var(--tx2);font-size:18px" onclick="toggleWSPanel()">✕</span></div><div class="row" style="margin-bottom:12px"><input type="text" id="ws-name-input" placeholder="Workspace-Name…" style="flex:1"><button class="b bp bs" onclick="saveWorkspace()">💾 Speichern</button></div><div id="ws-list"></div><div style="margin-top:16px;border-top:1px solid var(--bdr);padding-top:12px"><h3 style="color:var(--tx2);margin-bottom:8px">Letzte Dateien</h3><div id="ws-recent"></div></div></div>
+<div class="sig-wm">Rawkeep</div>
+<div id="mn" role="main">
+
+<!-- HOME -->
+<div class="pg a" id="p-home">
+<h1>VBA BEAST <span style="color:var(--red)">V3</span></h1>
+<p class="sub">Excel bearbeiten · Serienbriefe erstellen · Dokumente automatisieren — 100% offline &amp; DSGVO-konform</p>
+
+<!-- Dashboard KPI Stats -->
+<div id="dash-stats">
+<div class="dash-kpi"><div class="dk-ico">📊</div><div class="dk-val" id="dk-rows">0</div><div class="dk-lbl">Datensätze</div><div class="dk-bar" style="width:0"></div></div>
+<div class="dash-kpi dk-blu"><div class="dk-ico">📋</div><div class="dk-val" id="dk-cols">0</div><div class="dk-lbl">Spalten</div><div class="dk-bar" style="width:0"></div></div>
+<div class="dash-kpi dk-grn"><div class="dk-ico">✅</div><div class="dk-val" id="dk-quality">—</div><div class="dk-lbl">Datenqualität</div><div class="dk-bar" style="width:0"></div></div>
+<div class="dash-kpi dk-pur"><div class="dk-ico">⚡</div><div class="dk-val" id="dk-actions">0</div><div class="dk-lbl">Aktionen heute</div><div class="dk-bar" style="width:0"></div></div>
+<div class="dash-kpi dk-red"><div class="dk-ico">💾</div><div class="dk-val" id="dk-ws">0</div><div class="dk-lbl">Workspaces</div><div class="dk-bar" style="width:0"></div></div>
+</div>
+
+<div id="home-cards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:10px"></div>
+
+<!-- Quick Access -->
+<div class="cd" id="dash-quick" style="display:none">
+<h3 style="color:var(--blu)">⚡ SCHNELLZUGRIFF</h3>
+<div class="row" style="gap:8px;margin-top:8px">
+<button class="b bp" onclick="N('excel');loadDemo()">▶ Demo laden</button>
+<button class="b bb" onclick="N('excel');$('xf').click()">⬆ Import</button>
+<button class="b bpur" onclick="N('word')">✉ Serienbrief</button>
+<button class="b bg" onclick="N('email')">📧 E-Mail</button>
+</div>
+</div>
+
+<!-- Recent Activity -->
+<div class="cd" id="dash-activity-wrap">
+<h3 style="color:var(--acc)">📊 LETZTE AKTIVITÄTEN</h3>
+<div id="dash-activity"><p style="color:var(--tx2);font-size:11px">Noch keine Aktivitäten — lade Daten, um loszulegen</p></div>
+</div>
+
+<!-- Saved Workspaces Grid -->
+<div class="cd" id="dash-ws-wrap" style="display:none">
+<h3 style="color:var(--pur)">🗂 WORKSPACES</h3>
+<div id="dash-ws-grid"></div>
+</div>
+
+<!-- Feature Cards -->
+<div class="cd" style="border-color:rgba(255,77,106,.3)">
+<h3 style="color:var(--red)">🔥 FEATURES</h3>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:8px">
+<div style="padding:10px;background:var(--s2);border-radius:6px"><span class="tg tg-pk">SELECT CASE</span><p style="font-size:11px;color:var(--tx2);margin-top:4px">Case "DE"→"DAP", Case Else→"EXW"</p></div>
+<div style="padding:10px;background:var(--s2);border-radius:6px"><span class="tg tg-o">IF/ELSEIF/ELSE</span><p style="font-size:11px;color:var(--tx2);margin-top:4px">Bedingungsketten mit AND/OR</p></div>
+<div style="padding:10px;background:var(--s2);border-radius:6px"><span class="tg tg-c">PIPELINE</span><p style="font-size:11px;color:var(--tx2);margin-top:4px">Filter→Sort→CASE→Export</p></div>
+<div style="padding:10px;background:var(--s2);border-radius:6px"><span class="tg tg-p">FORMELN</span><p style="font-size:11px;color:var(--tx2);margin-top:4px">=SUMME(), =WENN(), Berechnete Spalten</p></div>
+<div style="padding:10px;background:var(--s2);border-radius:6px"><span class="tg tg-b">MAIL-MERGE</span><p style="font-size:11px;color:var(--tx2);margin-top:4px">Serienbriefe, Etiketten, PDF</p></div>
+<div style="padding:10px;background:var(--s2);border-radius:6px"><span class="tg tg-g">DRAG & DROP</span><p style="font-size:11px;color:var(--tx2);margin-top:4px">Dateien direkt reinziehen</p></div>
+</div>
+</div>
+
+<!-- Keyboard Hint -->
+<div style="text-align:center;margin-top:10px;font:11px var(--mono);color:var(--tx3)">Drücke <kbd style="padding:2px 6px;border-radius:4px;background:var(--s2);border:1px solid var(--bdr);color:var(--acc);font:600 10px var(--mono)">Ctrl</kbd>+<kbd style="padding:2px 6px;border-radius:4px;background:var(--s2);border:1px solid var(--bdr);color:var(--acc);font:600 10px var(--mono)">?</kbd> für alle Shortcuts</div>
+<div style="text-align:center;margin-top:6px"><button class="b bo bs" onclick="tourStart()" style="font-size:10px">🎯 Guided Tour starten</button></div>
+</div>
+
+<!-- EXCEL -->
+<div class="pg" id="p-excel">
+<h2 style="color:var(--acc)">Excel Automation</h2>
+<div class="cd row" style="flex-wrap:wrap;gap:6px;align-items:center">
+<input type="file" id="xf" accept=".xlsx,.xls,.csv,.tsv,.txt" style="display:none" onchange="XI(this)">
+<span class="tb-group">
+<button class="b bp" onclick="$('xf').click()" title="Datei importieren (XLSX, CSV, TSV)" aria-label="Datei importieren">⬆ Import</button>
+<button class="b bo" id="x-local" onclick="XLocal()" title="Lokalen Ordner öffnen" aria-label="Lokalen Ordner öffnen">📂 Lokal</button>
+</span>
+<span class="tb-sep" id="tb-sep-export" style="display:none"></span>
+<span class="tb-group exp-dd-wrap" id="tb-export-group" style="display:none">
+<button class="b bo exp-dd-btn" id="x-exp-btn" onclick="toggleExpDD(event)" title="Exportieren als XLSX, CSV oder PDF" aria-label="Export-Menü öffnen">⬇ Export</button>
+<div class="exp-dd" id="exp-dd">
+<div class="exp-item" onclick="XE();closeExpDD()"><span class="exp-ico">📊</span> XLSX exportieren<span class="exp-hint">.xlsx</span></div>
+<div class="exp-item" onclick="XE('csv');closeExpDD()"><span class="exp-ico">📋</span> CSV exportieren<span class="exp-hint">.csv</span></div>
+<div class="exp-item" onclick="XPDF();closeExpDD()"><span class="exp-ico">📄</span> PDF exportieren<span class="exp-hint">.pdf</span></div>
+</div>
+</span>
+<button class="b bo" id="x-exp" style="display:none" onclick="XE()">⬇ XLSX</button>
+<button class="b bo" id="x-csv" style="display:none" onclick="XE('csv')">⬇ CSV</button>
+<button class="b bo" id="x-pdf" style="display:none" onclick="XPDF()">📄 PDF</button>
+<span class="tb-sep" id="tb-sep-undo" style="display:none"></span>
+<span class="undo-redo" id="x-undoredo" style="display:none">
+<button class="b bo" id="x-undo" onclick="UNDO()" disabled title="Rückgängig (Ctrl+Z)" aria-label="Rückgängig">↩</button>
+<button class="b bo" id="x-redo" onclick="REDO()" disabled title="Wiederholen (Ctrl+Y)" aria-label="Wiederholen">↪</button>
+</span>
+<span class="tb-sep" id="tb-sep-rows" style="display:none"></span>
+<span class="tb-group" id="tb-row-group" style="display:none">
+<button class="b bo" id="x-add" onclick="XAR()" title="Neue Zeile am Ende einfügen" aria-label="Zeile hinzufügen">+ Zeile</button>
+<button class="b bo" id="x-acol" onclick="XAC()" title="Neue Spalte hinzufügen" aria-label="Spalte hinzufügen">+ Spalte</button>
+</span>
+<span class="tb-sep" id="tb-sep-cols" style="display:none"></span>
+<span class="tb-group" id="tb-col-group" style="display:none">
+<button class="b bo" id="x-delcol" onclick="showColPicker(event,'delete')" title="Spalte löschen" aria-label="Spalte löschen">− Spalte</button>
+<button class="b bo" id="x-rencol" onclick="showColPicker(event,'rename')" title="Spalte umbenennen" aria-label="Spalte umbenennen">✏ Umbenennen</button>
+<button class="b bo" id="x-hidecol" onclick="showColPicker(event,'hide')" title="Spalte ein-/ausblenden" aria-label="Spalte ausblenden">👁 Ausblenden</button>
+<span id="x-hidden-badge" class="hidden-cols-badge" style="display:none" onclick="showHiddenCols(event)"></span>
+</span>
+<span class="tb-sep" id="tb-sep-sel" style="display:none"></span>
+<span class="tb-group" id="tb-sel-group" style="display:none">
+<button class="b bo" id="x-selact" onclick="showSelActions(event)" title="Massenaktionen für ausgewählte Zeilen" aria-label="Auswahl-Aktionen">☑ Auswahl</button>
+<button class="b bo" id="x-expsel" onclick="XESel()" title="Nur ausgewählte Zeilen als XLSX exportieren" aria-label="Auswahl exportieren">⬇ Auswahl</button>
+</span>
+<select id="x-sheet" style="display:none;width:140px" onchange="XSheet(this.value)"></select>
+<span id="x-info" style="font:12px var(--mono);color:var(--tx2)"></span>
+<button class="b bo" style="margin-left:auto;padding:5px 8px;font-size:13px" onclick="$('shortcuts').classList.add('show')" title="Alle Tastenkürzel anzeigen (Ctrl+?)" aria-label="Tastenkürzel anzeigen">?</button>
+<span id="rec-badge" style="display:none;margin-left:auto"><span class="rec-dot"></span> <span style="font:600 11px var(--mono);color:var(--red)">REC</span></span>
+</div>
+<div id="formula-bar"><div class="fb-addr" id="fb-addr">—</div><div class="fb-fx">fx</div><input class="fb-input" id="fb-input" placeholder="Zelle auswählen…" onkeydown="fbKeydown(event)" onblur="fbBlur()"><div class="fb-type" id="fb-type"></div></div>
+<div id="data-profile"></div>
+<div id="insights-panel"></div>
+<div id="smart-suggest"></div>
+<div id="quick-actions"><span class="qa-label">Häufig →</span></div>
+<div class="cd" id="x-quick-ops" style="display:none;padding:10px 14px">
+<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+<span style="font:600 10px var(--mono);color:var(--pur);text-transform:uppercase;letter-spacing:.5px;white-space:nowrap">⚡ Schnell-Aktionen:</span>
+<button class="b bo bs" onclick="qopTrimAll()" title="Leerzeichen am Anfang/Ende aller Zellen entfernen">✂ Trimmen</button>
+<button class="b bo bs" onclick="qopRemoveEmpty()" title="Alle komplett leeren Zeilen löschen">🗑 Leere Zeilen</button>
+<button class="b bo bs" onclick="qopRemoveDupes()" title="Duplikate basierend auf erster Spalte entfernen">♻ Duplikate entf.</button>
+<button class="b bo bs" onclick="qopFillMissing()" title="Leere Zellen mit '—' füllen">📝 Lücken füllen</button>
+<button class="b bo bs" onclick="qopAutoFormat()" title="Zahlen als Zahl, Datum als Datum formatieren">🔄 Auto-Format</button>
+<button class="b bo bs" onclick="qopSortAZ()" title="Nach erster Spalte A→Z sortieren">↕ Sortieren A→Z</button>
+<button class="b bo bs" onclick="qopUpperHeaders()" title="Alle Spaltenüberschriften in GROSSBUCHSTABEN">🔠 Header GROSS</button>
+<button class="b bo bs" onclick="qopStats()" title="Zusammenfassung aller numerischen Spalten generieren">📊 Statistik</button>
+</div>
+</div>
+<div class="cd" id="x-tbl" style="display:none;padding:0"><div class="tw" id="x-tw" style="max-height:520px"></div></div>
+<div id="status-bar"><span class="sb-item">Zeilen: <span class="sb-val" id="sb-rows">0</span></span><span class="sb-item">Spalten: <span class="sb-val" id="sb-cols">0</span></span><span class="sb-item" id="sb-sel-wrap" style="display:none">Auswahl: <span class="sb-val" id="sb-sel">0</span></span><span class="sb-item" id="sb-sum-wrap" style="display:none">Summe: <span class="sb-val" id="sb-sum">0</span></span><span class="sb-item" id="sb-avg-wrap" style="display:none">Ø: <span class="sb-val" id="sb-avg">0</span></span></div>
+
+<div class="tabs" id="x-tabs" style="display:none">
+<span class="tab-group-label">BEREINIGEN</span>
+<div class="tab a" onclick="XT(this,'xtp-sort')" title="Daten nach Spalte auf-/absteigend sortieren">Sortieren</div>
+<div class="tab" onclick="XT(this,'xtp-filter')" title="Zeilen nach Bedingung filtern">Filter</div>
+<div class="tab" onclick="XT(this,'xtp-fnr')" title="Text suchen und ersetzen (Ctrl+Shift+F)">Suchen &amp; Ersetzen</div>
+<div class="tab" onclick="XT(this,'xtp-dedup')" title="Doppelte Zeilen finden und entfernen">Duplikate</div>
+<div class="tab" onclick="XT(this,'xtp-valid')" title="Datenvalidierung: Pflichtfelder, Formate, Regeln">Validierung</div>
+<span class="tab-group-sep"></span>
+<span class="tab-group-label">TRANSFORMIEREN</span>
+<div class="tab" onclick="XT(this,'xtp-case')" title="VBA SELECT CASE — Wert gegen mehrere Fälle prüfen">SELECT CASE</div>
+<div class="tab" onclick="XT(this,'xtp-ifelse')" title="IF/ELSEIF/ELSE — Bedingungsketten mit AND/OR">IF / ELSE</div>
+<div class="tab" onclick="XT(this,'xtp-switch')" title="SWITCH — Spalteninhalt per Mapping umschreiben">SWITCH</div>
+<div class="tab" onclick="XT(this,'xtp-txtfn')" title="Textfunktionen: Groß/Klein, Trim, Split, Verketten">Text</div>
+<div class="tab" onclick="XT(this,'xtp-calc')" title="Berechnete Spalten mit Formeln erstellen">Berechnet</div>
+<div class="tab" onclick="XT(this,'xtp-form')" title="Excel-Formeln: SUMME, WENN, ZÄHLENWENN, etc.">Formeln</div>
+<div class="tab" onclick="XT(this,'xtp-vlook')" title="SVERWEIS — Daten aus einer anderen Spalte nachschlagen">VLOOKUP</div>
+<span class="tab-group-sep"></span>
+<span class="tab-group-label">ANALYSIEREN</span>
+<div class="tab" onclick="XT(this,'xtp-pivot')" title="Pivot-Tabelle: Daten gruppieren und aggregieren">Pivot</div>
+<div class="tab" onclick="XT(this,'xtp-chart')" title="Diagramme erstellen: Balken, Linie, Kreis, etc.">Charts</div>
+<div class="tab" onclick="XT(this,'xtp-cond')" title="Bedingte Formatierung: Zellen farblich hervorheben">Bed. Format.</div>
+<span class="tab-group-sep"></span>
+<span class="tab-group-label">AUTOMATISIEREN</span>
+<div class="tab" onclick="XT(this,'xtp-pipe')" title="Batch-Pipeline: Mehrere Schritte automatisch verketten">Pipeline</div>
+<div class="tab" onclick="XT(this,'xtp-macro')" title="Makros aufzeichnen und wiedergeben">Makros</div>
+</div>
+
+<!-- ⚡ SELECT CASE / CASE ELSE -->
+<div class="tpanel" id="xtp-case"><div class="cd" style="border-color:rgba(236,72,153,.3)">
+<h3 style="color:var(--pk)">SELECT CASE / CASE ELSE <span class="ctx-help" onmouseenter="showHelp(event,'select-case')" onmouseleave="hideHelp()">?</span></h3>
+<p style="font-size:10px;color:var(--tx2);margin-bottom:10px">VBA Select Case als visueller Builder — prüfe einen Wert gegen mehrere Fälle</p>
+<div class="row" style="margin-bottom:8px">
+<span style="font:600 11px var(--mono);color:var(--pk)">SELECT CASE</span>
+<select id="cs-src" style="width:130px"></select>
+<span style="font:11px var(--mono);color:var(--tx2)">→ Ergebnis in</span>
+<select id="cs-tgt" style="width:130px"></select>
+<button class="b bo bs" onclick="csAddNew()">+ Neue Zielspalte</button>
+</div>
+<div id="cs-rows">
+<div class="case-row"><span class="case-kw" style="color:var(--pk)">Case</span><input type="text" placeholder="Wert (z.B. DE)" style="width:120px" class="cs-val"><span class="case-arrow">→</span><input type="text" placeholder="Dann (z.B. DAP)" style="width:150px" class="cs-res"><button class="b bo bs" onclick="this.closest('.case-row').remove()">✕</button></div>
+</div>
+<div class="row" style="margin-top:8px">
+<button class="b bo bs" onclick="csAddRow()">+ Case hinzufügen</button>
+<span style="font:600 11px var(--mono);color:var(--ora);margin-left:8px">Case Else →</span>
+<input type="text" id="cs-else" placeholder="Default-Wert" style="width:150px">
+</div>
+<div class="row" style="margin-top:10px">
+<button class="b bpk" onclick="CS_RUN()">⚡ SELECT CASE ausführen</button>
+<button class="b bo" onclick="CS_SAVE()">💾 Speichern</button>
+<span id="cs-result" style="font-size:11px;color:var(--tx2)"></span>
+</div>
+<div id="cs-saved" style="margin-top:10px"></div>
+<div class="help-box">
+<strong style="color:var(--pk)">VBA Equivalent:</strong><br>
+<code>Select Case [Spalte]</code><br>
+&nbsp;&nbsp;<code>Case "DE": Incoterm = "DAP"</code><br>
+&nbsp;&nbsp;<code>Case "US": Incoterm = "FCA"</code><br>
+&nbsp;&nbsp;<code>Case "NG": Incoterm = "CFR"</code><br>
+&nbsp;&nbsp;<code>Case Else: Incoterm = "EXW"</code><br>
+<code>End Select</code><br><br>
+<strong>Erweitert:</strong> Bereiche mit <code>&gt;</code> <code>&lt;</code> <code>&gt;=</code> <code>&lt;=</code> in Case-Wert, z.B. <code>&gt;1000</code> oder <code>&gt;=5000</code>
+</div>
+</div></div>
+
+<!-- ⚡ IF/ELSEIF/ELSE mit AND/OR -->
+<div class="tpanel" id="xtp-ifelse"><div class="cd" style="border-color:rgba(249,115,22,.3)">
+<h3 style="color:var(--ora)">IF / ELSEIF / ELSE Ketten <span class="ctx-help" onmouseenter="showHelp(event,'if-else')" onmouseleave="hideHelp()">?</span></h3>
+<p style="font-size:10px;color:var(--tx2);margin-bottom:10px">Mehrstufige Bedingungen mit AND/OR — wie VBA If...ElseIf...Else...End If</p>
+<div class="row" style="margin-bottom:6px">
+<span style="font:11px var(--mono);color:var(--tx2)">Zielspalte:</span>
+<select id="ie-tgt" style="width:130px"></select>
+<button class="b bo bs" onclick="ieAddNew()">+ Neue Zielspalte</button>
+</div>
+<div id="ie-chain">
+<div class="ie-block" data-type="if">
+<div class="row" style="padding:6px 0;border-bottom:1px solid var(--bdr)">
+<span class="case-kw" style="color:var(--grn)">IF</span>
+<select class="ie-col" style="width:110px"></select>
+<select class="ie-op" style="width:60px"><option>=</option><option>≠</option><option value=">">&gt;</option><option value="<">&lt;</option><option value=">=">&gt;=</option><option value="<=">&lt;=</option><option>enthält</option><option>leer</option><option>nicht leer</option></select>
+<input type="text" class="ie-val" placeholder="Wert" style="width:100px">
+<select class="ie-logic" style="width:60px;display:none"><option>AND</option><option>OR</option></select>
+<button class="b bo bs" onclick="ieAddCond(this)">+AND/OR</button>
+<span class="case-arrow">→</span>
+<input type="text" class="ie-res" placeholder="Dann" style="width:120px">
+</div>
+</div>
+</div>
+<div class="row" style="margin-top:6px">
+<button class="b bo bs" onclick="ieAddElseIf()">+ ElseIf</button>
+<span style="font:600 11px var(--mono);color:var(--ora);margin-left:8px">Else →</span>
+<input type="text" id="ie-else" placeholder="Sonst-Wert" style="width:140px">
+</div>
+<div class="row" style="margin-top:10px">
+<button class="b bora" onclick="IE_RUN()">⚡ IF/ELSE ausführen</button>
+<button class="b bo" onclick="IE_SAVE()">💾 Speichern</button>
+<span id="ie-result" style="font-size:11px;color:var(--tx2)"></span>
+</div>
+<div id="ie-saved" style="margin-top:10px"></div>
+<div class="help-box">
+<strong style="color:var(--ora)">VBA Equivalent:</strong><br>
+<code>If Land="DE" And Betrag&gt;1000 Then</code><br>
+&nbsp;&nbsp;<code>Status = "Premium DE"</code><br>
+<code>ElseIf Land="US" Then</code><br>
+&nbsp;&nbsp;<code>Status = "US Standard"</code><br>
+<code>Else</code><br>
+&nbsp;&nbsp;<code>Status = "International"</code><br>
+<code>End If</code>
+</div>
+</div></div>
+
+<!-- ⚡ BATCH PIPELINE -->
+<div class="tpanel" id="xtp-pipe"><div class="cd" style="border-color:rgba(34,211,238,.3)">
+<h3 style="color:var(--cyn)">BATCH TRANSFORM PIPELINE <span class="ctx-help" onmouseenter="showHelp(event,'pipeline')" onmouseleave="hideHelp()">?</span></h3>
+<p style="font-size:10px;color:var(--tx2);margin-bottom:10px">Mehrere Operationen als Kette ausführen — wie ein VBA Sub mit mehreren Schritten</p>
+<div class="row" style="margin-bottom:8px">
+<span style="font:11px var(--mono);color:var(--tx2)">Schritt hinzufügen:</span>
+<select id="pp-type" style="width:140px">
+<option value="sort">Sortieren</option>
+<option value="filter">Filtern</option>
+<option value="text">Text-Funktion</option>
+<option value="sr">Suchen/Ersetzen</option>
+<option value="dedup">Duplikate entf.</option>
+<option value="case">SELECT CASE (gespeichert)</option>
+<option value="ifelse">IF/ELSE (gespeichert)</option>
+<option value="switch">SWITCH (gespeichert)</option>
+<option value="export">Export XLSX</option>
+</select>
+<button class="b bcyn" onclick="ppAdd()">+ Schritt</button>
+</div>
+<div id="pp-steps"></div>
+<div class="row" style="margin-top:10px">
+<button class="b bcyn" onclick="PP_RUN()">🚀 Pipeline ausführen</button>
+<input type="text" id="pp-name" placeholder="Pipeline-Name" style="width:160px">
+<button class="b bo" onclick="PP_SAVE()">💾 Speichern</button>
+</div>
+<div id="pp-saved" style="margin-top:10px"></div>
+</div></div>
+
+<!-- BERECHNETE SPALTEN -->
+<div class="tpanel" id="xtp-calc"><div class="cd" style="border-color:rgba(167,139,250,.3)">
+<h3 style="color:var(--pur)">Berechnete Spalten <span class="ctx-help" onmouseenter="showHelp(event,'calc-cols')" onmouseleave="hideHelp()">?</span></h3>
+<div class="row" style="margin-bottom:8px"><input type="text" id="calc-name" placeholder="Spaltenname" style="width:140px"><input type="text" id="calc-formula" placeholder="z.B. Menge * Preis" style="width:260px" onkeydown="if(event.key==='Enter')CALC()"><button class="b bpur" onclick="CALC()">⚡</button></div>
+<div class="help-box"><strong style="color:var(--pur)">Syntax:</strong> <code>Menge * Preis</code> · <code>Netto * 1.19</code> · <code>ROUND(x,2)</code> · <code>IF(x&gt;1000,"A","B")</code> · <code>CONCAT(Vor," ",Nach)</code></div>
+<div id="calc-history" style="margin-top:8px"></div>
+</div></div>
+
+<!-- MAKROS -->
+<div class="tpanel" id="xtp-macro"><div class="cd" style="border-color:rgba(255,77,106,.3)">
+<h3 style="color:var(--red)">Makro-Recorder</h3>
+<div class="row" style="margin-bottom:10px"><button class="b bd" id="mac-rec" onclick="MAC_REC()">⏺ Start</button><button class="b bo" id="mac-stop" onclick="MAC_STOP()" style="display:none">⏹ Stopp</button><input type="text" id="mac-name" placeholder="Makro-Name" style="width:160px"><button class="b bo" id="mac-save" onclick="MAC_SAVE()" style="display:none">💾</button></div>
+<div id="mac-current"></div><div id="mac-list"></div>
+</div></div>
+
+<!-- EXISTING TABS -->
+<div class="tpanel" id="xtp-form"><div class="cd"><h3 style="color:var(--acc)">Formeln</h3><p style="font-size:10px;color:var(--tx2);margin-bottom:8px">SUM·AVG·COUNT·COUNTIF·MIN·MAX·MEDIAN·STDEV·SUMIF — auch deutsch: SUMME·MITTELWERT·ANZAHL·STABW·SUMMEWENN</p><div class="row"><input type="text" id="fm-in" placeholder="SUM(Umsatz)" style="width:300px" onkeydown="if(event.key==='Enter')FM()"><button class="b bp" onclick="FM()">▶</button><span id="fm-out"></span></div></div></div>
+<div class="tpanel" id="xtp-cond"><div class="cd"><h3 style="color:var(--acc)">Bedingte Formatierung</h3><div class="row"><select id="cc-col" onchange="XR()" style="width:120px"></select><select id="cc-op" onchange="XR()" style="width:55px"><option value=">">&gt;</option><option>&lt;</option><option value=">=">&gt;=</option><option>&lt;=</option><option>=</option><option>≠</option><option>enthält</option></select><input type="text" id="cc-val" placeholder="Wert" style="width:90px" oninput="XR()"><span id="cc-st"></span></div></div></div>
+<div class="tpanel" id="xtp-pivot"><div class="cd"><h3 style="color:var(--acc)">Pivot</h3><div class="row" style="margin-bottom:10px"><select id="pv-g" style="width:120px"></select><select id="pv-a" style="width:120px"></select><select id="pv-f" style="width:80px"><option>SUM</option><option>AVG</option><option>COUNT</option><option>MIN</option><option>MAX</option><option>MEDIAN</option></select><button class="b bp" onclick="PV()">▶</button></div><div id="pv-out"></div></div></div>
+<div class="tpanel a" id="xtp-sort"><div class="cd"><h3 style="color:var(--acc)">Sortieren</h3><div class="row"><select id="so-col" style="width:140px"></select><select id="so-dir" style="width:80px"><option value="asc">A→Z</option><option value="desc">Z→A</option></select><button class="b bp" onclick="SO()">▶</button></div></div></div>
+<div class="tpanel" id="xtp-filter"><div class="cd"><h3 style="color:var(--acc)">AutoFilter</h3><div class="row" style="margin-bottom:6px"><select id="fi-col" style="width:110px"></select><select id="fi-op" style="width:85px"><option>enthält</option><option>beginnt mit</option><option>endet mit</option><option>=</option><option>≠</option><option value=">">&gt;</option><option>&lt;</option><option>leer</option><option>nicht leer</option></select><input type="text" id="fi-val" placeholder="Wert" style="width:90px"><button class="b bp" onclick="FI()">▶</button><button class="b bo" onclick="FIR()">✕</button></div><div id="fi-info" style="font-size:11px;color:var(--tx2)"></div></div></div>
+<div class="tpanel" id="xtp-fnr"><div class="cd"><h3 style="color:var(--acc)">Suchen & Ersetzen</h3><div class="row"><input type="text" id="sr-find" placeholder="Suchen" style="width:140px"><input type="text" id="sr-rep" placeholder="Ersetzen" style="width:140px"><select id="sr-col" style="width:110px"><option value="__ALL__">Alle</option></select><button class="b bp" onclick="SR()">▶</button></div><div id="sr-out" style="font-size:11px;color:var(--tx2);margin-top:6px"></div></div></div>
+<div class="tpanel" id="xtp-txtfn"><div class="cd"><h3 style="color:var(--acc)">Text</h3><div class="row"><select id="tf-col" style="width:120px"></select><select id="tf-fn" style="width:100px" onchange="$('tf-n').style.display=this.value.includes('(n)')?'':'none'"><option>UPPER</option><option>LOWER</option><option>TRIM</option><option>PROPER</option><option>LEN</option><option>LEFT(n)</option><option>RIGHT(n)</option><option>REVERSE</option></select><input type="number" id="tf-n" placeholder="n" style="width:50px;display:none"><button class="b bp" onclick="TF()">▶</button></div></div></div>
+<div class="tpanel" id="xtp-dedup"><div class="cd"><h3 style="color:var(--acc)">Duplikate</h3><div class="row"><select id="dd-col" style="width:140px"></select><button class="b bd" onclick="DD()">Entfernen</button></div><div id="dd-out" style="font-size:11px;color:var(--tx2);margin-top:6px"></div></div></div>
+<div class="tpanel" id="xtp-vlook"><div class="cd"><h3 style="color:var(--acc)">VLOOKUP</h3><div class="row"><input type="text" id="vl-val" placeholder="Suchwert" style="width:110px"><select id="vl-scol" style="width:100px"></select><select id="vl-rcol" style="width:100px"></select><button class="b bp" onclick="VL()">▶</button></div><div id="vl-out" style="margin-top:8px"></div></div></div>
+<!-- ⚡ PRÜFEN / VALIDIERUNG -->
+<div class="tpanel" id="xtp-valid"><div class="cd" style="border-color:rgba(0,224,142,.3)">
+<h3 style="color:var(--grn)">✓ Prüfspalten & Datenvalidierung <span class="ctx-help" onmouseenter="showHelp(event,'validierung')" onmouseleave="hideHelp()">?</span></h3>
+<p style="font-size:10px;color:var(--tx2);margin-bottom:10px">Neue Spalte mit Prüfergebnis erstellen — wie VBA IsEmpty, IsNumeric, Like</p>
+<div class="row" style="margin-bottom:6px">
+<span style="font:600 11px var(--mono);color:var(--grn)">PRÜFE</span>
+<select id="vd-col" style="width:120px"></select>
+<select id="vd-type" style="width:160px">
+<option value="empty">Ist leer? (IsEmpty)</option>
+<option value="filled">Ist gefüllt? (Not Empty)</option>
+<option value="numeric">Ist Zahl? (IsNumeric)</option>
+<option value="email">Ist E-Mail? (@-Prüfung)</option>
+<option value="duplicate">Ist Duplikat?</option>
+<option value="len_min">Mindestlänge (Len &gt;= n)</option>
+<option value="len_max">Maximallänge (Len &lt;= n)</option>
+<option value="between">Wert zwischen X und Y?</option>
+<option value="in_list">Wert in Liste? (IN)</option>
+<option value="regex">Muster (Like/RegExp)</option>
+<option value="starts">Beginnt mit?</option>
+<option value="ends">Endet mit?</option>
+<option value="contains_num">Enthält Zahlen?</option>
+<option value="all_upper">Alles Großbuchstaben?</option>
+</select>
+</div>
+<div class="row" style="margin-bottom:6px">
+<input type="text" id="vd-p1" placeholder="Parameter 1 (n / Min / Muster / Liste)" style="width:200px">
+<input type="text" id="vd-p2" placeholder="Parameter 2 (Max)" style="width:120px">
+<span style="font:11px var(--mono);color:var(--tx2)">→ Ergebnis in:</span>
+<input type="text" id="vd-out" placeholder="Neue Spalte" style="width:130px" value="Prüfung">
+</div>
+<div class="row" style="margin-bottom:6px">
+<span style="font:11px var(--mono);color:var(--tx2)">Ergebnis-Format:</span>
+<select id="vd-fmt" style="width:140px">
+<option value="bool">✓ / ✗</option>
+<option value="jn">Ja / Nein</option>
+<option value="10">1 / 0</option>
+<option value="custom">Eigene Werte</option>
+</select>
+<input type="text" id="vd-ctrue" placeholder="Wahr-Wert" style="width:80px;display:none">
+<input type="text" id="vd-cfalse" placeholder="Falsch-Wert" style="width:80px;display:none">
+</div>
+<div class="row">
+<button class="b bg" onclick="VD_RUN()">✓ Prüfung ausführen</button>
+<span id="vd-result" style="font-size:11px;color:var(--tx2)"></span>
+</div>
+<div class="help-box" style="margin-top:8px">
+<strong style="color:var(--grn)">Beispiele:</strong><br>
+<code>Email</code> + <code>Ist E-Mail?</code> → Prüft ob @ enthalten<br>
+<code>Betrag</code> + <code>Wert zwischen</code> 1000 / 5000 → Prüft ob im Bereich<br>
+<code>Land</code> + <code>Wert in Liste</code> → <code>DE,US,NG,GH</code> → Ist Land in der Liste?<br>
+<code>PLZ</code> + <code>Muster</code> → <code>^\d{5}$</code> → 5 Ziffern (deutsche PLZ)?<br>
+<code>HS-Code</code> + <code>Mindestlänge</code> → <code>6</code> → Hat HS-Code mind. 6 Zeichen?<br>
+<code>Name</code> + <code>Ist Duplikat?</code> → Findet doppelte Namen
+</div>
+</div></div>
+
+<!-- ⚡ SWITCH (Multi-Column Case) -->
+<div class="tpanel" id="xtp-switch"><div class="cd" style="border-color:rgba(34,211,238,.3)">
+<h3 style="color:var(--cyn)">SWITCH — Multi-Spalten-Verzweigung</h3>
+<p style="font-size:10px;color:var(--tx2);margin-bottom:10px">Wie SELECT CASE, aber prüft Kombinationen aus mehreren Spalten gleichzeitig</p>
+<div class="row" style="margin-bottom:6px">
+<span style="font:11px var(--mono);color:var(--tx2)">Ergebnis in:</span>
+<select id="sw-tgt" style="width:120px"></select>
+<button class="b bo bs" onclick="swAddNew()">+ Neue Spalte</button>
+</div>
+<div id="sw-rows">
+<div class="sw-rule"><div class="row" style="padding:6px 0;border-bottom:1px solid var(--bdr)">
+<span class="case-kw" style="color:var(--cyn)">WENN</span>
+<select class="sw-col1" style="width:100px"></select><select class="sw-op1" style="width:50px"><option>=</option><option>≠</option><option value=">">&gt;</option><option value="<">&lt;</option><option>enthält</option></select><input type="text" class="sw-val1" placeholder="Wert" style="width:70px">
+<select class="sw-logic" style="width:50px"><option>AND</option><option>OR</option></select>
+<select class="sw-col2" style="width:100px"></select><select class="sw-op2" style="width:50px"><option>=</option><option>≠</option><option value=">">&gt;</option><option value="<">&lt;</option><option>enthält</option></select><input type="text" class="sw-val2" placeholder="Wert" style="width:70px">
+<span class="case-arrow">→</span><input type="text" class="sw-res" placeholder="Dann" style="width:90px">
+<button class="b bo bs" onclick="this.closest('.sw-rule').remove()">✕</button>
+</div></div>
+</div>
+<div class="row" style="margin-top:6px">
+<button class="b bo bs" onclick="swAddRule()">+ Regel</button>
+<span style="font:600 11px var(--mono);color:var(--ora)">Else →</span>
+<input type="text" id="sw-else" placeholder="Default" style="width:120px">
+</div>
+<div class="row" style="margin-top:8px">
+<button class="b bcyn" onclick="SW_RUN()">⚡ SWITCH ausführen</button>
+<button class="b bo" onclick="SW_SAVE()">💾 Speichern</button>
+<span id="sw-result" style="font-size:11px;color:var(--tx2)"></span>
+</div>
+<div id="sw-saved" style="margin-top:8px"></div>
+<div class="help-box">
+<strong style="color:var(--cyn)">Beispiele:</strong><br>
+WENN <code>Land=DE AND DG=Ja</code> → <code>Gefahrgut DE (ADR)</code><br>
+WENN <code>Land=US AND Betrag&gt;10000</code> → <code>US Export License</code><br>
+WENN <code>Incoterm=CIF OR Incoterm=CFR</code> → <code>Versicherung prüfen</code><br>
+Else → <code>Standard</code>
+</div>
+</div></div>
+
+<div class="tpanel" id="xtp-chart"><div class="cd"><h3 style="color:var(--acc)">Charts</h3>
+<div class="chart-type-grid">
+<button class="chart-type-btn active" onclick="setChartType('bar',this)">📊 Balken</button>
+<button class="chart-type-btn" onclick="setChartType('line',this)">📈 Linie</button>
+<button class="chart-type-btn" onclick="setChartType('pie',this)">🥧 Kreis</button>
+<button class="chart-type-btn" onclick="setChartType('doughnut',this)">🍩 Donut</button>
+<button class="chart-type-btn" onclick="setChartType('radar',this)">🕸 Radar</button>
+<button class="chart-type-btn" onclick="setChartType('polarArea',this)">🎯 Polar</button>
+<button class="chart-type-btn" onclick="setChartType('waterfall',this)">💧 Wasserfall</button>
+<button class="chart-type-btn" onclick="setChartType('gauge',this)">⏱ Gauge</button>
+</div>
+<select id="ch-type" style="display:none"><option value="bar">Balken</option><option value="line">Linie</option><option value="pie">Kreis</option><option value="doughnut">Donut</option><option value="radar">Radar</option><option value="polarArea">Polar</option><option value="waterfall">Wasserfall</option><option value="gauge">Gauge</option></select>
+<div class="row" style="margin-bottom:10px;gap:6px"><select id="ch-label" style="width:120px"></select><select id="ch-data" style="width:120px"></select><select id="ch-data2" style="width:120px;display:none"><option value="">2. Datenreihe…</option></select><button class="b bp" onclick="CH()">▶ Erstellen</button><button class="b bo bs" onclick="exportChartPNG()">📷</button></div>
+<div class="chart-wrap" id="ch-wrap" style="display:none"><canvas id="ch-canvas"></canvas></div>
+<div class="gauge-wrap" id="gauge-wrap" style="display:none"><canvas id="gauge-canvas"></canvas><div class="gauge-val" id="gauge-val"></div></div>
+</div></div>
+
+<div class="cd empty-onboard" id="x-empty">
+<div style="border:2px dashed rgba(240,165,0,.3);border-radius:16px;padding:28px 20px 20px;text-align:center;transition:border-color .2s,background .2s;cursor:pointer" onclick="$('xf').click()" onmouseenter="this.style.borderColor='rgba(240,165,0,.6)';this.style.background='rgba(240,165,0,.03)'" onmouseleave="this.style.borderColor='rgba(240,165,0,.3)';this.style.background='transparent'">
+<div style="font-size:40px;margin-bottom:6px">📂</div>
+<h3 style="color:var(--acc);margin-bottom:4px;font-size:16px">Datei hierher ziehen oder klicken</h3>
+<p style="font-size:12px;color:var(--tx2);margin-bottom:0">XLSX · CSV · TSV · XLS — oder klicke zum Auswählen</p>
+</div>
+<div class="row" style="justify-content:center;margin:14px 0;gap:8px">
+<button class="b bp" onclick="$('xf').click()" title="Datei vom Computer auswählen" aria-label="Datei importieren">⬆ Datei importieren</button>
+<button class="b bg" onclick="loadDemo()" title="Demo-Daten laden, um die Funktionen auszuprobieren" aria-label="Demo-Daten laden">▶ Demo starten</button>
+<button class="b bo" onclick="$('shortcuts').classList.add('show')" title="Alle Tastenkürzel anzeigen" aria-label="Tastenkürzel">? Tastenkürzel</button>
+</div>
+<p style="font:600 10px var(--mono);color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Oder starte mit Demo-Daten:</p>
+<div class="eo-grid">
+<div class="eo-card" onclick="loadDemo('sendungen')"><div class="eo-ico">🚢</div><div class="eo-title">Sendungsliste</div><div class="eo-desc">12 Exportsendungen — ideal für <strong style="color:var(--pk)">SELECT CASE</strong></div></div>
+<div class="eo-card" onclick="loadDemo('rechnungen')"><div class="eo-ico">🧾</div><div class="eo-title">Rechnungen</div><div class="eo-desc">10 Rechnungen — ideal für <strong style="color:var(--pur)">Berechnete Spalten</strong></div></div>
+<div class="eo-card" onclick="loadDemo('kunden')"><div class="eo-ico">👥</div><div class="eo-title">Kundenstamm</div><div class="eo-desc">15 Kunden — ideal für <strong style="color:var(--blu)">Mail-Merge</strong></div></div>
+<div class="eo-card" onclick="loadDemo('container')"><div class="eo-ico">📦</div><div class="eo-title">Container-Tracking</div><div class="eo-desc">8 Container — ideal für <strong style="color:var(--cyn)">Pipeline</strong></div></div>
+</div>
+<div id="recent-files-section" style="display:none;margin-top:16px;text-align:left"><h3 style="color:var(--tx2);margin-bottom:8px;font-size:11px">⏱ LETZTE DATEIEN</h3><div id="recent-files-list"></div></div>
+<div id="saved-ws-section" style="display:none;margin-top:16px;text-align:left"><h3 style="color:var(--tx2);margin-bottom:8px;font-size:11px">💾 GESPEICHERTE WORKSPACES</h3><div id="saved-ws-list"></div></div>
+<div style="font-size:10px;color:var(--tx3);margin-top:14px;display:flex;justify-content:center;gap:16px;flex-wrap:wrap"><span>Drag &amp; Drop</span><span>·</span><span>Rechtsklick auf Header</span><span>·</span><span><kbd style="padding:1px 5px;border-radius:3px;background:var(--s2);border:1px solid var(--bdr);font:9px var(--mono)">?</kbd> Tastenkürzel</span></div>
+</div>
+</div>
+
+<!-- WORD -->
+<div class="pg" id="p-word"><h2 style="color:var(--blu)">Word / Mail-Merge / Etiketten</h2>
+
+<!-- Workflow Steps Hint -->
+<div class="cd" style="padding:10px 16px;border-color:rgba(10,132,255,.2);background:rgba(10,132,255,.03)">
+<div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;font:500 11px var(--mono);color:var(--tx2)">
+<span style="color:var(--blu);font-weight:700;white-space:nowrap">Workflow:</span>
+<span style="display:flex;align-items:center;gap:6px"><span style="background:var(--blu);color:#fff;border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">1</span> Excel-Daten laden</span>
+<span style="color:var(--tx3)">→</span>
+<span style="display:flex;align-items:center;gap:6px"><span style="background:var(--blu);color:#fff;border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">2</span> Dokument-Typ wählen</span>
+<span style="color:var(--tx3)">→</span>
+<span style="display:flex;align-items:center;gap:6px"><span style="background:var(--blu);color:#fff;border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">3</span> Vorlage anpassen</span>
+<span style="color:var(--tx3)">→</span>
+<span style="display:flex;align-items:center;gap:6px"><span style="background:var(--blu);color:#fff;border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">4</span> Vorschau &amp; Export</span>
+</div>
+</div>
+
+<!-- Document Type Selector -->
+<div class="cd" style="padding:12px 18px">
+<div class="row" style="gap:6px;flex-wrap:wrap">
+<span style="font:600 10px var(--mono);color:var(--tx3);text-transform:uppercase;margin-right:4px">DOKUMENT-TYP:</span>
+<button class="b bo bs doc-type-btn active" data-dtype="brief" onclick="setDocType('brief')" title="Geschäftsbrief mit Adresse, Betreff, Text">📄 Brief</button>
+<button class="b bo bs doc-type-btn" data-dtype="rechnung" onclick="setDocType('rechnung')" title="Rechnung mit Positionen, MwSt, Summen">🧾 Rechnung</button>
+<button class="b bo bs doc-type-btn" data-dtype="lieferschein" onclick="setDocType('lieferschein')" title="Lieferschein mit Artikel, Menge, Empfänger">📦 Lieferschein</button>
+<button class="b bo bs doc-type-btn" data-dtype="etikett" onclick="setDocType('etikett')" title="Etiketten-Druck in verschiedenen Formaten">🏷 Etiketten</button>
+<button class="b bo bs doc-type-btn" data-dtype="custom" onclick="setDocType('custom')" title="Eigene Vorlage mit frei definierbarem Layout">✏ Eigenes</button>
+</div>
+</div>
+
+<!-- Template Library -->
+<div class="cd" id="w-tpl-lib">
+<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+<h3 style="color:var(--blu);margin:0">📚 Vorlagen-Bibliothek</h3>
+<div class="row" style="gap:4px">
+<button class="b bo bs" onclick="saveUserTemplate()">💾 Aktuelle speichern</button>
+<select id="w-saved-tpl" style="width:150px;font-size:11px" onchange="loadUserTemplate(this.value)"><option value="">— Gespeicherte —</option></select>
+</div>
+</div>
+<div class="row" style="gap:6px;flex-wrap:wrap;margin-bottom:10px" id="w-tpl-cards"></div>
+</div>
+
+<!-- Briefkopf & Footer Konfiguration -->
+<div class="cd" id="w-docx-cfg">
+<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+<h3 style="color:var(--blu);margin:0">📝 Briefkopf &amp; Footer <span class="ctx-help" onmouseenter="showHelp(event,'briefkopf')" onmouseleave="hideHelp()">?</span></h3>
+<span style="font:400 10px var(--mono);color:var(--tx3)">Wird in jede DOCX-Datei eingebettet</span>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+<div>
+<label style="font:600 10px var(--mono);color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px">Briefkopf / Logo</label>
+<input type="file" id="lh-upload" accept="image/png,image/jpeg,image/jpg" style="display:none" onchange="uploadLetterhead(this)">
+<div style="display:flex;gap:6px;align-items:center;margin-bottom:6px">
+<button class="b bo bs" onclick="$('lh-upload').click()" title="Briefkopf-Bild hochladen (PNG/JPG, max 2 MB)">⬆ Bild hochladen</button>
+<span style="font:10px var(--mono);color:var(--tx3)">PNG / JPG · max 2 MB</span>
+</div>
+<div id="lh-preview" style="display:none;align-items:center;gap:8px;margin-top:4px"></div>
+</div>
+<div>
+<label style="font:600 10px var(--mono);color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px">Footer-Zeile</label>
+<div style="display:flex;gap:6px">
+<input type="text" id="w-footer-input" placeholder="z.B. Firma GmbH · Musterstr. 1 · Tel: 0123-456" style="flex:1;font-size:11px" oninput="this.dataset.changed='1'">
+<button class="b bo bs" onclick="saveFooterText()" title="Footer-Text speichern">💾</button>
+</div>
+<p style="font:10px var(--mono);color:var(--tx3);margin-top:4px">Zentriert am Seitenende jeder Seite</p>
+</div>
+</div>
+</div>
+
+<!-- Label Layout Selector (hidden by default) -->
+<div class="cd" id="w-label-cfg" style="display:none">
+<h3 style="color:var(--pur);margin-bottom:8px">🏷 Etiketten-Layout</h3>
+<div class="row" style="gap:8px;flex-wrap:wrap;margin-bottom:10px">
+<button class="b bo bs label-layout-btn" onclick="setLabelLayout('avery3422')">Avery 3422 (2×7)</button>
+<button class="b bo bs label-layout-btn" onclick="setLabelLayout('avery3474')">Avery 3474 (3×8)</button>
+<button class="b bo bs label-layout-btn" onclick="setLabelLayout('avery3659')">Avery 3659 (2×5)</button>
+<button class="b bo bs label-layout-btn" onclick="setLabelLayout('a5half')">A5 Halb (2/Seite)</button>
+<button class="b bo bs label-layout-btn" onclick="setLabelLayout('a6quarter')">A6 Viertel (4/Seite)</button>
+<button class="b bo bs label-layout-btn" onclick="setLabelLayout('badge')">Namensschilder (2×4)</button>
+<button class="b bo bs label-layout-btn" onclick="setLabelLayout('custom')" id="label-custom-btn">Eigenes Layout…</button>
+</div>
+<div class="row" style="gap:8px;flex-wrap:wrap">
+<div><label style="font:10px var(--mono);color:var(--tx2)">Spalten</label><input type="number" id="lbl-cols" value="2" min="1" max="5" style="width:60px" onchange="updateLabelPreview()"></div>
+<div><label style="font:10px var(--mono);color:var(--tx2)">Zeilen</label><input type="number" id="lbl-rows" value="5" min="1" max="12" style="width:60px" onchange="updateLabelPreview()"></div>
+<div><label style="font:10px var(--mono);color:var(--tx2)">Breite mm</label><input type="number" id="lbl-w" value="85" min="20" max="200" style="width:60px"></div>
+<div><label style="font:10px var(--mono);color:var(--tx2)">Höhe mm</label><input type="number" id="lbl-h" value="50" min="10" max="150" style="width:60px"></div>
+<span style="font:11px var(--mono);color:var(--acc)" id="lbl-info">10 Etiketten/Seite</span>
+</div>
+</div>
+
+<!-- Template Editor -->
+<div class="cd"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px"><h3 style="color:var(--blu);margin:0">Template</h3><div class="row"><input type="file" id="dx" accept=".docx" style="display:none" onchange="DI(this)"><button class="b bo bs" onclick="$('dx').click()">⬆ DOCX</button><button class="b bo bs" onclick="insertField()">+ Feld</button><button class="b bo bs" onclick="insertFieldFromData()" id="w-insert-data" style="display:none">+ Aus Daten</button><button class="b bg bs" onclick="autoGenTemplate()" id="w-auto-tpl" style="display:none" title="Template aus allen Datenspalten generieren">⚡ Auto</button></div></div><textarea id="w-tpl" rows="18" style="width:100%;resize:vertical;line-height:1.7;font-size:13px" oninput="UP()">Sendung: {{Sendungsnr}}
+Kunde: {{Kunde}}
+Datum: {{Datum}}
+
+Sehr geehrter Kunde,
+
+Ihre Sendung nach {{Hafen}}, {{Land}} (Incoterm: {{Incoterm}}) ist {{Status}}.
+
+Gewicht: {{Gewicht_kg}} kg
+Wert: {{Betrag_EUR}} EUR
+Gefahrgut: {{Gefahrgut}}
+
+Mit freundlichen Grüßen</textarea><div id="w-ph" style="margin-top:8px"></div><div id="w-ph-warn" style="display:none;margin-top:6px;padding:6px 10px;background:rgba(255,160,0,.12);border:1px solid rgba(255,160,0,.3);border-radius:6px;font:600 11px var(--mono);color:#ffa000"></div></div>
+
+<!-- Data Source -->
+<div class="cd"><h3 style="color:var(--blu)">Datenquelle</h3><div class="row" style="margin-bottom:8px"><input type="file" id="wf" accept=".xlsx,.xls,.csv" style="display:none" onchange="WI(this)"><button class="b bb" onclick="$('wf').click()">⬆ XLSX</button><button class="b bo" id="w-use" style="display:none" onclick="WU()">Excel übern.</button></div><div id="w-dt" style="display:none"><div class="tw" id="w-dw" style="max-height:260px"></div></div></div>
+
+<!-- Merge Output -->
+<div class="cd" id="w-merge" style="display:none"><h3 style="color:var(--blu)">Seriendokumente</h3>
+<div class="row" style="margin-bottom:6px" id="w-pvs"></div>
+<div class="row" style="margin-bottom:8px;flex-wrap:wrap;gap:4px">
+<button class="b bb" id="w-all" onclick="WEA()" title="Alle Serienbriefe als echte DOCX-Dateien exportieren">⬇ Alle .docx</button>
+<button class="b bo" id="w-ep" style="display:none" onclick="WES()" title="Aktuelle Vorschau als DOCX exportieren">⬇ Vorschau .docx</button>
+<button class="b bpur" id="w-allpdf" onclick="WEAPDF()">📄 Alle PDF</button>
+<button class="b bo" id="w-eppdf" style="display:none" onclick="WESPDF()">📄 Vorschau PDF</button>
+<button class="b bora" id="w-labels-pdf" style="display:none" onclick="exportLabelsPDF()">🏷 Etiketten PDF</button>
+<button class="b bg" onclick="WPD()">🖨</button>
+</div>
+<div id="w-pvbox" style="display:none" class="pv"></div>
+</div>
+<div class="cd empty" id="w-empty"><p>Datenquelle laden oder "Excel übern." klicken</p></div></div>
+
+<!-- DOKUMENTEN-CENTER -->
+<div class="pg" id="p-doccenter">
+<h2 style="color:var(--ora)">Dokumenten-Center</h2>
+<p style="font-size:12px;color:var(--tx2);margin:-6px 0 12px">Vorlagen zentral verwalten — Platzhalter definieren — per Trigger aus Excel automatisch generieren</p>
+
+<!-- Workflow -->
+<div class="cd" style="padding:10px 16px;border-color:rgba(255,159,10,.2);background:rgba(255,159,10,.03)">
+<div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;font:500 11px var(--mono);color:var(--tx2)">
+<span style="color:var(--ora);font-weight:700;white-space:nowrap">Workflow:</span>
+<span style="display:flex;align-items:center;gap:6px"><span style="background:var(--ora);color:#fff;border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">1</span> Vorlagen hochladen</span>
+<span style="color:var(--tx3)">→</span>
+<span style="display:flex;align-items:center;gap:6px"><span style="background:var(--ora);color:#fff;border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">2</span> Trigger-Regeln definieren</span>
+<span style="color:var(--tx3)">→</span>
+<span style="display:flex;align-items:center;gap:6px"><span style="background:var(--ora);color:#fff;border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">3</span> Excel laden &amp; generieren</span>
+</div>
+</div>
+
+<!-- Tab Bar -->
+<div class="tabs" id="dc-tabs">
+<div class="tab a" onclick="dcTab(this,'dc-tpl')">Vorlagen</div>
+<div class="tab" onclick="dcTab(this,'dc-trigger')">Trigger-Regeln</div>
+<div class="tab" onclick="dcTab(this,'dc-batch')">Batch-Export</div>
+</div>
+
+<!-- Tab: Vorlagen -->
+<div id="dc-tpl">
+<div class="cd">
+<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+<h3 style="color:var(--ora);margin:0">📁 Vorlagen-Manager <span class="ctx-help" onmouseenter="showHelp(event,'vorlagen')" onmouseleave="hideHelp()">?</span></h3>
+<div class="row" style="gap:6px">
+<select id="dc-cat-filter" onchange="dcRenderTemplates()" style="font-size:11px;width:140px">
+<option value="">Alle Kategorien</option>
+</select>
+<select id="dc-client-filter" onchange="dcRenderTemplates()" style="font-size:11px;width:120px">
+<option value="">Alle Kunden</option>
+</select>
+<input type="file" id="dc-upload" accept=".docx" style="display:none" onchange="dcUploadTemplate(this)">
+<button class="b bp" onclick="$('dc-upload').click()" title="DOCX-Vorlage hochladen">⬆ Vorlage hochladen</button>
+</div>
+</div>
+
+<!-- New Template Form (hidden by default) -->
+<div id="dc-new-form" style="display:none;background:var(--s2);border-radius:10px;padding:14px;margin-bottom:12px;border:1px solid rgba(255,159,10,.2)">
+<h3 style="color:var(--ora);margin-bottom:8px">Neue Vorlage konfigurieren</h3>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+<div><label style="font:600 10px var(--mono);color:var(--tx2);display:block;margin-bottom:4px">Name</label><input type="text" id="dc-new-name" placeholder="z.B. CMR Frachtbrief" style="width:100%"></div>
+<div><label style="font:600 10px var(--mono);color:var(--tx2);display:block;margin-bottom:4px">Kategorie</label>
+<select id="dc-new-cat" style="width:100%"></select></div>
+<div><label style="font:600 10px var(--mono);color:var(--tx2);display:block;margin-bottom:4px">Kunde / Dienstleister</label><input type="text" id="dc-new-client" placeholder="z.B. DHL, Alle" style="width:100%"></div>
+<div><label style="font:600 10px var(--mono);color:var(--tx2);display:block;margin-bottom:4px">Erkannte Platzhalter</label><div id="dc-new-ph" style="font:10px var(--mono);color:var(--tx3)">—</div></div>
+</div>
+<div style="margin-bottom:8px"><label style="font:600 10px var(--mono);color:var(--tx2);display:block;margin-bottom:4px">Vorlage bearbeiten (Platzhalter mit {{Name}} einfügen)</label>
+<textarea id="dc-new-content" rows="10" style="width:100%;resize:vertical;font-size:12px;line-height:1.6" oninput="dcDetectPlaceholders()"></textarea></div>
+<div class="row" style="gap:6px">
+<button class="b bp" onclick="dcSaveTemplate()">💾 Speichern</button>
+<button class="b bo" onclick="$('dc-new-form').style.display='none'">Abbrechen</button>
+</div>
+</div>
+
+<!-- Template Grid -->
+<div id="dc-tpl-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px"></div>
+<div id="dc-tpl-empty" style="text-align:center;padding:30px;color:var(--tx3)">
+<div style="font-size:32px;margin-bottom:8px">📁</div>
+<p style="font:500 12px var(--mono);color:var(--tx2)">Noch keine Vorlagen hinterlegt</p>
+<p style="font-size:11px;margin-top:6px;color:var(--tx2);max-width:400px;margin-left:auto;margin-right:auto">Lade ein fertiges DOCX hoch oder erstelle eine Vorlage manuell.<br>Setze <strong style="color:var(--acc)">{{Platzhalter}}</strong> ein — die werden beim Export automatisch befüllt.</p>
+<div class="row" style="justify-content:center;gap:8px;margin-top:12px">
+<button class="b bp" onclick="$('dc-upload').click()">⬆ DOCX hochladen</button>
+<button class="b bo" onclick="dcCreateManualTemplate()">✏ Manuell erstellen</button>
+</div>
+<p style="font-size:10px;margin-top:10px">Gefahrgut-Labels · Frachtbriefe · CMR · Zollpapiere · Rechnungen · Etiketten</p>
+<div style="margin-top:16px;border-top:1px solid var(--bdr);padding-top:12px">
+<p style="font:600 10px var(--mono);color:var(--tx2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">📦 Fertige Vorlagen zum Starten:</p>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:6px" id="dc-builtin-grid"></div>
+</div>
+</div>
+</div>
+
+<!-- Category Management -->
+<div class="cd">
+<h3 style="color:var(--pur);margin-bottom:8px">🏷 Kategorien verwalten</h3>
+<div class="row" style="gap:6px;margin-bottom:8px">
+<input type="text" id="dc-cat-name" placeholder="Neue Kategorie…" style="width:150px;font-size:11px">
+<select id="dc-cat-color" style="width:100px;font-size:11px">
+<option value="var(--red)">🔴 Rot</option>
+<option value="var(--ora)">🟠 Orange</option>
+<option value="var(--acc)">🟡 Gelb</option>
+<option value="var(--grn)">🟢 Grün</option>
+<option value="var(--blu)">🔵 Blau</option>
+<option value="var(--pur)">🟣 Lila</option>
+<option value="var(--cyn)">🩵 Cyan</option>
+</select>
+<button class="b bo bs" onclick="dcAddCategory()">+ Hinzufügen</button>
+</div>
+<div id="dc-cat-list" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+</div>
+</div>
+
+<!-- Tab: Trigger-Regeln -->
+<div id="dc-trigger" style="display:none">
+<div class="cd">
+<h3 style="color:var(--ora);margin-bottom:4px">⚡ Trigger-Regeln <span class="ctx-help" onmouseenter="showHelp(event,'trigger-regeln')" onmouseleave="hideHelp()">?</span></h3>
+<p style="font-size:11px;color:var(--tx2);margin-bottom:12px">Definiere, welche Vorlage bei welchem Excel-Wert automatisch generiert wird</p>
+
+<div style="background:var(--s2);border-radius:10px;padding:12px;margin-bottom:12px;border:1px solid var(--bdr)">
+<div style="display:grid;grid-template-columns:1fr auto 1fr 1fr auto;gap:8px;align-items:end">
+<div><label style="font:600 10px var(--mono);color:var(--tx2);display:block;margin-bottom:4px">Wenn Spalte</label>
+<select id="dc-tr-col" style="width:100%;font-size:11px"><option value="">— Excel-Spalte —</option></select></div>
+<div><label style="font:600 10px var(--mono);color:var(--tx2);display:block;margin-bottom:4px">Bedingung</label>
+<select id="dc-tr-op" style="width:80px;font-size:11px"><option value="eq">= gleich</option><option value="contains">enthält</option><option value="starts">beginnt</option></select></div>
+<div><label style="font:600 10px var(--mono);color:var(--tx2);display:block;margin-bottom:4px">Wert</label>
+<input type="text" id="dc-tr-val" placeholder="z.B. CMR, DG" style="width:100%;font-size:11px"></div>
+<div><label style="font:600 10px var(--mono);color:var(--tx2);display:block;margin-bottom:4px">→ Vorlage</label>
+<select id="dc-tr-tpl" style="width:100%;font-size:11px"><option value="">— Vorlage —</option></select></div>
+<button class="b bp bs" onclick="dcAddTrigger()" style="margin-bottom:1px">+ Regel</button>
+</div>
+</div>
+
+<div id="dc-trigger-list"></div>
+<div id="dc-trigger-empty" style="text-align:center;padding:20px;color:var(--tx3);font:11px var(--mono)">Keine Regeln definiert — füge oben eine neue Regel hinzu</div>
+</div>
+</div>
+
+<!-- Tab: Batch-Export -->
+<div id="dc-batch" style="display:none">
+<div class="cd">
+<h3 style="color:var(--ora);margin-bottom:4px">🚀 Batch-Export <span class="ctx-help" onmouseenter="showHelp(event,'batch-export')" onmouseleave="hideHelp()">?</span></h3>
+<p style="font-size:11px;color:var(--tx2);margin-bottom:12px">Alle Excel-Zeilen prüfen, passende Vorlagen zuordnen und Dokumente automatisch generieren</p>
+
+<div class="row" style="gap:8px;margin-bottom:12px">
+<div id="dc-data-status" style="font:11px var(--mono);color:var(--tx3)">Keine Daten geladen</div>
+<button class="b bo bs" onclick="dcUseExcelData()" title="Aktuelle Excel-Daten verwenden">📊 Excel-Daten verwenden</button>
+</div>
+
+<!-- Match Preview -->
+<div id="dc-match-preview" style="display:none">
+<h3 style="color:var(--tx2);margin-bottom:8px;font-size:10px">VORSCHAU — ZUORDNUNG</h3>
+<div class="tw" id="dc-match-table" style="max-height:300px;margin-bottom:12px"></div>
+<div class="row" style="gap:8px">
+<button class="b bp" onclick="dcBatchGenerate()" id="dc-gen-btn">🚀 Alle Dokumente generieren</button>
+<span id="dc-gen-info" style="font:11px var(--mono);color:var(--tx2)"></span>
+</div>
+</div>
+
+<div id="dc-batch-result" style="display:none;margin-top:12px"></div>
+</div>
+</div>
+</div>
+
+<!-- DATENBANK-MANAGER -->
+<div class="pg" id="p-database">
+<h2 style="color:var(--grn)">Datenbank-Manager</h2>
+<p style="font-size:12px;color:var(--tx2);margin:-6px 0 12px">Datensätze zentral verwalten — importieren, organisieren, exportieren — alle Tabellen an einem Ort</p>
+
+<!-- DB Stats -->
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-bottom:10px" id="db-stats">
+<div class="dash-kpi dk-grn"><div class="dk-ico">🗃</div><div class="dk-val" id="db-count">0</div><div class="dk-lbl">Datensätze</div></div>
+<div class="dash-kpi dk-blu"><div class="dk-ico">📊</div><div class="dk-val" id="db-rows">0</div><div class="dk-lbl">Zeilen gesamt</div></div>
+<div class="dash-kpi dk-pur"><div class="dk-ico">🏷</div><div class="dk-val" id="db-cats">0</div><div class="dk-lbl">Kategorien</div></div>
+<div class="dash-kpi"><div class="dk-ico">💾</div><div class="dk-val" id="db-size">—</div><div class="dk-lbl">Speicher</div></div>
+</div>
+
+<!-- Actions -->
+<div class="cd" style="padding:10px 14px">
+<div class="row" style="gap:6px;flex-wrap:wrap">
+<input type="file" id="db-import" accept=".xlsx,.xls,.csv,.tsv,.json" style="display:none" onchange="dbImportFile(this)" multiple>
+<button class="b bp" onclick="$('db-import').click()" title="Neue Datei(en) importieren">⬆ Importieren</button>
+<button class="b bg" onclick="dbSaveCurrent()" title="Aktuellen Excel-Datensatz in Datenbank speichern">💾 Aktuell speichern</button>
+<button class="b bo" onclick="dbExportAll()" title="Alle Datensätze als ZIP exportieren">⬇ Alle exportieren</button>
+<button class="b bpur" onclick="dbMergeSelected()" title="Ausgewählte Datensätze zusammenführen">🔗 Zusammenführen</button>
+<span class="tb-sep"></span>
+<select id="db-cat-filter" onchange="dbRender()" style="font-size:11px;width:130px">
+<option value="">Alle Kategorien</option>
+</select>
+<input type="text" id="db-search" placeholder="🔍 Suchen…" style="width:140px;font-size:11px" oninput="dbRender()">
+</div>
+</div>
+
+<!-- Category Manager -->
+<div class="cd" style="padding:10px 14px">
+<div class="row" style="gap:6px;align-items:center">
+<span style="font:600 10px var(--mono);color:var(--pur);white-space:nowrap">🏷 Kategorien:</span>
+<div id="db-cat-tags" style="display:flex;flex-wrap:wrap;gap:4px"></div>
+<span class="tb-sep"></span>
+<input type="text" id="db-new-cat" placeholder="Neue Kategorie…" style="width:120px;font-size:10px">
+<button class="b bo bs" onclick="dbAddCategory()">+</button>
+</div>
+</div>
+
+<!-- Database Table -->
+<div class="cd" style="padding:0" id="db-table-wrap">
+<div class="tw" id="db-table" style="max-height:500px">
+<table>
+<thead><tr>
+<th style="width:28px"><input type="checkbox" id="db-sel-all" onchange="dbToggleAll(this.checked)" style="accent-color:var(--acc)"></th>
+<th>Name</th>
+<th>Kategorie</th>
+<th style="text-align:right">Zeilen</th>
+<th style="text-align:right">Spalten</th>
+<th>Spaltenübersicht</th>
+<th>Erstellt</th>
+<th style="width:180px">Aktionen</th>
+</tr></thead>
+<tbody id="db-tbody"></tbody>
+</table>
+</div>
+</div>
+
+<!-- Empty State -->
+<div id="db-empty" style="text-align:center;padding:40px 20px;color:var(--tx3)">
+<div style="font-size:40px;margin-bottom:10px">🗃</div>
+<p style="font:500 13px var(--mono);color:var(--tx2)">Noch keine Datensätze gespeichert</p>
+<p style="font-size:11px;color:var(--tx2);margin-top:6px;max-width:400px;margin-left:auto;margin-right:auto">Importiere Dateien oder speichere deinen aktuellen Excel-Datensatz.<br>Organisiere Tabellen mit Kategorien und wechsle schnell zwischen ihnen.</p>
+<div class="row" style="justify-content:center;gap:8px;margin-top:14px">
+<button class="b bp" onclick="$('db-import').click()">⬆ Datei importieren</button>
+<button class="b bg" onclick="dbSaveCurrent()">💾 Aktuellen Datensatz speichern</button>
+</div>
+</div>
+</div>
+
+<!-- EMAIL -->
+<div class="pg" id="p-email"><h2 style="color:var(--cyn)">E-Mail / Serien-Mail</h2>
+
+<!-- Single Email -->
+<div class="cd"><h3 style="color:var(--cyn)">📧 EINZEL-MAIL</h3>
+<div class="email-form"><label>An</label><input type="email" id="em-to"><label>CC</label><input type="email" id="em-cc"><label>Betreff</label><input type="text" id="em-subj"><label>Nachricht</label><textarea id="em-body" rows="10" style="width:100%;resize:vertical;line-height:1.7;font-size:13px"></textarea>
+<div class="row"><button class="b bg" onclick="EM()">📧 Mail-Client</button><button class="b bpur" onclick="EMPDF()">📄 Als PDF</button><button class="b bo" onclick="EMC()">📋 Kopieren</button></div>
+</div></div>
+
+<!-- Merge Email -->
+<div class="cd"><h3 style="color:var(--cyn)">📬 SERIEN-E-MAIL MIT MERGE</h3>
+<p style="font-size:11px;color:var(--tx2);margin-bottom:8px">Personalisierte E-Mails an alle Datensätze — nutze <code style="color:var(--acc)">{{Spaltenname}}</code> als Platzhalter</p>
+
+<div class="row" style="margin-bottom:8px;gap:8px">
+<input type="text" id="sem-subj" placeholder="Betreff mit {{Felder}}…" style="flex:1;min-width:200px">
+<select id="sem-col-email" style="width:140px"><option value="">E-Mail-Spalte…</option></select>
+</div>
+
+<div style="margin-bottom:8px">
+<label style="font:500 11px var(--mono);color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:4px">TEMPLATE</label>
+<textarea id="sem-body" rows="12" style="width:100%;resize:vertical;line-height:1.7;font-size:13px" placeholder="Sehr geehrte/r {{Anrede}} {{Name}},&#10;&#10;Ihre Bestellung {{Auftragsnr}} wurde versendet.&#10;&#10;MfG"></textarea>
+<div id="sem-fields" style="margin-top:6px;display:flex;gap:4px;flex-wrap:wrap"></div>
+</div>
+
+<div class="row" style="margin-bottom:8px;gap:8px;align-items:center">
+<button class="b bg" onclick="SEM2()" id="sem-btn2" disabled>📧 Alle öffnen</button>
+<button class="b bpur" onclick="semPreview()" id="sem-pv-btn" disabled>👁 Vorschau</button>
+<button class="b bo" onclick="semExportAll()">📄 Alle als PDF</button>
+<span id="sem-info2" style="font-size:11px;color:var(--tx2)"></span>
+<!-- Legacy hidden buttons for backwards compat -->
+<button class="b bg" onclick="SEM()" id="sem-btn" disabled style="display:none">📧</button>
+</div>
+
+<!-- Attachment mapping -->
+<div class="em-merge-panel" id="sem-att-panel" style="display:none">
+<h3 style="color:var(--blu);margin-bottom:6px">📎 ANHANG-ZUORDNUNG</h3>
+<p style="font-size:10px;color:var(--tx2);margin-bottom:6px">PDF-Typ pro Empfänger automatisch anhängen (wird als separate Datei generiert)</p>
+<div class="row" style="gap:6px">
+<label style="font:11px var(--mono);color:var(--tx2)"><input type="checkbox" id="sem-att-doc" style="accent-color:var(--blu)"> Serienbrief</label>
+<label style="font:11px var(--mono);color:var(--tx2)"><input type="checkbox" id="sem-att-inv"> Rechnung</label>
+<label style="font:11px var(--mono);color:var(--tx2)"><input type="checkbox" id="sem-att-label"> Etikett</label>
+</div>
+</div>
+
+<!-- Preview Cards -->
+<div id="sem-preview" style="max-height:340px;overflow-y:auto"></div>
+
+<!-- Legacy list -->
+<div id="sem-list" style="margin-top:8px;max-height:260px;overflow:auto"></div>
+<span id="sem-info" style="display:none"></span>
+</div>
+</div>
+
+<!-- DSGVO -->
+<div class="pg" id="p-dsgvo"><h2 style="color:var(--red)">Datenschutz &amp; DSGVO</h2>
+<p style="font-size:12px;color:var(--tx2);margin:-6px 0 12px">Alle Daten bleiben lokal auf deinem Gerät — kein Server, kein Upload, 100% offline.</p>
+<p class="sub">Datenschutz-Grundverordnung — Alle Daten bleiben lokal auf deinem Gerät</p>
+
+<div class="g3" style="margin-bottom:10px"><div class="cd scard"><div class="slbl">Verarbeitung</div><div class="sval" style="color:var(--grn)">Lokal</div></div><div class="cd scard"><div class="slbl">Server</div><div class="sval" style="color:var(--grn)">Keiner</div></div><div class="cd scard"><div class="slbl">Cookies</div><div class="sval" style="color:var(--grn)">Keine</div></div><div class="cd scard"><div class="slbl">Art.17</div><div class="sval" style="color:var(--grn)">Bereit</div></div></div>
+
+<div class="cd" style="border-color:rgba(48,209,88,.2)">
+<h3 style="color:var(--grn)">Datenschutz-Garantien</h3>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:8px;font-size:12px;line-height:1.7;color:var(--tx2)">
+<div style="padding:10px;background:var(--s2);border-radius:8px"><strong style="color:var(--grn)">100% Offline</strong><br>Keine Daten verlassen deinen Browser. Kein Server, kein Cloud-Upload, keine API-Calls.</div>
+<div style="padding:10px;background:var(--s2);border-radius:8px"><strong style="color:var(--grn)">Kein Tracking</strong><br>Keine Cookies, kein Analytics, kein Fingerprinting. Null externe Requests.</div>
+<div style="padding:10px;background:var(--s2);border-radius:8px"><strong style="color:var(--grn)">Art. 17 — Recht auf Löschung</strong><br>Ein Klick löscht alle gespeicherten Daten unwiderruflich aus IndexedDB und localStorage.</div>
+<div style="padding:10px;background:var(--s2);border-radius:8px"><strong style="color:var(--grn)">Open Source Libs</strong><br>SheetJS, Mammoth.js, Chart.js, jsPDF — alle lokal eingebunden, keine CDN-Abhängigkeiten.</div>
+</div>
+</div>
+
+<div class="cd row" style="gap:8px"><button class="b bo" onclick="DLE()">⬇ Log exportieren</button><button class="b bd" onclick="$('del-cfm').style.display=''">🗑 Alle Daten löschen</button></div>
+<div class="cd confirm" id="del-cfm" style="display:none"><p>Alle lokal gespeicherten Daten unwiderruflich löschen?</p><div class="row"><button class="b bd" onclick="DA()">Ja, alles löschen</button><button class="b bo" onclick="$('del-cfm').style.display='none'">Abbrechen</button></div></div>
+<div class="cd"><h3>Verarbeitungs-Log (<span id="lc">0</span>)</h3><p style="font-size:11px;color:var(--tx3);margin-bottom:6px">Protokolliert alle Datenoperationen für Nachvollziehbarkeit</p><div id="dl-tbl"></div></div>
+
+<div class="cd" style="border-color:rgba(255,159,10,.2)"><h3 style="color:var(--ora)">Fehler-Log (<span id="errlc">0</span>)</h3><p style="font-size:11px;color:var(--tx3);margin-bottom:6px">Interne Fehler und Warnungen — hilfreich für Debugging</p><div id="err-tbl"></div><div class="row" style="margin-top:6px"><button class="b bo bs" onclick="renderErrLog()">🔄 Aktualisieren</button><button class="b bo bs" onclick="S._errLog=[];renderErrLog();toast('Fehlerlog geleert')">🗑 Leeren</button></div></div>
+
+<div class="cd" style="border-color:rgba(77,166,255,.2)"><h3 style="color:var(--blu)">Speicher-Nutzung</h3><div id="ls-usage" style="font-size:12px;color:var(--tx2);line-height:1.8"></div><button class="b bo bs" style="margin-top:6px" onclick="renderLSUsage()">🔄 Aktualisieren</button></div></div>
+
+<!-- ANLEITUNG -->
+<div class="pg" id="p-guide">
+<h2 style="color:var(--acc2)">📖 Anleitung</h2>
+<p class="sub">Schritt-für-Schritt für Einsteiger — mit Praxis-Beispielen aus dem Export-Alltag</p>
+
+<div class="cd" style="border-color:rgba(240,165,0,.3)">
+<h3 style="color:var(--acc)">🚀 Schnellstart (3 Minuten)</h3>
+<div style="font-size:13px;line-height:1.8;color:var(--tx)">
+<strong style="color:var(--acc)">1.</strong> Klicke auf <span class="tg tg-a">Excel</span> in der Sidebar<br>
+<strong style="color:var(--acc)">2.</strong> Klicke <span class="tg tg-a">⬆ Import</span> und wähle deine XLSX- oder CSV-Datei<br>
+<strong style="color:var(--acc)">3.</strong> Deine Daten erscheinen sofort als Tabelle — klicke auf jede Zelle zum Bearbeiten<br>
+<strong style="color:var(--acc)">4.</strong> Nutze die Tabs oben für alle Operationen: Formeln, Sortieren, Filtern, etc.<br>
+<strong style="color:var(--acc)">5.</strong> Klicke <span class="tg tg-a">⬇ Export</span> um die bearbeitete Datei herunterzuladen
+</div>
+</div>
+
+<div class="cd" style="border-color:rgba(236,72,153,.3)">
+<h3 style="color:var(--pk)">SELECT CASE — Werte automatisch zuordnen</h3>
+<div style="font-size:12px;line-height:1.8;color:var(--tx2)">
+<strong style="color:var(--tx)">Wann nutzen?</strong> Wenn du basierend auf einem Wert in Spalte A automatisch etwas in Spalte B eintragen willst.<br><br>
+<strong style="color:var(--pk)">Beispiel: Incoterm nach Land zuordnen</strong><br>
+<span style="color:var(--tx)">① Tab "SELECT CASE" öffnen</span><br>
+<span style="color:var(--tx)">② "SELECT CASE" → Spalte <code style="color:var(--acc);background:rgba(240,165,0,.1);padding:1px 4px;border-radius:3px">Land</code> wählen</span><br>
+<span style="color:var(--tx)">③ "Ergebnis in" → <code style="color:var(--acc);background:rgba(240,165,0,.1);padding:1px 4px;border-radius:3px">Incoterm</code> (oder "+ Neue Zielspalte")</span><br>
+<span style="color:var(--tx)">④ Cases eintragen:</span><br>
+&nbsp;&nbsp;&nbsp;Case <code style="color:var(--grn)">DE</code> → <code style="color:var(--grn)">DAP</code><br>
+&nbsp;&nbsp;&nbsp;Case <code style="color:var(--grn)">US</code> → <code style="color:var(--grn)">FCA</code><br>
+&nbsp;&nbsp;&nbsp;Case <code style="color:var(--grn)">NG</code> → <code style="color:var(--grn)">CFR</code><br>
+&nbsp;&nbsp;&nbsp;Case Else → <code style="color:var(--ora)">EXW</code> (für alle anderen Länder)<br>
+<span style="color:var(--tx)">⑤ "⚡ SELECT CASE ausführen" klicken — fertig!</span><br><br>
+<strong style="color:var(--tx)">Tipp:</strong> Auch Zahlenbereiche möglich: Case <code style="color:var(--grn)">>5000</code> → <code style="color:var(--grn)">Premium</code>
+</div>
+</div>
+
+<div class="cd" style="border-color:rgba(249,115,22,.3)">
+<h3 style="color:var(--ora)">IF/ELSEIF/ELSE — Mehrstufige Bedingungen</h3>
+<div style="font-size:12px;line-height:1.8;color:var(--tx2)">
+<strong style="color:var(--tx)">Wann nutzen?</strong> Wenn du mehrere Bedingungen prüfen willst, auch mit AND/OR.<br><br>
+<strong style="color:var(--ora)">Beispiel: Kundenstatus nach Betrag + Land</strong><br>
+<span style="color:var(--tx)">① Tab "IF/ELSE" öffnen, Zielspalte <code style="color:var(--acc);background:rgba(240,165,0,.1);padding:1px 4px;border-radius:3px">Status</code> wählen</span><br>
+<span style="color:var(--tx)">② IF: Betrag <code style="color:var(--grn)">></code> 5000 → klicke "+AND/OR" → AND Land <code style="color:var(--grn)">=</code> DE → Dann: <code style="color:var(--grn)">Premium DE</code></span><br>
+<span style="color:var(--tx)">③ Klicke "+ ElseIf": Betrag <code style="color:var(--grn)">></code> 1000 → Dann: <code style="color:var(--grn)">Standard</code></span><br>
+<span style="color:var(--tx)">④ Else → <code style="color:var(--ora)">Basis</code></span><br>
+<span style="color:var(--tx)">⑤ "⚡ IF/ELSE ausführen" — alle Zeilen werden geprüft</span><br><br>
+<strong style="color:var(--tx)">Tipp:</strong> Mit "💾 Speichern" kannst du Regeln wiederverwenden!
+</div>
+</div>
+
+<div class="cd" style="border-color:rgba(34,211,238,.3)">
+<h3 style="color:var(--cyn)">BATCH PIPELINE — Aktionsketten</h3>
+<div style="font-size:12px;line-height:1.8;color:var(--tx2)">
+<strong style="color:var(--tx)">Wann nutzen?</strong> Wenn du mehrere Schritte hintereinander automatisieren willst.<br><br>
+<strong style="color:var(--cyn)">Beispiel: Monatsbericht-Pipeline</strong><br>
+<span style="color:var(--tx)">① Tab "Pipeline" öffnen</span><br>
+<span style="color:var(--tx)">② Schritt 1: <code style="color:var(--acc)">Filter</code> hinzufügen → Spalte "Monat" = "März"</span><br>
+<span style="color:var(--tx)">③ Schritt 2: <code style="color:var(--acc)">Sort</code> → Spalte "Betrag" Z→A (höchste zuerst)</span><br>
+<span style="color:var(--tx)">④ Schritt 3: <code style="color:var(--acc)">Text</code> → Spalte "Name" PROPER (Groß/Klein korrekt)</span><br>
+<span style="color:var(--tx)">⑤ Schritt 4: <code style="color:var(--acc)">SELECT CASE</code> (gespeicherten Case #1 nutzen)</span><br>
+<span style="color:var(--tx)">⑥ Schritt 5: <code style="color:var(--acc)">Export</code></span><br>
+<span style="color:var(--tx)">⑦ "🚀 Pipeline ausführen" — alle 5 Schritte laufen automatisch</span><br><br>
+<strong style="color:var(--tx)">Tipp:</strong> Pipeline speichern → nächsten Monat mit einem Klick wiederholen!
+</div>
+</div>
+
+<div class="cd" style="border-color:rgba(167,139,250,.3)">
+<h3 style="color:var(--pur)">Berechnete Spalten — Formeln wie in Excel</h3>
+<div style="font-size:12px;line-height:1.8;color:var(--tx2)">
+<strong style="color:var(--tx)">Wann nutzen?</strong> Wenn du eine neue Spalte aus bestehenden Werten berechnen willst.<br><br>
+<strong style="color:var(--pur)">Beispiele:</strong><br>
+<code style="color:var(--acc);background:rgba(240,165,0,.1);padding:2px 6px;border-radius:3px">Brutto</code> = <code style="color:var(--grn)">Netto * 1.19</code> — MwSt berechnen<br>
+<code style="color:var(--acc);background:rgba(240,165,0,.1);padding:2px 6px;border-radius:3px">Gesamt</code> = <code style="color:var(--grn)">Menge * Preis</code> — Zeilensumme<br>
+<code style="color:var(--acc);background:rgba(240,165,0,.1);padding:2px 6px;border-radius:3px">Gewinn</code> = <code style="color:var(--grn)">Verkauf - Einkauf</code> — Differenz<br>
+<code style="color:var(--acc);background:rgba(240,165,0,.1);padding:2px 6px;border-radius:3px">Gerundet</code> = <code style="color:var(--grn)">ROUND(Preis * 1.19, 2)</code> — auf 2 Stellen<br>
+<code style="color:var(--acc);background:rgba(240,165,0,.1);padding:2px 6px;border-radius:3px">Vollername</code> = <code style="color:var(--grn)">CONCAT(Vorname, " ", Nachname)</code> — Text verbinden<br>
+<code style="color:var(--acc);background:rgba(240,165,0,.1);padding:2px 6px;border-radius:3px">Kategorie</code> = <code style="color:var(--grn)">IF(Betrag > 1000, "Groß", "Klein")</code> — Bedingung<br><br>
+<strong style="color:var(--pur)">💰 Finanz-Formeln:</strong><br>
+<code style="color:var(--acc);background:rgba(240,165,0,.1);padding:2px 6px;border-radius:3px">MwSt</code> = <code style="color:var(--grn)">Netto * 0.19</code> — USt-Betrag<br>
+<code style="color:var(--acc);background:rgba(240,165,0,.1);padding:2px 6px;border-radius:3px">Brutto</code> = <code style="color:var(--grn)">Netto * 1.19</code> — inkl. MwSt<br>
+<code style="color:var(--acc);background:rgba(240,165,0,.1);padding:2px 6px;border-radius:3px">Netto_aus_Brutto</code> = <code style="color:var(--grn)">Brutto / 1.19</code> — Herausrechnen<br>
+<code style="color:var(--acc);background:rgba(240,165,0,.1);padding:2px 6px;border-radius:3px">Marge_pct</code> = <code style="color:var(--grn)">ROUND((Verkauf - Einkauf) / Verkauf * 100, 1)</code> — Marge %<br>
+<code style="color:var(--acc);background:rgba(240,165,0,.1);padding:2px 6px;border-radius:3px">Deckungsbeitrag</code> = <code style="color:var(--grn)">Umsatz - Variable_Kosten</code> — DB I<br>
+<code style="color:var(--acc);background:rgba(240,165,0,.1);padding:2px 6px;border-radius:3px">ROI</code> = <code style="color:var(--grn)">ROUND((Gewinn / Investition) * 100, 1)</code> — Return %<br>
+<code style="color:var(--acc);background:rgba(240,165,0,.1);padding:2px 6px;border-radius:3px">Skonto</code> = <code style="color:var(--grn)">IF(Zahlungsziel &lt; 14, Betrag * 0.02, 0)</code> — 2% Skonto<br>
+<code style="color:var(--acc);background:rgba(240,165,0,.1);padding:2px 6px;border-radius:3px">AfA_linear</code> = <code style="color:var(--grn)">ROUND(Anschaffung / Nutzungsdauer, 2)</code> — Abschreibung<br>
+<code style="color:var(--acc);background:rgba(240,165,0,.1);padding:2px 6px;border-radius:3px">Break_Even</code> = <code style="color:var(--grn)">ROUND(Fixkosten / (Preis - Variable_Stueck), 0)</code> — Stückzahl<br>
+<code style="color:var(--acc);background:rgba(240,165,0,.1);padding:2px 6px;border-radius:3px">Cashflow</code> = <code style="color:var(--grn)">Einnahmen - Ausgaben</code> — Netto-Cashflow<br><br>
+<strong style="color:var(--pur)">💱 Fremdwährungs-Formeln:</strong><br>
+<code style="color:var(--acc);background:rgba(240,165,0,.1);padding:2px 6px;border-radius:3px">EUR_Betrag</code> = <code style="color:var(--grn)">USD_Betrag / Kurs_USD</code> — USD→EUR<br>
+<code style="color:var(--acc);background:rgba(240,165,0,.1);padding:2px 6px;border-radius:3px">EUR_Betrag</code> = <code style="color:var(--grn)">GBP_Betrag / Kurs_GBP</code> — GBP→EUR<br>
+<code style="color:var(--acc);background:rgba(240,165,0,.1);padding:2px 6px;border-radius:3px">CFA_Betrag</code> = <code style="color:var(--grn)">EUR_Betrag * 655.957</code> — EUR→XOF (fester Kurs)<br>
+<code style="color:var(--acc);background:rgba(240,165,0,.1);padding:2px 6px;border-radius:3px">NGN_Betrag</code> = <code style="color:var(--grn)">EUR_Betrag * Kurs_NGN</code> — EUR→Naira<br>
+<code style="color:var(--acc);background:rgba(240,165,0,.1);padding:2px 6px;border-radius:3px">Kursgewinn</code> = <code style="color:var(--grn)">ROUND((Kurs_Zahlung - Kurs_Rechnung) * Betrag_FW, 2)</code> — Kursdifferenz<br>
+<code style="color:var(--acc);background:rgba(240,165,0,.1);padding:2px 6px;border-radius:3px">Kurssicherung</code> = <code style="color:var(--grn)">IF(ABS(Kursgewinn) > 500, "Hedging prüfen", "OK")</code>
+</div>
+</div>
+
+<div class="cd">
+<h3 style="color:var(--acc)">Formeln — Schnellreferenz</h3>
+<div style="font-size:12px;line-height:1.8;color:var(--tx2)">
+<code style="color:var(--grn)">SUM(Spalte)</code> — Summe aller Zahlen<br>
+<code style="color:var(--grn)">AVG(Spalte)</code> — Durchschnitt<br>
+<code style="color:var(--grn)">COUNT(Spalte)</code> — Anzahl Zahlen<br>
+<code style="color:var(--grn)">COUNTIF(Spalte)</code> — Anzahl nicht-leere Zellen<br>
+<code style="color:var(--grn)">MIN(Spalte)</code> / <code style="color:var(--grn)">MAX(Spalte)</code> — Kleinster/Größter Wert<br>
+<code style="color:var(--grn)">MEDIAN(Spalte)</code> — Median<br>
+<code style="color:var(--grn)">STDEV(Spalte)</code> — Standardabweichung<br>
+<code style="color:var(--grn)">SUMIF(PrüfSpalte, Bedingung, WertSpalte)</code> — Bedingte Summe<br>
+&nbsp;&nbsp;z.B. <code style="color:var(--acc)">SUMIF(Land, DE, Umsatz)</code> = Summe aller DE-Umsätze
+</div>
+</div>
+
+<div class="cd" style="border-color:rgba(77,166,255,.3)">
+<h3 style="color:var(--blu)">💰 Finanz-Formel-Schnellreferenz</h3>
+<div style="font-size:12px;line-height:1.8;color:var(--tx2)">
+<strong style="color:var(--tx)">Steuer & Preise:</strong><br>
+<code style="color:var(--grn)">Netto * 1.19</code> = Brutto (19% MwSt) · <code style="color:var(--grn)">Brutto / 1.19</code> = Netto herausrechnen<br>
+<code style="color:var(--grn)">Netto * 0.19</code> = USt-Betrag · <code style="color:var(--grn)">Netto * 1.07</code> = Brutto (7%)<br><br>
+<strong style="color:var(--tx)">Margen & Rendite:</strong><br>
+<code style="color:var(--grn)">(VK - EK) / VK * 100</code> = Marge % · <code style="color:var(--grn)">Gewinn / Investition * 100</code> = ROI %<br>
+<code style="color:var(--grn)">Umsatz - Variable_Kosten</code> = DB I · <code style="color:var(--grn)">DB_I - Fixkosten</code> = DB II<br><br>
+<strong style="color:var(--tx)">Zahlungsverkehr:</strong><br>
+<code style="color:var(--grn)">IF(Tage &lt; 14, Betrag * 0.02, 0)</code> = 2% Skonto · <code style="color:var(--grn)">Betrag * 0.03</code> = 3% Skonto<br>
+<code style="color:var(--grn)">Betrag * Zinssatz / 100 / 360 * Tage</code> = Verzugszinsen<br><br>
+<strong style="color:var(--tx)">Abschreibung:</strong><br>
+<code style="color:var(--grn)">Anschaffung / Nutzungsjahre</code> = Linear p.a. · <code style="color:var(--grn)">AfA / 12</code> = pro Monat<br><br>
+<strong style="color:var(--tx)">Controlling:</strong><br>
+<code style="color:var(--grn)">Fixkosten / (Preis - Var_Stueck)</code> = Break-Even Stück<br>
+<code style="color:var(--grn)">(Ist - Soll) / Soll * 100</code> = Abweichung %<br>
+<code style="color:var(--grn)">Einnahmen - Ausgaben</code> = Cashflow<br><br>
+<strong style="color:var(--tx)">💱 Fremdwährung:</strong><br>
+<code style="color:var(--grn)">Betrag_FW / Kurs</code> = Umrechnung in EUR · <code style="color:var(--grn)">Betrag_EUR * Kurs</code> = EUR in Fremdwährung<br>
+<code style="color:var(--grn)">EUR * 655.957</code> = XOF/CFA (fest) · <code style="color:var(--grn)">EUR * 655.957</code> = XAF (fest)<br>
+<code style="color:var(--grn)">(Kurs_Zahlung - Kurs_Rechnung) * Betrag_FW</code> = Kursdifferenz<br>
+<code style="color:var(--grn)">ABS(Kursgewinn) / Rechnungsbetrag * 100</code> = Kursrisiko %
+</div>
+</div>
+
+<div class="cd">
+<h3 style="color:var(--blu)">Word Mail-Merge — Serienbriefe</h3>
+<div style="font-size:12px;line-height:1.8;color:var(--tx2)">
+<strong style="color:var(--tx)">① Template schreiben</strong> — nutze <code style="color:var(--blu)">{{Platzhalter}}</code> für variable Felder<br>
+<strong style="color:var(--tx)">② Datenquelle laden</strong> — XLSX mit Spalten die zu den Platzhaltern passen<br>
+<strong style="color:var(--tx)">③ Vorschau prüfen</strong> — klicke #1, #2 etc. um einzelne Briefe zu sehen<br>
+<strong style="color:var(--tx)">④ Exportieren</strong> — alle Briefe als .docx oder 🖨 als PDF drucken<br><br>
+<strong style="color:var(--blu)">Beispiel-Template:</strong><br>
+<code style="color:var(--tx);font-size:11px">Sehr geehrte/r {{Anrede}} {{Name}},<br>Auftrag Nr. {{Auftragsnr}} bestätigt.<br>Lieferung: {{Incoterm}} → {{Adresse}}</code>
+</div>
+</div>
+
+<div class="cd">
+<h3 style="color:var(--ora)">📁 Dokumenten-Center — Automatisierte Dokumentenerstellung</h3>
+<div style="font-size:12px;line-height:1.8;color:var(--tx2)">
+<strong style="color:var(--tx)">Wofür?</strong> Wenn du feste Dokumentvorlagen hast (Frachtbriefe, Gefahrgut-Labels, Formulare), die du für verschiedene Kunden/Sendungen automatisch befüllen willst.<br><br>
+<strong style="color:var(--ora)">So geht's:</strong><br>
+① <strong>Vorlagen anlegen:</strong> Lade ein fertiges DOCX hoch oder erstelle manuell eine Vorlage mit <code style="color:var(--blu)">{{Platzhaltern}}</code><br>
+② <strong>Kategorie &amp; Kunde zuordnen:</strong> z.B. "Gefahrgut" + "DHL" — so findest du Vorlagen schnell wieder<br>
+③ <strong>Trigger-Regel definieren:</strong> z.B. <code style="color:var(--acc)">Gefahrgut = "Ja"</code> → automatisch Gefahrgut-Erklärung generieren<br>
+④ <strong>Excel laden &amp; generieren:</strong> Die App prüft jede Zeile, matcht die Trigger und erstellt alle Dokumente als DOCX<br><br>
+<strong style="color:var(--tx)">Beispiel:</strong><br>
+Du hast 50 Sendungen in Excel. 12 davon sind Gefahrgut, 30 haben Status "Versandt".<br>
+→ Trigger 1: <code style="color:var(--cyn)">Gefahrgut = "Ja"</code> → Gefahrgut-Erklärung<br>
+→ Trigger 2: <code style="color:var(--cyn)">Status = "Versandt"</code> → CMR Frachtbrief<br>
+→ Klick auf "Alle generieren" → 42 DOCX-Dateien als ZIP heruntergeladen ✓
+</div>
+</div>
+
+<div class="cd">
+<h3 style="color:var(--cyn)">E-Mail Versand</h3>
+<div style="font-size:12px;line-height:1.8;color:var(--tx2)">
+<strong style="color:var(--tx)">Einzel-E-Mail:</strong> Empfänger, Betreff, Text eingeben → öffnet deinen lokalen Mail-Client (Outlook, Thunderbird, etc.)<br><br>
+<strong style="color:var(--tx)">Serien-E-Mail:</strong><br>
+① Deine Word-Datenquelle muss eine Spalte "Email" enthalten<br>
+② Das Word-Template wird als E-Mail-Body verwendet<br>
+③ Betreff kann auch <code style="color:var(--blu)">{{Platzhalter}}</code> enthalten<br>
+④ Für jeden Datensatz wird ein individueller mailto:-Link erzeugt<br>
+⑤ Klick auf 📧 öffnet den Mail-Client mit vorausgefüllter Mail<br><br>
+<strong style="color:var(--grn)">Datenschutz:</strong> Kein Server — alles geht über deinen lokalen Mail-Client!
+</div>
+</div>
+
+<div class="cd">
+<h3 style="color:var(--red)">Makro-Recorder</h3>
+<div style="font-size:12px;line-height:1.8;color:var(--tx2)">
+<strong style="color:var(--tx)">So funktioniert's:</strong><br>
+① <code style="color:var(--red)">⏺ Start</code> klicken — der rote REC-Punkt erscheint<br>
+② Jetzt normal arbeiten: Sortieren, Filtern, Text-Funktionen, S&R, etc.<br>
+③ Jede Aktion wird automatisch aufgezeichnet<br>
+④ <code style="color:var(--red)">⏹ Stopp</code> → Name vergeben → <code style="color:var(--red)">💾 Speichern</code><br>
+⑤ Gespeicherte Makros jederzeit mit <code style="color:var(--red)">▶</code> abspielen<br><br>
+<strong style="color:var(--tx)">Tipp:</strong> Makros + Pipelines ergänzen sich. Makros zeichnen auf WAS du tust, Pipelines lässt du visuell zusammenstellen.
+</div>
+</div>
+
+<div class="cd" style="border-color:rgba(0,224,142,.3)">
+<h3 style="color:var(--grn)">✓ Prüfspalten — Daten validieren</h3>
+<div style="font-size:12px;line-height:1.8;color:var(--tx2)">
+<strong style="color:var(--tx)">Wann nutzen?</strong> Um Datenqualität zu prüfen — fehlende Werte, falsche Formate, Duplikate.<br><br>
+<strong style="color:var(--grn)">14 Prüftypen verfügbar:</strong><br>
+<code style="color:var(--grn)">Ist leer?</code> — Findet fehlende Pflichtfelder<br>
+<code style="color:var(--grn)">Ist Zahl?</code> — Prüft ob numerisch (Gewicht, Betrag)<br>
+<code style="color:var(--grn)">Ist E-Mail?</code> — @ und Domain vorhanden?<br>
+<code style="color:var(--grn)">Ist Duplikat?</code> — Doppelte Werte markieren<br>
+<code style="color:var(--grn)">Wert zwischen X und Y</code> — Bereich prüfen<br>
+<code style="color:var(--grn)">Wert in Liste</code> — z.B. <code style="color:var(--acc)">DE,US,NG,GH</code><br>
+<code style="color:var(--grn)">Muster (RegExp)</code> — z.B. <code style="color:var(--acc)">^\d{5}$</code> für PLZ<br>
+<code style="color:var(--grn)">Mindest-/Maximallänge</code> — z.B. HS-Code ≥ 6 Zeichen<br><br>
+<strong style="color:var(--grn)">Praxis:</strong> EORI leer? → HS-Code zu kurz? → Land in erlaubter Liste? → Betrag realistisch?
+</div>
+</div>
+
+<div class="cd" style="border-color:rgba(34,211,238,.3)">
+<h3 style="color:var(--cyn)">SWITCH — Multi-Spalten-Verzweigung</h3>
+<div style="font-size:12px;line-height:1.8;color:var(--tx2)">
+<strong style="color:var(--tx)">Wann nutzen?</strong> Wenn das Ergebnis von MEHREREN Spalten abhängt.<br><br>
+<strong style="color:var(--cyn)">Beispiel: Compliance nach Land + Warenart</strong><br>
+WENN <code style="color:var(--acc)">Land=NG AND DG=Ja</code> → <code style="color:var(--grn)">SONCAP + DG-Deklaration</code><br>
+WENN <code style="color:var(--acc)">Land=KE AND Betrag&gt;5000</code> → <code style="color:var(--grn)">PVoC + Vorauszahlung</code><br>
+WENN <code style="color:var(--acc)">Land=CI OR Land=SN</code> → <code style="color:var(--grn)">ECTN/BESC erforderlich</code><br>
+Else → <code style="color:var(--ora)">Standard-Export</code>
+</div>
+</div>
+
+<div class="cd" style="border-color:rgba(240,165,0,.4)">
+<h3 style="color:var(--acc)">📦 EXPORT-SZENARIEN — Komplette Praxis-Workflows</h3>
+<div style="font-size:12px;line-height:1.8;color:var(--tx2)">
+
+<strong style="color:var(--acc);font-size:13px">Szenario 1: Sendungsliste für Afrika aufbereiten</strong><br>
+① Import → ② <code>SELECT CASE</code> Land→Incoterm (DE→DAP, NG→CFR, KE→CIF)<br>
+③ <code>SWITCH</code> Land+Produkt→Compliance (NG+Chemie→SONCAP+NAFDAC)<br>
+④ <code>Berechnet</code>: Fracht = Gewicht×2.50 → ⑤ Gesamt = Warenwert+Fracht<br>
+⑥ <code>Prüfung</code>: EORI leer? → ⑦ Filter Prüfung=✗ → ⑧ Export Korrekturbedarf<br><br>
+
+<strong style="color:var(--acc);font-size:13px">Szenario 2: Gefahrgut-Dokumentation</strong><br>
+① Import → ② <code>CASE</code> UN-Klasse→Verpackungsgruppe<br>
+③ <code>SWITCH</code> Klasse+Transport→Doku (Kl.3+Luft→IATA, Kl.8+See→IMO)<br>
+④ <code>IF/ELSE</code> Menge&gt;30 AND Klasse=3→"CAO only" / ELSE→"PAX erlaubt"<br>
+⑤ <code>Prüfung</code>: UN-Nr Länge≥4 → ⑥ EmS-Code Muster <code style="color:var(--acc)">^[FS]-[A-Z]$</code><br>
+⑦ Mail-Merge → Gefahrgut-Begleitschreiben pro Sendung<br><br>
+
+<strong style="color:var(--acc);font-size:13px">Szenario 3: Rechnungsprüfung + Freigabe</strong><br>
+① Import → ② <code>IF/ELSEIF/ELSE</code>:<br>
+&nbsp;&nbsp;IF Betrag&gt;10000 AND Status=Offen → "GF erforderlich"<br>
+&nbsp;&nbsp;ELSEIF Betrag&gt;2000 → "Abteilungsleiter" / ELSE → "Automatisch"<br>
+③ <code>Berechnet</code>: Skonto = IF(Betrag&gt;500, Betrag×0.02, 0)<br>
+④ <code>Berechnet</code>: Zahlbetrag = Betrag - Skonto<br>
+⑤ <code>Prüfung</code>: IBAN Länge≥22 → ⑥ Sort Fälligkeit → ⑦ Pipeline speichern<br><br>
+
+<strong style="color:var(--acc);font-size:13px">Szenario 4: Kunden-Segmentierung für Serien-Mail</strong><br>
+① Import → ② <code>CASE</code> Umsatz: >50000→"VIP", >10000→"Premium", Else→"Standard"<br>
+③ <code>SWITCH</code> Segment=VIP AND Land=DE → Betreuer="Herr Müller"<br>
+④ <code>Prüfung</code> Email gültig? → ⑤ Filter Email=✓<br>
+⑥ Excel→Word → Template: "{{Anrede}}, als {{Segment}}-Kunde..."<br>
+⑦ Serien-E-Mail → personalisierte Mails<br><br>
+
+<strong style="color:var(--acc);font-size:13px">Szenario 5: ECTN/BESC Pflichtprüfung Westafrika</strong><br>
+① Import → ② <code>SELECT CASE</code> Land:<br>
+&nbsp;&nbsp;BJ→"ECTN Benin", CM→"ECTN Kamerun", CI→"BSC Côte d'Ivoire"<br>
+&nbsp;&nbsp;SN→"BESC Senegal", TG→"ECTN Togo", GN→"ECTN Guinea"<br>
+&nbsp;&nbsp;MG→"BSC Madagaskar", Case Else→"Nicht erforderlich"<br>
+③ <code>SWITCH</code> ECTN≠"Nicht erford." AND BL-Nr=leer → "⚠ BL fehlt!"<br>
+④ <code>Prüfung</code> ECTN-Nr Länge≥10 → ⑤ Filter Warnung → Problemfälle<br><br>
+
+<strong style="color:var(--acc);font-size:13px">Szenario 6: Akkreditiv-/LC-Prüfung (UCP 600)</strong><br>
+① Import → ② <code>Prüfung</code> Betrag ist Zahl? + LC-Nr Muster <code style="color:var(--acc)">^[A-Z]{2}\d+$</code><br>
+③ <code>IF/ELSE</code> Ablauf &lt; Verladedatum → "⚠ ABGELAUFEN"<br>
+④ <code>SWITCH</code> Bank=Commerzbank AND Betrag&gt;100000 → "Doppelfreigabe"<br>
+⑤ <code>Berechnet</code>: Gebühr = IF(Betrag&gt;50000, Betrag×0.0015, 75)<br><br>
+
+<strong style="color:var(--acc);font-size:13px">Szenario 7: Container-Beladung optimieren</strong><br>
+① Import (Artikel, Maße, Gewicht, Stück) → ② <code>Berechnet</code>: CBM = L×B×H/1000000<br>
+③ <code>Berechnet</code>: Gesamtgewicht = Gewicht × Stück<br>
+④ <code>IF/ELSE</code>: CBM*Stück > 33 → "Eigener 20ft" / >60 → "40ft" / ELSE → "LCL"<br>
+⑤ <code>CASE</code> auf Containertyp → Frachtrate zuordnen<br>
+⑥ <code>Prüfung</code>: Gesamtgewicht zwischen 0 und 28000 (20ft Max)<br><br>
+
+<strong style="color:var(--acc);font-size:13px">Szenario 8: Health Certificate Tracking</strong><br>
+① Import → ② <code>SWITCH</code> Produkt=Lebensmittel AND Land=NG → "NAFDAC + HC"<br>
+③ <code>CASE</code> Produktkategorie → Zuständige Behörde zuordnen<br>
+④ <code>Prüfung</code>: HC-Nummer nicht leer + Ablaufdatum nicht leer<br>
+⑤ <code>IF/ELSE</code>: Ablauf &lt; Versanddatum → "⚠ ABGELAUFEN"<br>
+⑥ Filter alle Warnungen → Export Maßnahmenliste
+</div>
+</div>
+
+<div class="cd" style="border-color:rgba(77,166,255,.4)">
+<h3 style="color:var(--blu)">💰 CONTROLLING & BUCHHALTUNG — Finanz-Workflows</h3>
+<div style="font-size:12px;line-height:1.8;color:var(--tx2)">
+
+<strong style="color:var(--blu);font-size:13px">Szenario 9: Monatliche BWA erstellen</strong><br>
+① Buchungsliste importieren (Konto, Soll, Haben, Kostenstelle, Monat)<br>
+② <code>SELECT CASE</code> Konto-Nr:<br>
+&nbsp;&nbsp;Case 4000–4999 → Kontoart = "Erlöse"<br>
+&nbsp;&nbsp;Case 5000–5999 → "Wareneinsatz" / Case 6000–6999 → "Personalkosten"<br>
+&nbsp;&nbsp;Case 7000–7999 → "Sonstige Kosten" / Case Else → "Sonstige"<br>
+③ <code>Berechnet</code>: Saldo = <code style="color:var(--grn)">Soll - Haben</code><br>
+④ <code>Pivot</code>: Gruppieren nach Kontoart → SUM(Saldo)<br>
+⑤ <code>Berechnet</code>: Anteil_pct = <code style="color:var(--grn)">ROUND(Saldo / Umsatz * 100, 1)</code><br>
+⑥ <code>Chart</code>: Donut → Kostenverteilung visualisieren<br>
+⑦ Pipeline speichern → jeden Monat wiederholen<br><br>
+
+<strong style="color:var(--blu);font-size:13px">Szenario 10: Debitoren-Management / Offene Posten</strong><br>
+① OP-Liste importieren (Kunde, Rechnungs-Nr, Betrag, Fällig, Bezahlt)<br>
+② <code>Berechnet</code>: Offen = <code style="color:var(--grn)">Betrag - Bezahlt</code><br>
+③ <code>Berechnet</code>: Überfällig_Tage = <code style="color:var(--grn)">ROUND((Heute - Fällig), 0)</code><br>
+④ <code>SELECT CASE</code> auf Überfällig_Tage:<br>
+&nbsp;&nbsp;Case &lt;=0 → Status = "✅ OK" / Case &lt;=30 → "⚠ Mahnung 1"<br>
+&nbsp;&nbsp;Case &lt;=60 → "🔴 Mahnung 2" / Case &lt;=90 → "⛔ Mahnung 3"<br>
+&nbsp;&nbsp;Case Else → "💀 Inkasso"<br>
+⑤ <code>Prüfung</code>: Offen &gt; 0 → nur unbezahlte anzeigen<br>
+⑥ <code>Pivot</code>: Status → SUM(Offen) → Mahnvolumen pro Stufe<br>
+⑦ <code>Serien-Mail</code>: Mahnschreiben automatisch per Template<br><br>
+
+<strong style="color:var(--blu);font-size:13px">Szenario 11: Kostenstellenrechnung</strong><br>
+① Buchungen importieren (Kostenstelle, Kostenart, Betrag, Monat)<br>
+② <code>SWITCH</code>: KST=100 AND Kostenart=Personal → Verantwortlich = "HR"<br>
+&nbsp;&nbsp;KST=200 AND Kostenart=Material → Verantwortlich = "Einkauf"<br>
+③ <code>Pivot</code>: Kostenstelle → SUM(Betrag) → Kosten pro Abteilung<br>
+④ <code>Berechnet</code>: Budget_Rest = <code style="color:var(--grn)">Budget - Betrag</code><br>
+⑤ <code>IF/ELSE</code>: Budget_Rest &lt; 0 → Ampel = "🔴 Überbudget" / &lt;500 → "🟡" / ELSE → "🟢"<br>
+⑥ <code>Chart</code>: Balken → Budget vs. Ist pro Kostenstelle<br><br>
+
+<strong style="color:var(--blu);font-size:13px">Szenario 12: Kreditoren / Eingangsrechnungen</strong><br>
+① Eingangsrechnungen importieren (Lieferant, Netto, MwSt-Satz, Datum, Konto)<br>
+② <code>Berechnet</code>: MwSt = <code style="color:var(--grn)">ROUND(Netto * MwSt_Satz / 100, 2)</code><br>
+③ <code>Berechnet</code>: Brutto = <code style="color:var(--grn)">Netto + MwSt</code><br>
+④ <code>Berechnet</code>: Skonto = <code style="color:var(--grn)">IF(Zahlungsziel &lt; 14, Brutto * 0.02, 0)</code><br>
+⑤ <code>Berechnet</code>: Zahlbetrag = <code style="color:var(--grn)">Brutto - Skonto</code><br>
+⑥ <code>SELECT CASE</code> MwSt-Satz: 19→"Regelsteuersatz", 7→"Ermäßigt", 0→"Steuerfrei"<br>
+⑦ <code>Prüfung</code>: Netto ist Zahl? + IBAN Länge ≥ 22<br>
+⑧ <code>Pivot</code>: Lieferant → SUM(Brutto) → Top-Lieferanten<br><br>
+
+<strong style="color:var(--blu);font-size:13px">Szenario 13: Liquiditätsplanung</strong><br>
+① Zahlungsplan importieren (Monat, Einnahmen, Ausgaben, Typ)<br>
+② <code>Berechnet</code>: Cashflow = <code style="color:var(--grn)">Einnahmen - Ausgaben</code><br>
+③ <code>IF/ELSE</code>: Cashflow &lt; 0 → Warnung = "🔴 Negativ" / &lt;5000 → "🟡 Knapp" / ELSE → "🟢"<br>
+④ <code>Pivot</code>: Monat → SUM(Cashflow) → Monatlicher Netto-Cashflow<br>
+⑤ <code>SELECT CASE</code> Typ: Miete→"Fix", Gehalt→"Fix", Material→"Variabel", Else→"Sonstig"<br>
+⑥ <code>Chart</code>: Linie → Cashflow-Verlauf über Monate<br>
+⑦ <code>Pivot</code>: Fix/Variabel → SUM → Kostenstruktur analysieren<br><br>
+
+<strong style="color:var(--blu);font-size:13px">Szenario 14: Anlagenbuchhaltung / AfA</strong><br>
+① Anlagenverzeichnis importieren (Anlagegut, Anschaffung, Datum, Nutzungsdauer)<br>
+② <code>Berechnet</code>: AfA_Jahr = <code style="color:var(--grn)">ROUND(Anschaffung / Nutzungsdauer, 2)</code><br>
+③ <code>Berechnet</code>: AfA_Monat = <code style="color:var(--grn)">ROUND(AfA_Jahr / 12, 2)</code><br>
+④ <code>Berechnet</code>: Restbuchwert = <code style="color:var(--grn)">Anschaffung - (AfA_Jahr * Alter)</code><br>
+⑤ <code>IF/ELSE</code>: Restbuchwert ≤ 1 → Status = "Voll abgeschrieben" / ELSE → "Aktiv"<br>
+⑥ <code>SELECT CASE</code> Anlageklasse: EDV→3 Jahre, Möbel→13, Fahrzeug→6, Gebäude→33<br>
+⑦ <code>Pivot</code>: Anlageklasse → SUM(AfA_Jahr) → Abschreibungsvolumen<br><br>
+
+<strong style="color:var(--blu);font-size:13px">Szenario 15: Reisekosten-Abrechnung</strong><br>
+① Belege importieren (Mitarbeiter, Datum, Kategorie, Betrag, Land)<br>
+② <code>SELECT CASE</code> Land → Pauschale zuordnen:<br>
+&nbsp;&nbsp;DE→28€, US→59€, NG→44€, FR→53€, Else→40€<br>
+③ <code>SWITCH</code>: Kategorie=Hotel AND Land=DE → MwSt_Satz = "7%"<br>
+&nbsp;&nbsp;Kategorie=Taxi AND Land=DE → MwSt_Satz = "19%"<br>
+④ <code>Berechnet</code>: MwSt = <code style="color:var(--grn)">ROUND(Betrag * MwSt_Satz / 100, 2)</code><br>
+⑤ <code>Berechnet</code>: Erstattung = <code style="color:var(--grn)">Betrag + Pauschale</code><br>
+⑥ <code>Prüfung</code>: Beleg-Nr nicht leer + Betrag ist Zahl<br>
+⑦ <code>Pivot</code>: Mitarbeiter → SUM(Erstattung) → Auszahlungsliste<br>
+⑧ <code>Serien-Mail</code>: Abrechnungsbestätigung pro Mitarbeiter<br><br>
+
+<strong style="color:var(--blu);font-size:13px">Szenario 16: Umsatzsteuer-Voranmeldung vorbereiten</strong><br>
+① Ausgangsrechnungen importieren (Kunde, Netto, MwSt-Satz, Land, Datum)<br>
+② <code>SELECT CASE</code> MwSt-Satz:<br>
+&nbsp;&nbsp;19→KZ = "81 (19%)", 7→KZ = "86 (7%)", 0→KZ = "41 (steuerfrei)"<br>
+③ <code>SWITCH</code>: Land≠DE AND EU=Ja → KZ = "21 (ig. Lieferung steuerfrei)"<br>
+&nbsp;&nbsp;Land≠DE AND EU=Nein → KZ = "43 (Drittland-Export)"<br>
+④ <code>Berechnet</code>: MwSt_Betrag = <code style="color:var(--grn)">ROUND(Netto * MwSt_Satz / 100, 2)</code><br>
+⑤ <code>Pivot</code>: KZ → SUM(Netto) + SUM(MwSt_Betrag) → UStVA-Positionen<br>
+⑥ <code>Prüfung</code>: Rechnungs-Nr Duplikat? → Doppelbuchungen finden<br><br>
+
+<strong style="color:var(--blu);font-size:13px">Szenario 17: Budget-Soll/Ist-Vergleich (Controlling)</strong><br>
+① Budget + Ist-Zahlen importieren (Kostenstelle, Kostenart, Soll, Ist, Monat)<br>
+② <code>Berechnet</code>: Abweichung = <code style="color:var(--grn)">Ist - Soll</code><br>
+③ <code>Berechnet</code>: Abw_pct = <code style="color:var(--grn)">ROUND(Abweichung / Soll * 100, 1)</code><br>
+④ <code>IF/ELSEIF/ELSE</code>:<br>
+&nbsp;&nbsp;IF Abw_pct > 20 → Ampel = "🔴 Kritisch"<br>
+&nbsp;&nbsp;ELSEIF Abw_pct > 10 → "🟡 Beobachten"<br>
+&nbsp;&nbsp;ELSEIF Abw_pct > 0 → "🟠 Leicht über Plan"<br>
+&nbsp;&nbsp;ELSE → "🟢 Im Budget"<br>
+⑤ <code>Sort</code>: Abw_pct Z→A → größte Abweicher zuerst<br>
+⑥ <code>Chart</code>: Balken → Soll vs. Ist pro Kostenstelle<br>
+⑦ <code>Filter</code>: Ampel = "🔴" → nur kritische Positionen<br>
+⑧ <code>Pipeline</code> speichern → monatlich wiederholen<br><br>
+
+<strong style="color:var(--blu);font-size:13px">Szenario 18: Deckungsbeitragsrechnung</strong><br>
+① Produktliste importieren (Produkt, Umsatz, Variable_Kosten, Fixkosten_Anteil)<br>
+② <code>Berechnet</code>: DB_I = <code style="color:var(--grn)">Umsatz - Variable_Kosten</code><br>
+③ <code>Berechnet</code>: DB_II = <code style="color:var(--grn)">DB_I - Fixkosten_Anteil</code><br>
+④ <code>Berechnet</code>: DB_Marge = <code style="color:var(--grn)">ROUND(DB_I / Umsatz * 100, 1)</code><br>
+⑤ <code>IF/ELSE</code>: DB_II &lt; 0 → Empfehlung = "⛔ Eliminieren" / DB_Marge &lt; 20 → "⚠ Prüfen" / ELSE → "✅ Profitabel"<br>
+⑥ <code>Berechnet</code>: Break_Even = <code style="color:var(--grn)">ROUND(Fixkosten_Anteil / (Preis - Var_Stueck), 0)</code><br>
+⑦ <code>Sort</code>: DB_Marge Z→A → profitabelste Produkte zuerst<br>
+⑧ <code>Chart</code>: Balken → DB I / DB II pro Produkt<br>
+⑨ <code>Pivot</code>: Empfehlung → COUNT → Wie viele eliminieren/prüfen/behalten?
+</div>
+</div>
+
+<div class="cd" style="border-color:rgba(240,165,0,.5)">
+<h3 style="color:var(--acc2)">💱 FREMDWÄHRUNG — Währungs-Workflows</h3>
+<div style="font-size:12px;line-height:1.8;color:var(--tx2)">
+
+<strong style="color:var(--acc2);font-size:13px">Szenario 19: Multi-Währungs-Rechnungen in EUR umrechnen</strong><br>
+① Rechnungsliste importieren (Kunde, Betrag, Währung, Kurs_EUR)<br>
+② <code>SELECT CASE</code> Währung → Festen Kurs setzen wo nötig:<br>
+&nbsp;&nbsp;Case XOF → Kurs = 655.957 (CFA Franc BCEAO, fester Kurs)<br>
+&nbsp;&nbsp;Case XAF → Kurs = 655.957 (CFA Franc BEAC, fester Kurs)<br>
+&nbsp;&nbsp;Case EUR → Kurs = 1<br>
+&nbsp;&nbsp;Case Else → "Manuell prüfen" (Kurs aus Spalte Kurs_EUR nutzen)<br>
+③ <code>Berechnet</code>: EUR_Betrag = <code style="color:var(--grn)">ROUND(Betrag / Kurs_EUR, 2)</code><br>
+④ <code>Berechnet</code>: MwSt_EUR = <code style="color:var(--grn)">ROUND(EUR_Betrag * 0.19, 2)</code><br>
+⑤ <code>Prüfung</code>: Kurs_EUR ist Zahl? + Kurs_EUR zwischen 0.01 und 10000<br>
+⑥ <code>Pivot</code>: Währung → SUM(EUR_Betrag) → Umsatz pro Währung<br>
+⑦ <code>Chart</code>: Donut → Währungsverteilung<br><br>
+
+<strong style="color:var(--acc2);font-size:13px">Szenario 20: Kursdifferenzen / Kursgewinne & -verluste</strong><br>
+① Zahlungsliste importieren (Rechnung, Betrag_FW, Kurs_Rechnung, Kurs_Zahlung, Währung)<br>
+② <code>Berechnet</code>: EUR_Rechnung = <code style="color:var(--grn)">ROUND(Betrag_FW / Kurs_Rechnung, 2)</code><br>
+③ <code>Berechnet</code>: EUR_Zahlung = <code style="color:var(--grn)">ROUND(Betrag_FW / Kurs_Zahlung, 2)</code><br>
+④ <code>Berechnet</code>: Kursdifferenz = <code style="color:var(--grn)">ROUND(EUR_Zahlung - EUR_Rechnung, 2)</code><br>
+⑤ <code>IF/ELSEIF/ELSE</code>:<br>
+&nbsp;&nbsp;IF Kursdifferenz &gt; 100 → Typ = "🟢 Kursgewinn"<br>
+&nbsp;&nbsp;ELSEIF Kursdifferenz &lt; -100 → "🔴 Kursverlust"<br>
+&nbsp;&nbsp;ELSE → "⚪ Neutral"<br>
+⑥ <code>Berechnet</code>: Risiko_pct = <code style="color:var(--grn)">ROUND(ABS(Kursdifferenz) / EUR_Rechnung * 100, 1)</code><br>
+⑦ <code>IF/ELSE</code>: Risiko_pct > 5 → Empfehlung = "⚠ Hedging empfohlen"<br>
+⑧ <code>Pivot</code>: Währung → SUM(Kursdifferenz) → Netto-Kurseffekt pro Währung<br>
+⑨ <code>Pivot</code>: Typ → SUM(ABS) → Gesamtvolumen Gewinne vs. Verluste<br><br>
+
+<strong style="color:var(--acc2);font-size:13px">Szenario 21: Afrika-Export mit CFA/Naira/Cedi-Umrechnung</strong><br>
+① Auftragsliste importieren (Kunde, Land, Betrag_EUR, Produkt)<br>
+② <code>SELECT CASE</code> Land → Währung zuordnen:<br>
+&nbsp;&nbsp;Case NG → "NGN" / Case GH → "GHS" / Case KE → "KES"<br>
+&nbsp;&nbsp;Case CI,SN,BJ,TG,ML,BF,NE,GW → "XOF"<br>
+&nbsp;&nbsp;Case CM,GA,TD,CF,CG,GQ → "XAF"<br>
+&nbsp;&nbsp;Case ZA → "ZAR" / Case EG → "EGP" / Case MA → "MAD"<br>
+&nbsp;&nbsp;Case Else → "USD"<br>
+③ <code>SELECT CASE</code> Währung → Kurs setzen:<br>
+&nbsp;&nbsp;Case XOF → 655.957 / Case XAF → 655.957 (fest an EUR)<br>
+&nbsp;&nbsp;Case NGN → 1650 / Case GHS → 15.2 / Case KES → 140<br>
+&nbsp;&nbsp;Case ZAR → 20.5 / Case USD → 1.08 / Case Else → 1<br>
+④ <code>Berechnet</code>: Betrag_Lokal = <code style="color:var(--grn)">ROUND(Betrag_EUR * Kurs, 0)</code><br>
+⑤ <code>SWITCH</code>: Land=NG AND Betrag_EUR&gt;10000 → Zahlungsbed = "LC erforderlich (CBN)"<br>
+&nbsp;&nbsp;Währung=XOF AND Betrag_EUR&gt;5000 → Zahlungsbed = "Domizilierung BCEAO"<br>
+&nbsp;&nbsp;Else → "Vorauszahlung/TT"<br>
+⑥ <code>Berechnet</code>: Sicherheitspuffer = <code style="color:var(--grn)">ROUND(Betrag_EUR * 0.03, 2)</code> — 3% Kursrisiko<br>
+⑦ <code>Berechnet</code>: Angebotspreis = <code style="color:var(--grn)">ROUND(Betrag_EUR + Sicherheitspuffer, 2)</code><br><br>
+
+<strong style="color:var(--acc2);font-size:13px">Szenario 22: Währungs-Konsolidierung (Multi-Entity)</strong><br>
+① Buchungen aus Niederlassungen importieren (Entity, Betrag, Währung, Kurs, Monat)<br>
+② <code>Berechnet</code>: EUR = <code style="color:var(--grn)">ROUND(Betrag / Kurs, 2)</code><br>
+③ <code>Pivot</code>: Entity → SUM(EUR) → Umsatz pro Niederlassung in EUR<br>
+④ <code>Pivot</code>: Monat → SUM(EUR) → Zeitverlauf konsolidiert<br>
+⑤ <code>Chart</code>: Balken → Entity-Vergleich in EUR<br>
+⑥ <code>Chart</code>: Linie → Monatlicher Gesamtumsatz konsolidiert<br><br>
+
+<strong style="color:var(--acc2);font-size:13px">Szenario 23: Zollwertberechnung (Customs Valuation)</strong><br>
+① Sendungsliste importieren (Artikel, FOB_Wert, Währung, Kurs, Fracht, Versicherung)<br>
+② <code>Berechnet</code>: FOB_EUR = <code style="color:var(--grn)">ROUND(FOB_Wert / Kurs, 2)</code><br>
+③ <code>Berechnet</code>: CIF_EUR = <code style="color:var(--grn)">FOB_EUR + Fracht + Versicherung</code><br>
+④ <code>SELECT CASE</code> HS_Code → Zollsatz zuordnen:<br>
+&nbsp;&nbsp;Case 8471 → 0% (IT-Geräte ITA) / Case 6109 → 12%<br>
+&nbsp;&nbsp;Case 2204 → "Kontingent" / Case Else → 5%<br>
+⑤ <code>Berechnet</code>: Zoll = <code style="color:var(--grn)">ROUND(CIF_EUR * Zollsatz / 100, 2)</code><br>
+⑥ <code>Berechnet</code>: EUSt = <code style="color:var(--grn)">ROUND((CIF_EUR + Zoll) * 0.19, 2)</code> — Einfuhrumsatzsteuer<br>
+⑦ <code>Berechnet</code>: Landed_Cost = <code style="color:var(--grn)">CIF_EUR + Zoll + EUSt</code><br>
+⑧ <code>Berechnet</code>: Aufschlag_pct = <code style="color:var(--grn)">ROUND((Landed_Cost - FOB_EUR) / FOB_EUR * 100, 1)</code><br>
+⑨ <code>Prüfung</code>: HS_Code Länge ≥ 8 + FOB_Wert ist Zahl
+</div>
+</div>
+
+<div class="cd" style="border-color:rgba(240,165,0,.3)">
+<h3 style="color:var(--acc)">💱 Wichtige Währungskurse (Referenz)</h3>
+<div style="font-size:12px;line-height:1.8;color:var(--tx2)">
+<strong style="color:var(--tx)">Feste Kurse (an EUR gebunden):</strong><br>
+<code style="color:var(--grn)">XOF</code> (CFA BCEAO) = 655.957 — Westafrika: CI, SN, BJ, TG, ML, BF, NE, GW<br>
+<code style="color:var(--grn)">XAF</code> (CFA BEAC) = 655.957 — Zentralafrika: CM, GA, TD, CF, CG, GQ<br>
+<code style="color:var(--grn)">KMF</code> (Komoren-Franc) = 491.968<br>
+<code style="color:var(--grn)">CVE</code> (Kap-Verde-Escudo) = 110.265<br><br>
+<strong style="color:var(--tx)">Variable Kurse (täglich prüfen!):</strong><br>
+<code style="color:var(--ora)">USD</code> ~1.08 · <code style="color:var(--ora)">GBP</code> ~0.86 · <code style="color:var(--ora)">CHF</code> ~0.94 · <code style="color:var(--ora)">JPY</code> ~162<br>
+<code style="color:var(--ora)">NGN</code> ~1650 · <code style="color:var(--ora)">GHS</code> ~15 · <code style="color:var(--ora)">KES</code> ~140 · <code style="color:var(--ora)">ZAR</code> ~20<br>
+<code style="color:var(--ora)">EGP</code> ~52 · <code style="color:var(--ora)">MAD</code> ~10.8 · <code style="color:var(--ora)">TND</code> ~3.3 · <code style="color:var(--ora)">DZD</code> ~147<br><br>
+<strong style="color:var(--red)">⚠ Variable Kurse sind Richtwerte!</strong> Für Buchungen immer den Tageskurs der EZB oder Hausbank verwenden. Kurse als eigene Spalte in der Excel-Datei mitführen.
+</div>
+</div>
+
+<div class="cd" style="border-color:rgba(0,224,142,.3)">
+<h3 style="color:var(--grn)">🔒 DSGVO — Alles sicher</h3>
+<div style="font-size:12px;line-height:1.8;color:var(--tx2)">
+✅ Keine Cloud — Daten im Browser-RAM · ✅ Kein Server · ✅ Keine Cookies<br>
+✅ Sofortlöschung (Art. 17) · ✅ Verarbeitungsverzeichnis · ✅ E-Mail via mailto: lokal
+</div>
+</div>
+
+<div class="cd">
+<h3 style="color:var(--acc)">⌨️ Tastenkürzel & Tipps</h3>
+<div style="font-size:12px;line-height:1.8;color:var(--tx2)">
+• <strong>Enter</strong> in Formel-/Suchfeldern = sofort ausführen<br>
+• <strong>Klick auf Zelle</strong> = direkt bearbeiten, Enter oder Klick außerhalb = speichern<br>
+• <strong>"+ Neue Zielspalte"</strong> bei CASE/IF erstellt die Spalte automatisch<br>
+• <strong>Regeln speichern</strong> = wiederverwenden für neue Daten<br>
+• <strong>Excel→Word Button</strong> = übernimmt deine Excel-Daten direkt als Mail-Merge-Quelle<br>
+• <strong>Filter Reset</strong> (✕) stellt alle ausgeblendeten Zeilen wieder her<br>
+• <strong>Berechnete Spalten 🔄</strong> = neu berechnen nach Datenänderung
+</div>
+</div>
+</div>
+
+</div>
+
+<script type="module" src="/src/main.js"></script>
 </body>
 </html>

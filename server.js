@@ -1,12 +1,17 @@
-const express = require('express');
-const helmet = require('helmet');
-const compression = require('compression');
-const cors = require('cors');
-const path = require('path');
+import 'dotenv/config';
+import express from 'express';
+import helmet from 'helmet';
+import compression from 'compression';
+import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import stripeRouter from './api/stripe.js';
+import aiRouter from './api/ai.js';
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 const PORT = process.env.PORT || 3000;
-const NODE_ENV = process.env.NODE_ENV || 'development';
+const NODE_ENV = process.env.NODE_ENV || 'production';
 
 // ---------------------------------------------------------------------------
 // Middleware
@@ -15,8 +20,6 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
 app.use(cors());
 app.use(compression());
 
-// Helmet with relaxed CSP so the single-file PWA (inline scripts/styles,
-// data-URIs for icons, blob URLs for downloads) keeps working.
 app.use(
   helmet({
     contentSecurityPolicy: false,
@@ -37,19 +40,25 @@ app.get('/api/health', (_req, res) => {
 });
 
 // ---------------------------------------------------------------------------
-// Static files — serves the PWA (index.html, vba-beast-v3_z.html, etc.)
+// API routes
+// ---------------------------------------------------------------------------
+
+app.use('/api/stripe', stripeRouter);
+app.use('/api/ai', aiRouter);
+
+// ---------------------------------------------------------------------------
+// Static files — serve built PWA from dist/
 // ---------------------------------------------------------------------------
 
 app.use(
-  express.static(path.join(__dirname, '.'), {
-    extensions: ['html'],
-    maxAge: NODE_ENV === 'production' ? '1d' : 0,
+  express.static(path.join(__dirname, 'dist'), {
+    maxAge: '1d',
   })
 );
 
-// SPA / PWA fallback — serve index.html for any unmatched route
+// SPA / PWA fallback
 app.get('*', (_req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
 // ---------------------------------------------------------------------------

@@ -1,0 +1,19 @@
+{
+  "appId": "com.rawkeep.vbabeast",
+  "appName": "VBA BEAST",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  },
+  "ios": {
+    "scheme": "VBA BEAST",
+    "contentInset": "automatic"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "backgroundColor": "#000000",
+      "showSpinner": false
+    }
+  }
+}
