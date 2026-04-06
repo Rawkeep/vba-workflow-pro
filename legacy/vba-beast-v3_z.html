@@ -782,21 +782,17 @@ body.light #nav-history button:hover:not(:disabled){background:rgba(0,0,0,.08);c
 <!-- ⚡ SELECT CASE / CASE ELSE -->
 <div class="tpanel" id="xtp-case"><div class="cd" style="border-color:rgba(236,72,153,.3)">
 <h3 style="color:var(--pk)">SELECT CASE / CASE ELSE <span class="ctx-help" onmouseenter="showHelp(event,'select-case')" onmouseleave="hideHelp()">?</span></h3>
-<p style="font-size:10px;color:var(--tx2);margin-bottom:10px">VBA Select Case als visueller Builder — prüfe einen Wert gegen mehrere Fälle</p>
+<p style="font-size:10px;color:var(--tx2);margin-bottom:10px">Mehrere Bedingungen pro Case (AND/OR), jede Regel kann eigene Zielspalte haben</p>
 <div class="row" style="margin-bottom:8px">
-<span style="font:600 11px var(--mono);color:var(--pk)">SELECT CASE</span>
-<select id="cs-src" style="width:130px"></select>
-<span style="font:11px var(--mono);color:var(--tx2)">→ Ergebnis in</span>
-<select id="cs-tgt" style="width:130px"></select>
-<button class="b bo bs" onclick="csAddNew()">+ Neue Zielspalte</button>
+<span style="font:11px var(--mono);color:var(--tx2)">Standard-Ziel:</span>
+<select id="cs-tgt" style="width:130px" onchange="csSyncTargets()"></select>
+<button class="b bo bs" onclick="csAddNew()">+ Neue Spalte</button>
 </div>
-<div id="cs-rows">
-<div class="case-row"><span class="case-kw" style="color:var(--pk)">Case</span><input type="text" placeholder="Wert (z.B. DE)" style="width:120px" class="cs-val"><span class="case-arrow">→</span><input type="text" placeholder="Dann (z.B. DAP)" style="width:150px" class="cs-res"><button class="b bo bs" onclick="this.closest('.case-row').remove()">✕</button></div>
-</div>
+<div id="cs-rows"></div>
 <div class="row" style="margin-top:8px">
 <button class="b bo bs" onclick="csAddRow()">+ Case hinzufügen</button>
 <span style="font:600 11px var(--mono);color:var(--ora);margin-left:8px">Case Else →</span>
-<input type="text" id="cs-else" placeholder="Default-Wert" style="width:150px">
+<input type="text" id="cs-else" placeholder="Default oder {Spalte}" style="width:150px">
 </div>
 <div class="row" style="margin-top:10px">
 <button class="b bpk" onclick="CS_RUN()">⚡ SELECT CASE ausführen</button>
@@ -805,14 +801,11 @@ body.light #nav-history button:hover:not(:disabled){background:rgba(0,0,0,.08);c
 </div>
 <div id="cs-saved" style="margin-top:10px"></div>
 <div class="help-box">
-<strong style="color:var(--pk)">VBA Equivalent:</strong><br>
-<code>Select Case [Spalte]</code><br>
-&nbsp;&nbsp;<code>Case "DE": Incoterm = "DAP"</code><br>
-&nbsp;&nbsp;<code>Case "US": Incoterm = "FCA"</code><br>
-&nbsp;&nbsp;<code>Case "NG": Incoterm = "CFR"</code><br>
-&nbsp;&nbsp;<code>Case Else: Incoterm = "EXW"</code><br>
-<code>End Select</code><br><br>
-<strong>Erweitert:</strong> Bereiche mit <code>></code> <code><</code> <code>>=</code> <code><=</code> in Case-Wert, z.B. <code>>1000</code> oder <code>>=5000</code>
+<strong style="color:var(--pk)">Enhanced SELECT CASE:</strong><br>
+<code>Mehrere Bedingungen pro Case (AND/OR)</code><br>
+<code>Jede Regel kann eigene Zielspalte haben</code><br>
+<code>{Spaltenname} im Ergebnis = Wert kopieren</code><br>
+<code>12 Operatoren: = ≠ &gt; &lt; &gt;= &lt;= enthält beginnt endet leer nicht&nbsp;leer zwischen</code>
 </div>
 </div></div>
 
@@ -821,28 +814,15 @@ body.light #nav-history button:hover:not(:disabled){background:rgba(0,0,0,.08);c
 <h3 style="color:var(--ora)">IF / ELSEIF / ELSE Ketten <span class="ctx-help" onmouseenter="showHelp(event,'if-else')" onmouseleave="hideHelp()">?</span></h3>
 <p style="font-size:10px;color:var(--tx2);margin-bottom:10px">Mehrstufige Bedingungen mit AND/OR — wie VBA If...ElseIf...Else...End If</p>
 <div class="row" style="margin-bottom:6px">
-<span style="font:11px var(--mono);color:var(--tx2)">Zielspalte:</span>
-<select id="ie-tgt" style="width:130px"></select>
-<button class="b bo bs" onclick="ieAddNew()">+ Neue Zielspalte</button>
+<span style="font:11px var(--mono);color:var(--tx2)">Standard-Ziel:</span>
+<select id="ie-tgt" style="width:130px" onchange="ieSyncTargets()"></select>
+<button class="b bo bs" onclick="ieAddNew()">+ Neue Spalte</button>
 </div>
-<div id="ie-chain">
-<div class="ie-block" data-type="if">
-<div class="row" style="padding:6px 0;border-bottom:1px solid var(--bdr)">
-<span class="case-kw" style="color:var(--grn)">IF</span>
-<select class="ie-col" style="width:110px"></select>
-<select class="ie-op" style="width:60px"><option>=</option><option>≠</option><option>></option><option><</option><option>>=</option><option><=</option><option>enthält</option><option>leer</option><option>nicht leer</option></select>
-<input type="text" class="ie-val" placeholder="Wert" style="width:100px">
-<select class="ie-logic" style="width:60px;display:none"><option>AND</option><option>OR</option></select>
-<button class="b bo bs" onclick="ieAddCond(this)">+AND/OR</button>
-<span class="case-arrow">→</span>
-<input type="text" class="ie-res" placeholder="Dann" style="width:120px">
-</div>
-</div>
-</div>
+<div id="ie-chain"></div>
 <div class="row" style="margin-top:6px">
-<button class="b bo bs" onclick="ieAddElseIf()">+ ElseIf</button>
+<button class="b bo bs" onclick="ieAddElseIf()">+ IF / ElseIf Block</button>
 <span style="font:600 11px var(--mono);color:var(--ora);margin-left:8px">Else →</span>
-<input type="text" id="ie-else" placeholder="Sonst-Wert" style="width:140px">
+<input type="text" id="ie-else" placeholder="Sonst-Wert oder {Spalte}" style="width:160px">
 </div>
 <div class="row" style="margin-top:10px">
 <button class="b bora" onclick="IE_RUN()">⚡ IF/ELSE ausführen</button>
@@ -851,14 +831,11 @@ body.light #nav-history button:hover:not(:disabled){background:rgba(0,0,0,.08);c
 </div>
 <div id="ie-saved" style="margin-top:10px"></div>
 <div class="help-box">
-<strong style="color:var(--ora)">VBA Equivalent:</strong><br>
-<code>If Land="DE" And Betrag>1000 Then</code><br>
-&nbsp;&nbsp;<code>Status = "Premium DE"</code><br>
-<code>ElseIf Land="US" Then</code><br>
-&nbsp;&nbsp;<code>Status = "US Standard"</code><br>
-<code>Else</code><br>
-&nbsp;&nbsp;<code>Status = "International"</code><br>
-<code>End If</code>
+<strong style="color:var(--ora)">Enhanced IF/ELSE:</strong><br>
+<code>Mehrere Bedingungen pro Block (AND/OR)</code><br>
+<code>Jeder Block kann eigene Zielspalte haben</code><br>
+<code>{Spaltenname} im Ergebnis = Wert kopieren</code><br>
+<code>12 Operatoren: = ≠ &gt; &lt; &gt;= &lt;= enthält beginnt endet leer nicht&nbsp;leer zwischen</code>
 </div>
 </div></div>
 
@@ -974,26 +951,17 @@ body.light #nav-history button:hover:not(:disabled){background:rgba(0,0,0,.08);c
 <!-- ⚡ SWITCH (Multi-Column Case) -->
 <div class="tpanel" id="xtp-switch"><div class="cd" style="border-color:rgba(34,211,238,.3)">
 <h3 style="color:var(--cyn)">SWITCH — Multi-Spalten-Verzweigung</h3>
-<p style="font-size:10px;color:var(--tx2);margin-bottom:10px">Wie SELECT CASE, aber prüft Kombinationen aus mehreren Spalten gleichzeitig</p>
+<p style="font-size:10px;color:var(--tx2);margin-bottom:10px">Mehrere Bedingungen pro Regel (AND/OR), jede Regel kann eigene Zielspalte haben</p>
 <div class="row" style="margin-bottom:6px">
-<span style="font:11px var(--mono);color:var(--tx2)">Ergebnis in:</span>
-<select id="sw-tgt" style="width:120px"></select>
+<span style="font:11px var(--mono);color:var(--tx2)">Standard-Ziel:</span>
+<select id="sw-tgt" style="width:120px" onchange="swSyncTargets()"></select>
 <button class="b bo bs" onclick="swAddNew()">+ Neue Spalte</button>
 </div>
-<div id="sw-rows">
-<div class="sw-rule"><div class="row" style="padding:6px 0;border-bottom:1px solid var(--bdr)">
-<span class="case-kw" style="color:var(--cyn)">WENN</span>
-<select class="sw-col1" style="width:100px"></select><select class="sw-op1" style="width:50px"><option>=</option><option>≠</option><option>></option><option><</option><option>enthält</option></select><input type="text" class="sw-val1" placeholder="Wert" style="width:70px">
-<select class="sw-logic" style="width:50px"><option>AND</option><option>OR</option></select>
-<select class="sw-col2" style="width:100px"></select><select class="sw-op2" style="width:50px"><option>=</option><option>≠</option><option>></option><option><</option><option>enthält</option></select><input type="text" class="sw-val2" placeholder="Wert" style="width:70px">
-<span class="case-arrow">→</span><input type="text" class="sw-res" placeholder="Dann" style="width:90px">
-<button class="b bo bs" onclick="this.closest('.sw-rule').remove()">✕</button>
-</div></div>
-</div>
+<div id="sw-rows"></div>
 <div class="row" style="margin-top:6px">
 <button class="b bo bs" onclick="swAddRule()">+ Regel</button>
 <span style="font:600 11px var(--mono);color:var(--ora)">Else →</span>
-<input type="text" id="sw-else" placeholder="Default" style="width:120px">
+<input type="text" id="sw-else" placeholder="Default oder {Spalte}" style="width:140px">
 </div>
 <div class="row" style="margin-top:8px">
 <button class="b bcyn" onclick="SW_RUN()">⚡ SWITCH ausführen</button>
@@ -1002,11 +970,11 @@ body.light #nav-history button:hover:not(:disabled){background:rgba(0,0,0,.08);c
 </div>
 <div id="sw-saved" style="margin-top:8px"></div>
 <div class="help-box">
-<strong style="color:var(--cyn)">Beispiele:</strong><br>
-WENN <code>Land=DE AND DG=Ja</code> → <code>Gefahrgut DE (ADR)</code><br>
-WENN <code>Land=US AND Betrag>10000</code> → <code>US Export License</code><br>
-WENN <code>Incoterm=CIF OR Incoterm=CFR</code> → <code>Versicherung prüfen</code><br>
-Else → <code>Standard</code>
+<strong style="color:var(--cyn)">Enhanced SWITCH:</strong><br>
+<code>Unbegrenzte Bedingungen pro Regel (AND/OR)</code><br>
+<code>Jede Regel kann eigene Zielspalte haben</code><br>
+<code>{Spaltenname} im Ergebnis = Wert kopieren</code><br>
+<code>12 Operatoren: = ≠ &gt; &lt; &gt;= &lt;= enthält beginnt endet leer nicht&nbsp;leer zwischen</code>
 </div>
 </div></div>
 
@@ -2440,83 +2408,312 @@ function XDR(i){S.xD.splice(i,1);XR()}
 function XAC(){const n=prompt('Spaltenname:');if(!n)return;S.xH.push(n);S.xD.forEach(r=>r.push(''));showX();XR();L('Spalte hinzugefügt',n)}
 let _xtTabs,_xtPanels;function XT(tab,pid){if(!_xtTabs)_xtTabs=document.querySelectorAll('#x-tabs .tab');if(!_xtPanels)_xtPanels=document.querySelectorAll('.tpanel');_xtTabs.forEach(t=>t.classList.remove('a'));_xtPanels.forEach(p=>p.classList.remove('a'));tab.classList.add('a');$(pid).classList.add('a')}
 
-// ══════ SELECT CASE ══════
-function csAddRow(){const d=$('cs-rows');const div=document.createElement('div');div.className='case-row';div.innerHTML=`<span class="case-kw" style="color:var(--pk)">Case</span><input type="text" placeholder="Wert" style="width:120px" class="cs-val"><span class="case-arrow">→</span><input type="text" placeholder="Dann" style="width:150px" class="cs-res"><button class="b bo bs" onclick="this.closest('.case-row').remove()">✕</button>`;d.appendChild(div)}
+// ══════ SELECT CASE (Enhanced Multi-Condition) ══════
+function _csOpOpts(){
+  return ['=','≠','>','<','>=','<=','enthält','beginnt','endet','leer','nicht leer','zwischen'].map(o=>`<option value="${o}">${o}</option>`).join('');
+}
+function _csCondHTML(isFirst){
+  return `<div class="cs-cond" style="display:inline-flex;align-items:center;gap:4px;margin:2px 0">${
+    isFirst?''
+    :'<select class="cs-logic" style="width:50px;font-size:10px"><option>AND</option><option>OR</option></select>'
+  }<select class="cs-col" style="width:100px">${colOpts()}</select><select class="cs-op" style="width:70px">${_csOpOpts()}</select><input type="text" class="cs-val" placeholder="Wert" style="width:90px"><input type="text" class="cs-val2" placeholder="bis" style="width:55px;display:none"><button class="b bo bs" style="font-size:9px;padding:2px 5px" onclick="this.closest('.cs-cond').remove()">✕</button></div>`;
+}
+function _csBindOpChange(container){
+  container.querySelectorAll('.cs-op').forEach(s=>{
+    s.addEventListener('change',function(){
+      const v2=this.closest('.cs-cond').querySelector('.cs-val2');
+      if(v2) v2.style.display=this.value==='zwischen'?'':'none';
+    });
+  });
+}
+function _csResolveResult(row,resStr){
+  return resStr.replace(/\{([^}]+)\}/g,(_,name)=>{
+    const ci=S.xH.indexOf(name);
+    return ci!==-1?String(row[ci]??''):`{${name}}`;
+  });
+}
+function _csEvalCond(row,col,op,val,val2){
+  const ci=S.xH.indexOf(col);if(ci===-1)return false;
+  const c=String(row[ci]??''),n=parseFloat(c),nv=parseFloat(val);
+  switch(op){
+    case'=':return c===val;case'≠':return c!==val;
+    case'>':return!isNaN(n)&&n>nv;case'<':return!isNaN(n)&&n<nv;
+    case'>=':return!isNaN(n)&&n>=nv;case'<=':return!isNaN(n)&&n<=nv;
+    case'enthält':return c.toLowerCase().includes(val.toLowerCase());
+    case'beginnt':return c.toLowerCase().startsWith(val.toLowerCase());
+    case'endet':return c.toLowerCase().endsWith(val.toLowerCase());
+    case'leer':return!c.trim();case'nicht leer':return!!c.trim();
+    case'zwischen':{const nv2=parseFloat(val2);return!isNaN(n)&&n>=nv&&n<=nv2}
+  }
+  return false;
+}
+function csAddRow(){
+  const d=$('cs-rows');
+  const div=document.createElement('div');
+  div.className='cs-rule';
+  div.style.cssText='padding:8px;margin:4px 0;background:rgba(236,72,153,.04);border:1px solid rgba(236,72,153,.15);border-radius:6px';
+  div.innerHTML=`<div class="cs-conds">${_csCondHTML(true)}</div><div style="display:flex;align-items:center;gap:6px;margin-top:4px"><button class="b bo bs" style="font-size:9px" onclick="csAddCond(this.closest('.cs-rule'))">+ Bedingung</button><span class="case-arrow" style="color:var(--pk)">→</span><span style="font:600 10px var(--mono);color:var(--tx2)">in</span><select class="cs-rule-tgt" style="width:100px">${colOpts()}</select><span style="font:600 10px var(--mono);color:var(--tx2)">schreibe</span><input type="text" class="cs-res" placeholder="Wert oder {Spalte}" style="width:130px"><button class="b bo bs" onclick="this.closest('.cs-rule').remove()">✕</button></div>`;
+  d.appendChild(div);
+  _csBindOpChange(div);
+  const globalTgt=$('cs-tgt');
+  if(globalTgt&&globalTgt.value) div.querySelector('.cs-rule-tgt').value=globalTgt.value;
+}
+function csAddCond(ruleDiv){
+  const c=ruleDiv.querySelector('.cs-conds');
+  const tmp=document.createElement('div');
+  tmp.innerHTML=_csCondHTML(false);
+  const cond=tmp.firstElementChild;
+  c.appendChild(cond);
+  _csBindOpChange(cond);
+}
+function csSyncTargets(){
+  const v=$('cs-tgt').value;
+  document.querySelectorAll('#cs-rows .cs-rule-tgt').forEach(sel=>sel.value=v);
+}
 function csAddNew(){const n=prompt('Neue Spalte:');if(!n)return;if(S.xH.includes(n)){toast('⚠ Spalte "'+n+'" existiert bereits');$('cs-tgt').value=n;return}S.xH.push(n);S.xD.forEach(r=>r.push(''));showX();XR();$('cs-tgt').value=n}
+function _csParseRules(){
+  return [...document.querySelectorAll('#cs-rows .cs-rule')].map(r=>{
+    const conds=[...r.querySelectorAll('.cs-cond')].map((c,i)=>({
+      logic:i===0?'AND':(c.querySelector('.cs-logic')?.value||'AND'),
+      col:c.querySelector('.cs-col').value,
+      op:c.querySelector('.cs-op').value,
+      val:c.querySelector('.cs-val').value,
+      val2:c.querySelector('.cs-val2')?.value||''
+    }));
+    return{conds,tgt:r.querySelector('.cs-rule-tgt')?.value||'',res:r.querySelector('.cs-res').value};
+  });
+}
+function _csEvalRule(row,rule){
+  if(!rule.conds||!rule.conds.length)return false;
+  let result=_csEvalCond(row,rule.conds[0].col,rule.conds[0].op,rule.conds[0].val,rule.conds[0].val2);
+  for(let i=1;i<rule.conds.length;i++){
+    const c=rule.conds[i];
+    const r=_csEvalCond(row,c.col,c.op,c.val,c.val2);
+    result=c.logic==='AND'?result&&r:result||r;
+  }
+  return result;
+}
 function CS_RUN(){
-  const src=$('cs-src').value,tgt=$('cs-tgt').value,elseVal=$('cs-else').value;
-  if(!src||!tgt){toast('Spalten wählen');return}
-  const si=S.xH.indexOf(src),ti=S.xH.indexOf(tgt);if(si===-1||ti===-1)return;
-  pushUndo();const cases=[];document.querySelectorAll('#cs-rows .case-row').forEach(row=>{
-    const v=row.querySelector('.cs-val').value,r=row.querySelector('.cs-res').value;if(v&&r)cases.push({v,r})});
-  let count=0;
+  const globalTgt=$('cs-tgt').value,elseVal=$('cs-else').value;
+  if(!globalTgt){toast('Zielspalte?');return}
+  const rules=_csParseRules();
+  if(!rules.length){toast('Regeln hinzufügen');return}
+  pushUndo();let count=0;
   S.xD.forEach(row=>{
-    const val=String(row[si]??'');
     let matched=false;
-    for(const c of cases){
-      // Support range operators
-      if(c.v.startsWith('>=')){const n=parseFloat(c.v.slice(2)),rv=parseFloat(val);if(!isNaN(rv)&&rv>=n){row[ti]=c.r;matched=true;count++;break}}
-      else if(c.v.startsWith('<=')){const n=parseFloat(c.v.slice(2)),rv=parseFloat(val);if(!isNaN(rv)&&rv<=n){row[ti]=c.r;matched=true;count++;break}}
-      else if(c.v.startsWith('>')){const n=parseFloat(c.v.slice(1)),rv=parseFloat(val);if(!isNaN(rv)&&rv>n){row[ti]=c.r;matched=true;count++;break}}
-      else if(c.v.startsWith('<')){const n=parseFloat(c.v.slice(1)),rv=parseFloat(val);if(!isNaN(rv)&&rv<n){row[ti]=c.r;matched=true;count++;break}}
-      else if(val===c.v){row[ti]=c.r;matched=true;count++;break}
+    for(const rule of rules){
+      if(_csEvalRule(row,rule)){
+        const ti=S.xH.indexOf(rule.tgt||globalTgt);
+        if(ti!==-1){row[ti]=_csResolveResult(row,rule.res);matched=true;count++}
+        break;
+      }
     }
-    if(!matched&&elseVal){row[ti]=elseVal;count++}
+    if(!matched&&elseVal){
+      const ti=S.xH.indexOf(globalTgt);
+      if(ti!==-1){row[ti]=_csResolveResult(row,elseVal);count++}
+    }
   });
   XR();$('cs-result').innerHTML=`<span class="tg tg-g">${count} Zeilen</span>`;
-  L('CASE',`${src}→${tgt} (${cases.length} Cases, ${count}×)`);toast(count+' ✓');macLog('case',{src,tgt,cases,elseVal});
+  L('CASE',`→${globalTgt} (${count}×)`);toast(count+' ✓');
 }
 function CS_SAVE(){
-  const src=$('cs-src').value,tgt=$('cs-tgt').value,elseVal=$('cs-else').value;
-  const cases=[];document.querySelectorAll('#cs-rows .case-row').forEach(row=>{
-    const v=row.querySelector('.cs-val').value,r=row.querySelector('.cs-res').value;if(v)cases.push({v,r})});
-  if(!src||!cases.length)return;
-  S.savedCases.push({src,tgt,cases,elseVal,name:`CASE ${src}→${tgt}`});renderSavedCases();toast('Case gespeichert ✓');
+  const globalTgt=$('cs-tgt').value,elseVal=$('cs-else').value;if(!globalTgt)return;
+  const rules=_csParseRules();if(!rules.length)return;
+  S.savedCases.push({globalTgt,elseVal,rules,name:`CASE→${globalTgt}`});renderSavedCases();toast('Case gespeichert ✓');
 }
 function renderSavedCases(){if(!S.savedCases.length){$('cs-saved').innerHTML='';return}
-$('cs-saved').innerHTML=S.savedCases.map((c,i)=>`<div class="rule-card"><span class="tg tg-pk">CASE</span><span class="rt">${H(c.src)}→${H(c.tgt)}: ${c.cases.map(x=>x.v+'→'+x.r).join(', ')}${c.elseVal?' | Else→'+c.elseVal:''}</span><button class="b bpk bs" onclick="runSavedCase(${i})">▶</button><button class="b bo bs" onclick="S.savedCases.splice(${i},1);renderSavedCases()">✕</button></div>`).join('')}
-function runSavedCase(i){const c=S.savedCases[i];const si=S.xH.indexOf(c.src),ti=S.xH.indexOf(c.tgt);if(si===-1||ti===-1)return;pushUndo();let n=0;S.xD.forEach(row=>{const val=String(row[si]??'');let m=false;for(const cs of c.cases){if(cs.v.startsWith('>=')){if(parseFloat(val)>=parseFloat(cs.v.slice(2))){row[ti]=cs.r;m=true;n++;break}}else if(cs.v.startsWith('>')){if(parseFloat(val)>parseFloat(cs.v.slice(1))){row[ti]=cs.r;m=true;n++;break}}else if(cs.v.startsWith('<=')){if(parseFloat(val)<=parseFloat(cs.v.slice(2))){row[ti]=cs.r;m=true;n++;break}}else if(cs.v.startsWith('<')){if(parseFloat(val)<parseFloat(cs.v.slice(1))){row[ti]=cs.r;m=true;n++;break}}else if(val===cs.v){row[ti]=cs.r;m=true;n++;break}}if(!m&&c.elseVal){row[ti]=c.elseVal;n++}});XR();toast(n+' ✓');macLog('case',c)}
+$('cs-saved').innerHTML=S.savedCases.map((c,i)=>{
+  const tgt=c.globalTgt||c.tgt;
+  const ruleCount=c.rules?.length||c.cases?.length||0;
+  return `<div class="rule-card"><span class="tg tg-pk">CASE</span><span class="rt">→${H(tgt)}: ${ruleCount} Regeln${c.elseVal?' | Else→'+H(c.elseVal):''}</span><button class="b bpk bs" onclick="runSavedCase(${i})">▶</button><button class="b bo bs" onclick="S.savedCases.splice(${i},1);renderSavedCases()">✕</button></div>`;
+}).join('')}
+function runSavedCase(idx){
+  const c=S.savedCases[idx];
+  const globalTgt=c.globalTgt||c.tgt;
+  pushUndo();let n=0;
+  S.xD.forEach(row=>{
+    let matched=false;
+    if(c.rules){
+      for(const rule of c.rules){
+        if(_csEvalRule(row,rule)){
+          const ti=S.xH.indexOf(rule.tgt||globalTgt);
+          if(ti!==-1){row[ti]=_csResolveResult(row,rule.res);matched=true;n++}
+          break;
+        }
+      }
+    } else if(c.cases){
+      // Legacy format
+      const si=S.xH.indexOf(c.src),ti=S.xH.indexOf(globalTgt);
+      if(si!==-1&&ti!==-1){
+        const val=String(row[si]??'');
+        for(const cs of c.cases){
+          if(cs.v.startsWith('>=')){if(parseFloat(val)>=parseFloat(cs.v.slice(2))){row[ti]=cs.r;matched=true;n++;break}}
+          else if(cs.v.startsWith('>')){if(parseFloat(val)>parseFloat(cs.v.slice(1))){row[ti]=cs.r;matched=true;n++;break}}
+          else if(cs.v.startsWith('<=')){if(parseFloat(val)<=parseFloat(cs.v.slice(2))){row[ti]=cs.r;matched=true;n++;break}}
+          else if(cs.v.startsWith('<')){if(parseFloat(val)<parseFloat(cs.v.slice(1))){row[ti]=cs.r;matched=true;n++;break}}
+          else if(val===cs.v){row[ti]=cs.r;matched=true;n++;break}
+        }
+      }
+    }
+    if(!matched&&c.elseVal){
+      const ti=S.xH.indexOf(globalTgt);
+      if(ti!==-1){row[ti]=_csResolveResult(row,c.elseVal);n++}
+    }
+  });
+  XR();toast(n+' ✓');macLog('case',c);
+}
 
-// ══════ IF/ELSEIF/ELSE ══════
-function ieAddElseIf(){const d=$('ie-chain');const div=document.createElement('div');div.className='ie-block';div.dataset.type='elseif';div.innerHTML=`<div class="row" style="padding:6px 0;border-bottom:1px solid var(--bdr)"><span class="case-kw" style="color:var(--ora)">ElseIf</span><select class="ie-col" style="width:110px">${colOpts()}</select><select class="ie-op" style="width:60px"><option>=</option><option>≠</option><option>></option><option><</option><option>>=</option><option><=</option><option>enthält</option><option>leer</option><option>nicht leer</option></select><input type="text" class="ie-val" placeholder="Wert" style="width:100px"><button class="b bo bs" onclick="ieAddCond(this)">+AND/OR</button><span class="case-arrow">→</span><input type="text" class="ie-res" placeholder="Dann" style="width:120px"><button class="b bo bs" onclick="this.closest('.ie-block').remove()">✕</button></div>`;d.appendChild(div)}
-function ieAddCond(btn){const row=btn.closest('.row');const extra=document.createElement('span');extra.className='ie-extra';extra.innerHTML=` <select class="ie-logic" style="width:55px"><option>AND</option><option>OR</option></select> <select class="ie-col" style="width:110px">${colOpts()}</select> <select class="ie-op" style="width:60px"><option>=</option><option>≠</option><option>></option><option><</option><option>>=</option><option><=</option><option>enthält</option></select> <input type="text" class="ie-val" placeholder="Wert" style="width:90px">`;row.insertBefore(extra,btn)}
+// ══════ IF/ELSEIF/ELSE (Enhanced Multi-Condition) ══════
+function _ieOpOpts(){
+  return ['=','≠','>','<','>=','<=','enthält','beginnt','endet','leer','nicht leer','zwischen'].map(o=>`<option value="${o}">${o}</option>`).join('');
+}
+function evalCond(row,col,op,val,val2){
+  const ci=S.xH.indexOf(col);if(ci===-1)return false;
+  const c=String(row[ci]??''),n=parseFloat(c),nv=parseFloat(val);
+  switch(op){
+    case'=':return c===val;case'≠':return c!==val;
+    case'>':return!isNaN(n)&&n>nv;case'<':return!isNaN(n)&&n<nv;
+    case'>=':return!isNaN(n)&&n>=nv;case'<=':return!isNaN(n)&&n<=nv;
+    case'enthält':return c.toLowerCase().includes(val.toLowerCase());
+    case'beginnt':return c.toLowerCase().startsWith(val.toLowerCase());
+    case'endet':return c.toLowerCase().endsWith(val.toLowerCase());
+    case'leer':return!c.trim();case'nicht leer':return!!c.trim();
+    case'zwischen':{const nv2=parseFloat(val2);return!isNaN(n)&&n>=nv&&n<=nv2}
+  }
+  return false;
+}
+function _ieResolve(row,str){
+  return str.replace(/\{([^}]+)\}/g,(_,name)=>{
+    const ci=S.xH.indexOf(name);
+    return ci!==-1?String(row[ci]??''):`{${name}}`;
+  });
+}
+function _ieCondHTML(isFirst){
+  return `<div class="ie-cond" style="display:inline-flex;align-items:center;gap:4px;margin:2px 0">${
+    isFirst?''
+    :'<select class="ie-logic" style="width:50px;font-size:10px"><option>AND</option><option>OR</option></select>'
+  }<select class="ie-col" style="width:100px">${colOpts()}</select><select class="ie-op" style="width:70px">${_ieOpOpts()}</select><input type="text" class="ie-val" placeholder="Wert" style="width:90px"><input type="text" class="ie-val2" placeholder="bis" style="width:55px;display:none"><button class="b bo bs" style="font-size:9px;padding:2px 5px" onclick="this.closest('.ie-cond').remove()">✕</button></div>`;
+}
+function _ieBindOpChange(container){
+  container.querySelectorAll('.ie-op').forEach(s=>{
+    s.addEventListener('change',function(){
+      const v2=this.closest('.ie-cond').querySelector('.ie-val2');
+      if(v2) v2.style.display=this.value==='zwischen'?'':'none';
+    });
+  });
+}
+function ieAddElseIf(){
+  const d=$('ie-chain');
+  const div=document.createElement('div');
+  div.className='ie-block';div.dataset.type='elseif';
+  div.style.cssText='padding:8px;margin:4px 0;background:rgba(247,159,31,.04);border:1px solid rgba(247,159,31,.15);border-radius:6px';
+  div.innerHTML=`<div class="ie-conds">${_ieCondHTML(true)}</div><div style="display:flex;align-items:center;gap:6px;margin-top:4px"><button class="b bo bs" style="font-size:9px" onclick="ieAddCond(this.closest('.ie-block'))">+ Bedingung</button><span class="case-arrow" style="color:var(--ora)">→</span><span style="font:600 10px var(--mono);color:var(--tx2)">in</span><select class="ie-rule-tgt" style="width:100px">${colOpts()}</select><span style="font:600 10px var(--mono);color:var(--tx2)">schreibe</span><input type="text" class="ie-res" placeholder="Wert oder {Spalte}" style="width:130px"><button class="b bo bs" onclick="this.closest('.ie-block').remove()">✕</button></div>`;
+  d.appendChild(div);
+  _ieBindOpChange(div);
+  const globalTgt=$('ie-tgt');
+  if(globalTgt&&globalTgt.value) div.querySelector('.ie-rule-tgt').value=globalTgt.value;
+}
+function ieAddCond(blockDiv){
+  const c=blockDiv.querySelector('.ie-conds');
+  const tmp=document.createElement('div');
+  tmp.innerHTML=_ieCondHTML(false);
+  const cond=tmp.firstElementChild;
+  c.appendChild(cond);
+  _ieBindOpChange(cond);
+}
+function ieSyncTargets(){
+  const v=$('ie-tgt').value;
+  document.querySelectorAll('#ie-chain .ie-rule-tgt').forEach(sel=>sel.value=v);
+}
 function ieAddNew(){const n=prompt('Neue Spalte:');if(!n)return;if(S.xH.includes(n)){toast('⚠ Spalte "'+n+'" existiert bereits');$('ie-tgt').value=n;return}S.xH.push(n);S.xD.forEach(r=>r.push(''));showX();XR();$('ie-tgt').value=n}
-function evalCond(row,col,op,val){const ci=S.xH.indexOf(col);if(ci===-1)return false;const c=String(row[ci]??''),n=parseFloat(c),nv=parseFloat(val);switch(op){case'=':return c===val;case'≠':return c!==val;case'>':return!isNaN(n)&&n>nv;case'<':return!isNaN(n)&&n<nv;case'>=':return!isNaN(n)&&n>=nv;case'<=':return!isNaN(n)&&n<=nv;case'enthält':return c.toLowerCase().includes(val.toLowerCase());case'leer':return!c.trim();case'nicht leer':return!!c.trim()}return false}
+function _ieParseBlock(blockDiv){
+  const conds=[...blockDiv.querySelectorAll('.ie-cond')].map((c,i)=>({
+    logic: i===0?'AND':(c.querySelector('.ie-logic')?.value||'AND'),
+    col: c.querySelector('.ie-col').value,
+    op: c.querySelector('.ie-op').value,
+    val: c.querySelector('.ie-val').value,
+    val2: c.querySelector('.ie-val2')?.value||''
+  }));
+  return {
+    conds,
+    tgt: blockDiv.querySelector('.ie-rule-tgt')?.value||'',
+    res: blockDiv.querySelector('.ie-res').value,
+    type: blockDiv.dataset.type
+  };
+}
 function evalBlock(row,block){
-  const conds=[];const cols=block.querySelectorAll('.ie-col');const ops=block.querySelectorAll('.ie-op');const vals=block.querySelectorAll('.ie-val');const logics=block.querySelectorAll('.ie-logic');
-  for(let i=0;i<cols.length;i++){conds.push({col:cols[i].value,op:ops[i].value,val:vals[i].value,logic:i>0&&logics.length>=i?logics[i-1].value:''})}
-  if(!conds.length)return false;
-  let result=evalCond(row,conds[0].col,conds[0].op,conds[0].val);
-  for(let i=1;i<conds.length;i++){const r=evalCond(row,conds[i].col,conds[i].op,conds[i].val);result=conds[i].logic==='AND'?result&&r:result||r}
+  let conds;
+  if(block instanceof HTMLElement){
+    const parsed=_ieParseBlock(block);
+    conds=parsed.conds;
+  } else {
+    conds=block.conds;
+  }
+  if(!conds||!conds.length) return false;
+  let result=evalCond(row,conds[0].col,conds[0].op,conds[0].val,conds[0].val2);
+  for(let i=1;i<conds.length;i++){
+    const c=conds[i];
+    const r=evalCond(row,c.col,c.op,c.val,c.val2);
+    result=c.logic==='AND'?result&&r:result||r;
+  }
   return result;
 }
 function IE_RUN(){
-  const tgt=$('ie-tgt').value,elseVal=$('ie-else').value;if(!tgt){toast('Zielspalte?');return}
-  const ti=S.xH.indexOf(tgt);if(ti===-1)return;
-  pushUndo();const blocks=[...document.querySelectorAll('#ie-chain .ie-block')];let count=0;
+  const globalTgt=$('ie-tgt').value,elseVal=$('ie-else').value;
+  if(!globalTgt){toast('Zielspalte?');return}
+  const blocks=[...document.querySelectorAll('#ie-chain .ie-block')];
+  if(!blocks.length){toast('Bedingungen hinzufügen');return}
+  pushUndo();let count=0;
   S.xD.forEach(row=>{
     let matched=false;
-    for(const block of blocks){if(evalBlock(row,block)){row[ti]=block.querySelector('.ie-res').value;matched=true;count++;break}}
-    if(!matched&&elseVal){row[ti]=elseVal;count++}
+    for(const block of blocks){
+      const parsed=_ieParseBlock(block);
+      if(evalBlock(row,parsed)){
+        const ti=S.xH.indexOf(parsed.tgt||globalTgt);
+        if(ti!==-1){row[ti]=_ieResolve(row,parsed.res);matched=true;count++}
+        break;
+      }
+    }
+    if(!matched&&elseVal){
+      const ti=S.xH.indexOf(globalTgt);
+      if(ti!==-1){row[ti]=_ieResolve(row,elseVal);count++}
+    }
   });
   XR();$('ie-result').innerHTML=`<span class="tg tg-g">${count} Zeilen</span>`;
-  L('IF/ELSE',`→${tgt} (${count}×)`);toast(count+' ✓');
+  L('IF/ELSE',`→${globalTgt} (${count}×)`);toast(count+' ✓');
 }
 function IE_SAVE(){
-  const tgt=$('ie-tgt').value,elseVal=$('ie-else').value;if(!tgt)return;
-  const blocks=[...document.querySelectorAll('#ie-chain .ie-block')].map(b=>{
-    const res=b.querySelector('.ie-res').value;const conds=[];
-    const cols=b.querySelectorAll('.ie-col'),ops=b.querySelectorAll('.ie-op'),vals=b.querySelectorAll('.ie-val'),logics=b.querySelectorAll('.ie-logic');
-    for(let i=0;i<cols.length;i++)conds.push({col:cols[i].value,op:ops[i].value,val:vals[i].value,logic:i>0&&logics[i-1]?logics[i-1].value:''});
-    return{conds,res,type:b.dataset.type};
-  });
-  S.savedIE.push({tgt,elseVal,blocks,name:`IF→${tgt}`});renderSavedIE();toast('IF/ELSE gespeichert ✓');
+  const globalTgt=$('ie-tgt').value,elseVal=$('ie-else').value;if(!globalTgt)return;
+  const blocks=[...document.querySelectorAll('#ie-chain .ie-block')].map(b=>_ieParseBlock(b));
+  if(!blocks.length)return;
+  S.savedIE.push({globalTgt,elseVal,blocks,name:`IF→${globalTgt}`});renderSavedIE();toast('IF/ELSE gespeichert ✓');
 }
 function renderSavedIE(){if(!S.savedIE.length){$('ie-saved').innerHTML='';return}
-$('ie-saved').innerHTML=S.savedIE.map((ie,i)=>`<div class="rule-card"><span class="tg tg-o">IF/ELSE</span><span class="rt">→${H(ie.tgt)}: ${ie.blocks.length} Bedingungen${ie.elseVal?' | Else→'+H(ie.elseVal):''}</span><button class="b bora bs" onclick="runSavedIE(${i})">▶</button><button class="b bo bs" onclick="S.savedIE.splice(${i},1);renderSavedIE()">✕</button></div>`).join('')}
-function runSavedIE(idx){const ie=S.savedIE[idx];const ti=S.xH.indexOf(ie.tgt);if(ti===-1)return;pushUndo();let n=0;
-S.xD.forEach(row=>{let matched=false;for(const b of ie.blocks){let r=evalCond(row,b.conds[0].col,b.conds[0].op,b.conds[0].val);for(let j=1;j<b.conds.length;j++){const c=b.conds[j],v=evalCond(row,c.col,c.op,c.val);r=c.logic==='AND'?r&&v:r||v}if(r){row[ti]=b.res;matched=true;n++;break}}if(!matched&&ie.elseVal){row[ti]=ie.elseVal;n++}});
-XR();toast(n+' ✓');macLog('ifelse',ie)}
+$('ie-saved').innerHTML=S.savedIE.map((ie,i)=>{
+  const tgt=ie.globalTgt||ie.tgt;
+  const blockCount=ie.blocks?.length||0;
+  return `<div class="rule-card"><span class="tg tg-o">IF/ELSE</span><span class="rt">→${H(tgt)}: ${blockCount} Bedingungen${ie.elseVal?' | Else→'+H(ie.elseVal):''}</span><button class="b bora bs" onclick="runSavedIE(${i})">▶</button><button class="b bo bs" onclick="S.savedIE.splice(${i},1);renderSavedIE()">✕</button></div>`;
+}).join('')}
+function runSavedIE(idx){
+  const ie=S.savedIE[idx];
+  const globalTgt=ie.globalTgt||ie.tgt;
+  pushUndo();let n=0;
+  S.xD.forEach(row=>{
+    let matched=false;
+    for(const b of ie.blocks){
+      if(evalBlock(row,b)){
+        const ti=S.xH.indexOf(b.tgt||globalTgt);
+        if(ti!==-1){row[ti]=_ieResolve(row,b.res);matched=true;n++}
+        break;
+      }
+    }
+    if(!matched&&ie.elseVal){
+      const ti=S.xH.indexOf(globalTgt);
+      if(ti!==-1){row[ti]=_ieResolve(row,ie.elseVal);n++}
+    }
+  });
+  XR();toast(n+' ✓');macLog('ifelse',ie);
+}
 
 // ══════ BATCH PIPELINE ══════
 function ppAdd(){const type=$('pp-type').value;const div=document.createElement('div');const n=S.pipeSteps.length+1;
@@ -2634,43 +2831,140 @@ function VD_RUN(){
   L('Prüfung',`${type} auf ${col}: ${hits}/${S.xD.length}`);toast(`Prüfung: ${hits}/${S.xD.length} ✓`);
 }
 
-// ══════ SWITCH (Multi-Column) ══════
-function swAddRule(){const d=$('sw-rows');const div=document.createElement('div');div.className='sw-rule';div.innerHTML=`<div class="row" style="padding:6px 0;border-bottom:1px solid var(--bdr)"><span class="case-kw" style="color:var(--cyn)">WENN</span><select class="sw-col1" style="width:100px">${colOpts()}</select><select class="sw-op1" style="width:50px"><option>=</option><option>≠</option><option>></option><option><</option><option>enthält</option></select><input type="text" class="sw-val1" placeholder="Wert" style="width:70px"><select class="sw-logic" style="width:50px"><option>AND</option><option>OR</option></select><select class="sw-col2" style="width:100px">${colOpts()}</select><select class="sw-op2" style="width:50px"><option>=</option><option>≠</option><option>></option><option><</option><option>enthält</option></select><input type="text" class="sw-val2" placeholder="Wert" style="width:70px"><span class="case-arrow">→</span><input type="text" class="sw-res" placeholder="Dann" style="width:90px"><button class="b bo bs" onclick="this.closest('.sw-rule').remove()">✕</button></div>`;d.appendChild(div)}
+// ══════ SWITCH (Enhanced Multi-Column) ══════
+function _swOpOpts(){
+  return ['=','≠','>','<','>=','<=','enthält','beginnt','endet','leer','nicht leer','zwischen'].map(o=>`<option value="${o}">${o}</option>`).join('');
+}
+function _swCondHTML(isFirst){
+  return `<div class="sw-cond" style="display:inline-flex;align-items:center;gap:4px;margin:2px 0">${
+    isFirst?''
+    :'<select class="sw-logic" style="width:50px;font-size:10px"><option>AND</option><option>OR</option></select>'
+  }<select class="sw-col" style="width:100px">${colOpts()}</select><select class="sw-op" style="width:70px">${_swOpOpts()}</select><input type="text" class="sw-val" placeholder="Wert" style="width:90px"><input type="text" class="sw-val2" placeholder="bis" style="width:55px;display:none"><button class="b bo bs" style="font-size:9px;padding:2px 5px" onclick="this.closest('.sw-cond').remove()">✕</button></div>`;
+}
+function _swBindOpChange(container){
+  container.querySelectorAll('.sw-op').forEach(s=>{
+    s.addEventListener('change',function(){
+      const v2=this.closest('.sw-cond').querySelector('.sw-val2');
+      if(v2) v2.style.display=this.value==='zwischen'?'':'none';
+    });
+  });
+}
+function _swResolve(row,str){
+  return str.replace(/\{([^}]+)\}/g,(_,name)=>{
+    const ci=S.xH.indexOf(name);
+    return ci!==-1?String(row[ci]??''):`{${name}}`;
+  });
+}
+function swAddRule(){
+  const d=$('sw-rows');
+  const div=document.createElement('div');
+  div.className='sw-rule';
+  div.style.cssText='padding:8px;margin:4px 0;background:rgba(34,211,238,.04);border:1px solid rgba(34,211,238,.15);border-radius:6px';
+  div.innerHTML=`<div class="sw-conds">${_swCondHTML(true)}</div><div style="display:flex;align-items:center;gap:6px;margin-top:4px"><button class="b bo bs" style="font-size:9px" onclick="swAddCond(this.closest('.sw-rule'))">+ Bedingung</button><span class="case-arrow" style="color:var(--cyn)">→</span><span style="font:600 10px var(--mono);color:var(--tx2)">in</span><select class="sw-rule-tgt" style="width:100px">${colOpts()}</select><span style="font:600 10px var(--mono);color:var(--tx2)">schreibe</span><input type="text" class="sw-res" placeholder="Wert oder {Spalte}" style="width:130px"><button class="b bo bs" onclick="this.closest('.sw-rule').remove()">✕</button></div>`;
+  d.appendChild(div);
+  _swBindOpChange(div);
+  const globalTgt=$('sw-tgt');
+  if(globalTgt&&globalTgt.value) div.querySelector('.sw-rule-tgt').value=globalTgt.value;
+}
+function swAddCond(ruleDiv){
+  const c=ruleDiv.querySelector('.sw-conds');
+  const tmp=document.createElement('div');
+  tmp.innerHTML=_swCondHTML(false);
+  const cond=tmp.firstElementChild;
+  c.appendChild(cond);
+  _swBindOpChange(cond);
+}
+function swSyncTargets(){
+  const v=$('sw-tgt').value;
+  document.querySelectorAll('#sw-rows .sw-rule-tgt').forEach(sel=>sel.value=v);
+}
 function swAddNew(){const n=prompt('Neue Spalte:');if(!n)return;if(S.xH.includes(n)){toast('⚠ Spalte "'+n+'" existiert bereits');$('sw-tgt').value=n;return}S.xH.push(n);S.xD.forEach(r=>r.push(''));showX();XR();$('sw-tgt').value=n}
-function swEvalCond(row,col,op,val){const ci=S.xH.indexOf(col);if(ci===-1)return false;const c=String(row[ci]??''),n=parseFloat(c),nv=parseFloat(val);switch(op){case'=':return c===val;case'≠':return c!==val;case'>':return!isNaN(n)&&n>nv;case'<':return!isNaN(n)&&n<nv;case'enthält':return c.toLowerCase().includes(val.toLowerCase())}return false}
-function SW_RUN(){
-  const tgt=$('sw-tgt').value,elseVal=$('sw-else').value;if(!tgt){toast('Zielspalte?');return}
-  const ti=S.xH.indexOf(tgt);if(ti===-1)return;pushUndo();
-  const rules=[...document.querySelectorAll('#sw-rows .sw-rule')].map(r=>({
-    col1:r.querySelector('.sw-col1').value,op1:r.querySelector('.sw-op1').value,val1:r.querySelector('.sw-val1').value,
-    logic:r.querySelector('.sw-logic').value,
-    col2:r.querySelector('.sw-col2').value,op2:r.querySelector('.sw-op2').value,val2:r.querySelector('.sw-val2').value,
-    res:r.querySelector('.sw-res').value
+function _swParseRule(ruleDiv){
+  const conds=[...ruleDiv.querySelectorAll('.sw-cond')].map((c,i)=>({
+    logic: i===0?'AND':(c.querySelector('.sw-logic')?.value||'AND'),
+    col: c.querySelector('.sw-col').value,
+    op: c.querySelector('.sw-op').value,
+    val: c.querySelector('.sw-val').value,
+    val2: c.querySelector('.sw-val2')?.value||''
   }));
-  let count=0;
-  S.xD.forEach(row=>{let matched=false;
-    for(const r of rules){
-      const c1=swEvalCond(row,r.col1,r.op1,r.val1);
-      const c2=r.col2?swEvalCond(row,r.col2,r.op2,r.val2):true;
-      const pass=r.logic==='AND'?c1&&c2:c1||c2;
-      if(pass){row[ti]=r.res;matched=true;count++;break}
+  return{conds,tgt:ruleDiv.querySelector('.sw-rule-tgt')?.value||'',res:ruleDiv.querySelector('.sw-res').value};
+}
+function _swEvalRule(row,rule){
+  const conds=rule.conds;
+  if(!conds||!conds.length)return false;
+  let result=evalCond(row,conds[0].col,conds[0].op,conds[0].val,conds[0].val2);
+  for(let i=1;i<conds.length;i++){
+    const c=conds[i];
+    const r=evalCond(row,c.col,c.op,c.val,c.val2);
+    result=c.logic==='AND'?result&&r:result||r;
+  }
+  return result;
+}
+function SW_RUN(){
+  const globalTgt=$('sw-tgt').value,elseVal=$('sw-else').value;
+  if(!globalTgt){toast('Zielspalte?');return}
+  const rules=[...document.querySelectorAll('#sw-rows .sw-rule')].map(r=>_swParseRule(r));
+  if(!rules.length){toast('Regeln hinzufügen');return}
+  pushUndo();let count=0;
+  S.xD.forEach(row=>{
+    let matched=false;
+    for(const rule of rules){
+      if(_swEvalRule(row,rule)){
+        const ti=S.xH.indexOf(rule.tgt||globalTgt);
+        if(ti!==-1){row[ti]=_swResolve(row,rule.res);matched=true;count++}
+        break;
+      }
     }
-    if(!matched&&elseVal){row[ti]=elseVal;count++}
+    if(!matched&&elseVal){
+      const ti=S.xH.indexOf(globalTgt);
+      if(ti!==-1){row[ti]=_swResolve(row,elseVal);count++}
+    }
   });
   XR();$('sw-result').innerHTML=`<span class="tg tg-g">${count} Zeilen</span>`;
-  L('SWITCH',`→${tgt} (${count}×)`);toast(count+' ✓');macLog('switch',{tgt,rules,elseVal});
+  L('SWITCH',`→${globalTgt} (${count}×)`);toast(count+' ✓');
 }
 function SW_SAVE(){
-  const tgt=$('sw-tgt').value,elseVal=$('sw-else').value;
-  const rules=[...document.querySelectorAll('#sw-rows .sw-rule')].map(r=>({col1:r.querySelector('.sw-col1').value,op1:r.querySelector('.sw-op1').value,val1:r.querySelector('.sw-val1').value,logic:r.querySelector('.sw-logic').value,col2:r.querySelector('.sw-col2').value,op2:r.querySelector('.sw-op2').value,val2:r.querySelector('.sw-val2').value,res:r.querySelector('.sw-res').value}));
-  if(!tgt||!rules.length)return;
-  S.savedSW.push({tgt,elseVal,rules,name:`SW→${tgt}`});renderSavedSW();toast('SWITCH gespeichert ✓');
+  const globalTgt=$('sw-tgt').value,elseVal=$('sw-else').value;if(!globalTgt)return;
+  const rules=[...document.querySelectorAll('#sw-rows .sw-rule')].map(r=>_swParseRule(r));
+  if(!rules.length)return;
+  S.savedSW.push({globalTgt,elseVal,rules,name:`SW→${globalTgt}`});renderSavedSW();toast('SWITCH gespeichert ✓');
 }
 function renderSavedSW(){if(!S.savedSW.length){$('sw-saved').innerHTML='';return}
-$('sw-saved').innerHTML=S.savedSW.map((s,i)=>`<div class="rule-card"><span class="tg tg-c">SWITCH</span><span class="rt">→${H(s.tgt)}: ${s.rules.length} Regeln</span><button class="b bcyn bs" onclick="runSavedSW(${i})">▶</button><button class="b bo bs" onclick="S.savedSW.splice(${i},1);renderSavedSW()">✕</button></div>`).join('')}
-function runSavedSW(idx){const s=S.savedSW[idx];const ti=S.xH.indexOf(s.tgt);if(ti===-1)return;pushUndo();let n=0;
-S.xD.forEach(row=>{let matched=false;for(const r of s.rules){const c1=swEvalCond(row,r.col1,r.op1,r.val1),c2=r.col2?swEvalCond(row,r.col2,r.op2,r.val2):true;if(r.logic==='AND'?c1&&c2:c1||c2){row[ti]=r.res;matched=true;n++;break}}if(!matched&&s.elseVal){row[ti]=s.elseVal;n++}});
-XR();toast(n+' ✓')}
+$('sw-saved').innerHTML=S.savedSW.map((s,i)=>{
+  const tgt=s.globalTgt||s.tgt;
+  const ruleCount=s.rules?.length||0;
+  return `<div class="rule-card"><span class="tg tg-c">SWITCH</span><span class="rt">→${H(tgt)}: ${ruleCount} Regeln${s.elseVal?' | Else→'+H(s.elseVal):''}</span><button class="b bcyn bs" onclick="runSavedSW(${i})">▶</button><button class="b bo bs" onclick="S.savedSW.splice(${i},1);renderSavedSW()">✕</button></div>`;
+}).join('')}
+function runSavedSW(idx){
+  const s=S.savedSW[idx];
+  const globalTgt=s.globalTgt||s.tgt;
+  pushUndo();let n=0;
+  S.xD.forEach(row=>{
+    let matched=false;
+    for(const rule of s.rules){
+      if(rule.conds){
+        if(_swEvalRule(row,rule)){
+          const ti=S.xH.indexOf(rule.tgt||globalTgt);
+          if(ti!==-1){row[ti]=_swResolve(row,rule.res);matched=true;n++}
+          break;
+        }
+      } else {
+        const c1=evalCond(row,rule.col1,rule.op1,rule.val1,'');
+        const c2=rule.col2?evalCond(row,rule.col2,rule.op2,rule.val2,''):true;
+        if(rule.logic==='AND'?c1&&c2:c1||c2){
+          const ti=S.xH.indexOf(globalTgt);
+          if(ti!==-1){row[ti]=_swResolve(row,rule.res);matched=true;n++}
+          break;
+        }
+      }
+    }
+    if(!matched&&s.elseVal){
+      const ti=S.xH.indexOf(globalTgt);
+      if(ti!==-1){row[ti]=_swResolve(row,s.elseVal);n++}
+    }
+  });
+  XR();toast(n+' ✓');macLog('switch',s);
+}
 
 // ══════ WORD ══════
 const _FIELD_ALIASES={'firma':['kunde','company','unternehmen','lieferant','supplier'],'name':['kunde','ansprechpartner','empfänger','recipient','kontakt'],'stadt':['ort','city','hafen','port'],'betrag':['betrag_eur','brutto','netto','summe','preis','wert','amount'],'nr':['sendungsnr','auftragsnr','rechnungsnr','bestellnr','id','number'],'datum':['date','erstellt','created'],'land':['country','staat'],'status':['zustand','state'],'gewicht':['gewicht_kg','weight'],'anrede':['titel','title'],'absender':['sender','von'],'betreff':['subject','thema'],'text':['inhalt','body','beschreibung','content']};
