@@ -32,11 +32,11 @@ export function PP_RUN(){
   steps.forEach(step=>{
     const type=step.dataset.type;
     switch(type){
-      case'sort':{const c=step.querySelector('.pp-col').value,d=step.querySelector('.pp-dir').value;if(c){$('so-col').value=c;$('so-dir').value=d;SO()}}break;
-      case'filter':{const c=step.querySelector('.pp-col').value,o=step.querySelector('.pp-op').value,v=step.querySelector('.pp-val').value;if(c){$('fi-col').value=c;$('fi-op').value=o;$('fi-val').value=v;FI()}}break;
-      case'text':{const c=step.querySelector('.pp-col').value,f=step.querySelector('.pp-fn').value;if(c){$('tf-col').value=c;$('tf-fn').value=f;TF()}}break;
-      case'sr':{const f=step.querySelector('.pp-find').value,r=step.querySelector('.pp-rep').value;$('sr-find').value=f;$('sr-rep').value=r;$('sr-col').value='__ALL__';SR()}break;
-      case'dedup':{const c=step.querySelector('.pp-col').value;if(c){$('dd-col').value=c;DD()}}break;
+      case'sort':{const c=step.querySelector('.pp-col').value,d=step.querySelector('.pp-dir').value;if(c){$('so-col').value=c;$('so-dir').value=d;window.SO()}}break;
+      case'filter':{const c=step.querySelector('.pp-col').value,o=step.querySelector('.pp-op').value,v=step.querySelector('.pp-val').value;if(c){$('fi-col').value=c;$('fi-op').value=o;$('fi-val').value=v;window.FI()}}break;
+      case'text':{const c=step.querySelector('.pp-col').value,f=step.querySelector('.pp-fn').value;if(c){$('tf-col').value=c;$('tf-fn').value=f;window.TF()}}break;
+      case'sr':{const f=step.querySelector('.pp-find').value,r=step.querySelector('.pp-rep').value;$('sr-find').value=f;$('sr-rep').value=r;$('sr-col').value='__ALL__';window.SR()}break;
+      case'dedup':{const c=step.querySelector('.pp-col').value;if(c){$('dd-col').value=c;window.DD()}}break;
       case'case':{const idx=parseInt(step.querySelector('.pp-idx').value)-1;if(S.savedCases[idx])runSavedCase(idx)}break;
       case'ifelse':{const idx=parseInt(step.querySelector('.pp-idx').value)-1;if(S.savedIE[idx])runSavedIE(idx)}break;
       case'export':XE();break;
@@ -48,4 +48,4 @@ export function PP_SAVE(){const name=$('pp-name').value.trim()||`Pipeline ${S.pi
 if(!steps.length)return;S.pipelines.push({name,steps});renderSavedPipes();toast('Pipeline gespeichert ✓')}
 export function renderSavedPipes(){if(!S.pipelines.length){$('pp-saved').innerHTML='';return}
 $('pp-saved').innerHTML=S.pipelines.map((p,i)=>`<div class="rule-card"><span class="tg tg-c">${H(p.name)}</span><span class="rt">${p.steps.map(s=>s.type).join(' → ')}</span><button class="b bcyn bs" onclick="runSavedPipe(${i})">🚀</button><button class="b bo bs" onclick="S.pipelines.splice(${i},1);renderSavedPipes()">✕</button></div>`).join('')}
-export function runSavedPipe(idx){const p=S.pipelines[idx];p.steps.forEach(s=>{switch(s.type){case'sort':$('so-col').value=s.col;$('so-dir').value=s.dir;SO();break;case'filter':$('fi-col').value=s.col;$('fi-op').value=s.op;$('fi-val').value=s.val;FI();break;case'text':$('tf-col').value=s.col;$('tf-fn').value=s.fn;TF();break;case'sr':$('sr-find').value=s.find;$('sr-rep').value=s.rep;$('sr-col').value='__ALL__';SR();break;case'dedup':$('dd-col').value=s.col;DD();break;case'case':if(S.savedCases[s.idx])runSavedCase(s.idx);break;case'ifelse':if(S.savedIE[s.idx])runSavedIE(s.idx);break;case'export':XE();break}});toast(`🚀 "${p.name}" ✓`);L('Pipe▶',p.name)}
+export function runSavedPipe(idx){const p=S.pipelines[idx];p.steps.forEach(s=>{switch(s.type){case'sort':$('so-col').value=s.col;$('so-dir').value=s.dir;window.SO();break;case'filter':$('fi-col').value=s.col;$('fi-op').value=s.op;$('fi-val').value=s.val;window.FI();break;case'text':$('tf-col').value=s.col;$('tf-fn').value=s.fn;window.TF();break;case'sr':$('sr-find').value=s.find;$('sr-rep').value=s.rep;$('sr-col').value='__ALL__';window.SR();break;case'dedup':$('dd-col').value=s.col;window.DD();break;case'case':if(S.savedCases[s.idx])runSavedCase(s.idx);break;case'ifelse':if(S.savedIE[s.idx])runSavedIE(s.idx);break;case'export':XE();break}});toast(`🚀 "${p.name}" ✓`);L('Pipe▶',p.name)}

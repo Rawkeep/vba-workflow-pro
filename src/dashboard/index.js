@@ -31,7 +31,7 @@ export function updateDashboard(){
   $('dk-actions').textContent=todayActions;
   $('dk-actions').parentElement.querySelector('.dk-bar').style.width=Math.min(todayActions/20*100,100)+'%';
   // Workspaces
-  const ws=loadWorkspaces();
+  const ws=window.loadWorkspaces();
   $('dk-ws').textContent=Object.keys(ws).length;
   $('dk-ws').parentElement.querySelector('.dk-bar').style.width=Math.min(Object.keys(ws).length/5*100,100)+'%';
   // Quick access
@@ -57,7 +57,7 @@ export function renderDashActivity(){
   const el=$('dash-activity');
   if(!_dashActivity.length){el.innerHTML='<p style="color:var(--tx2);font-size:11px">Noch keine Aktivitäten</p>';return}
   el.innerHTML=_dashActivity.slice(0,15).map(a=>{
-    const ago=timeAgo(a.t);
+    const ago=window.timeAgo(a.t);
     return `<div class="dash-act"><span class="da-time">${ago}</span><span class="da-ico">${a.ico}</span><span class="da-txt">${H(a.txt)}</span></div>`;
   }).join('');
 }

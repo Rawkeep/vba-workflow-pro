@@ -17,54 +17,59 @@ import { MAC_REC, MAC_STOP, MAC_SAVE, renderMacC, renderMacList, MAC_RUN } from 
 import { FM, PV, SO, FI, FIR, SR, TF, DD, VL, CH, VD_RUN } from './excel/operations.js';
 import { swAddRule, swAddNew, SW_RUN, SW_SAVE, renderSavedSW, runSavedSW } from './excel/switch.js';
 
+// ─── Excel Advanced ───
+import { setActiveCell, colLetter, fbKeydown, fbBlur, showColFilter, closeColFilter, filterDDSearch, filterDDToggleAll, filterDDToggle, applyColFilter, clearColFilter, applyAllFilters, initClipboardPaste, showCellTip, hideCellTip, autoFitCol, autoFitAllCols, toggleFullscreen, initEnhancedCellEditing, initExcelXROverride, initExcelKeyboardNav } from './excel/render.js';
+import { genSuggestions, renderSuggestions, execSuggestion, dismissSuggestion, navToTab, prefillCase, prefillPivot, prefillIE, suggestFillMissing, initSuggestionsHook } from './excel/suggestions.js';
+import { detectColTypes, calcDataQuality, generateInsights, renderDataProfile, renderInsights, initAnalystXROverride } from './excel/analyst.js';
+
 // ─── Word ───
-import { UP, WI, WU, RW, DI, insertField } from './word/merge.js';
+import { UP, WI, WU, RW, DI, insertField, _replaceFieldInTpl, _autoFixAllFields } from './word/merge.js';
 import { buildDocx, uploadLetterhead, removeLetterhead, saveFooterText } from './word/docx-builder.js';
 
 // ─── Entitlements & Paywall ───
-import './entitlements.js';
+import { isPro, isAI, getTier, canUse, getLimit, activatePro, deactivate, gateFeature, showUpgradePrompt } from './entitlements.js';
 import { handleCheckoutReturn, syncEntitlement } from './paywall.js';
 
-// ─── Modules ───
-import './doccenter/index.js';
-import './templates/index.js';
-import './email/index.js';
-import './database/index.js';
+// ─── DocCenter ───
+import { dcTab, dcAddCategory, dcRemoveCategory, dcRenderCategories, dcUploadTemplate, dcDetectPlaceholders, dcSaveTemplate, dcEditTemplate, dcDeleteTemplate, dcCreateManualTemplate, dcRenderTemplates, dcAddTrigger, dcRemoveTrigger, dcUseExcelData, dcInitUI, dcAddBuiltin, dcBatchGenerate, mr, db, dl, WES, WEA, WPD, WP } from './doccenter/index.js';
+
+// ─── Templates ───
+import { setDocType, renderTemplateCards, loadLibTemplate, setLabelLayout, updateLabelPreview, exportLabelsPDF, insertFieldFromData, autoGenTemplate, _hydrateTemplates, saveUserTemplate, loadUserTemplate, renderSavedTemplates, checkSEM, EM, EMC, EMPDF, SEM, DLE, DA } from './templates/index.js';
+
+// ─── Email ───
+import { initEmailMerge, insertSemField, semPreview, SEM2, semExportAll } from './email/index.js';
+
+// ─── Database ───
+import { dbSaveCurrent, dbImportFile, dbLoadEntry, dbDeleteEntry, dbRenameEntry, dbSetCategory, dbDuplicateEntry, dbExportEntry, dbExportAll, dbMergeSelected, dbToggleEntry, dbToggleAll, dbAddCategory, dbRemoveCategory, dbRender } from './database/index.js';
 
 // ─── UI ───
-import './ui/quick-ops.js';
-import './ui/undo-redo.js';
-import './ui/columns.js';
-import './ui/rows.js';
-import './ui/context-menu.js';
-import './ui/cells.js';
-import './ui/keyboard.js';
-import './ui/drag-drop.js';
-import './ui/demo-data.js';
-import './ui/auto-save.js';
-import './ui/error-boundary.js';
-import './ui/tour.js';
+import { qopTrimAll, qopRemoveEmpty, qopRemoveDupes, qopFillMissing, qopAutoFormat, qopSortAZ, qopUpperHeaders, qopStats } from './ui/quick-ops.js';
+import { pushUndo, UNDO, REDO, updateUndoBtn, wrapMutatorsWithUndo } from './ui/undo-redo.js';
+import { XDC, XRenC, XHideC, XShowC, XShowAllC, updateHiddenBadge, showHiddenCols, XMoveC, showColPicker, startResize, _toggleAllDelCols, _deleteCheckedCols, _updateDelCount, initColStatsOverride } from './ui/columns.js';
+import { toggleRow, toggleAllRows, showSelActions, deleteSelectedRows, copySelectedRows, invertSelection, XESel } from './ui/rows.js';
+import { showCtxAt, hideCtx, initContextMenuListeners, ctxHeader, ctxCell } from './ui/context-menu.js';
+import { pasteToCell, clearCell, fillDown, insertRowAbove, insertRowBelow, sortByClick, updateStatusBar } from './ui/cells.js';
+import { initKeyboardShortcuts, initEnhancedKeyboard } from './ui/keyboard.js';
+import { initDragDrop } from './ui/drag-drop.js';
+import { DEMOS, loadDemo, loadTemplates } from './ui/demo-data.js';
+import { _lsUsage, autoSave, autoRestore, initAutoSaveHook, qSearchOpen, qSearchClose, qSearch } from './ui/auto-save.js';
+import { safeExec, initErrorBoundaries } from './ui/error-boundary.js';
+import { tourStart, tourNext, tourPrev, tourEnd } from './ui/tour.js';
+import { setChartType, exportChartPNG, renderErrLog, renderLSUsage, showHelp, hideHelp } from './ui/misc.js';
 
 // ─── AI ───
 import './ai/index.js';
 
-// ─── Excel Advanced ───
-import './excel/render.js';
-import './excel/suggestions.js';
-import './excel/analyst.js';
-
 // ─── Hybrid ───
-import './hybrid/index.js';
+import { trackUsage, getTopFeatures, updateQuickActions, qaRun, addRecentFile, renderRecentFiles, restoreRecent, loadWorkspaces, saveWorkspaces, saveWorkspace, loadWorkspaceByName, deleteWorkspace, renameWorkspace, renderWSList, renderSavedWSOnboard, toggleWSPanel, toggleFavorite, isFavorite, renderFavorites, setMode, timeAgo, saveHybridState, restoreHybridState } from './hybrid/index.js';
 
 // ─── Dashboard ───
-import './dashboard/index.js';
+import { updateDashboard, addDashActivity, renderDashActivity } from './dashboard/index.js';
 
 // ─── Startup ───
 import './startup.js';
 
 // ─── Expose globals for inline onclick handlers in HTML ───
-// The monolithic HTML uses onclick="functionName()" extensively.
-// Until we migrate to addEventListener, we need window bindings.
 Object.assign(window, {
   // Nav
   N, T, toggleTheme, navBack, navForward, toast,
@@ -85,9 +90,75 @@ Object.assign(window, {
   FM, PV, SO, FI, FIR, SR, TF, DD, VL, CH, VD_RUN,
   // Switch
   swAddRule, swAddNew, SW_RUN, SW_SAVE, renderSavedSW, runSavedSW,
+  // Excel Advanced
+  setActiveCell, colLetter, fbKeydown, fbBlur,
+  showColFilter, closeColFilter, filterDDSearch, filterDDToggleAll,
+  filterDDToggle, applyColFilter, clearColFilter, applyAllFilters,
+  initClipboardPaste, showCellTip, hideCellTip,
+  autoFitCol, autoFitAllCols, toggleFullscreen,
+  detectColTypes, calcDataQuality, generateInsights, renderDataProfile, renderInsights,
+  genSuggestions, renderSuggestions, execSuggestion, dismissSuggestion,
+  navToTab, prefillCase, prefillPivot, prefillIE, suggestFillMissing,
   // Word
-  UP, WI, WU, RW, DI, insertField,
+  UP, WI, WU, RW, DI, insertField, _replaceFieldInTpl, _autoFixAllFields,
   buildDocx, uploadLetterhead, removeLetterhead, saveFooterText,
+  // DocCenter
+  dcTab, dcAddCategory, dcRemoveCategory, dcRenderCategories,
+  dcUploadTemplate, dcDetectPlaceholders, dcSaveTemplate, dcEditTemplate,
+  dcDeleteTemplate, dcCreateManualTemplate, dcRenderTemplates,
+  dcAddTrigger, dcRemoveTrigger, dcUseExcelData, dcInitUI, dcAddBuiltin, dcBatchGenerate,
+  mr, db, dl, WES, WEA, WPD, WP,
+  // Templates
+  setDocType, renderTemplateCards, loadLibTemplate,
+  setLabelLayout, updateLabelPreview, exportLabelsPDF,
+  insertFieldFromData, autoGenTemplate,
+  saveUserTemplate, loadUserTemplate, renderSavedTemplates, checkSEM,
+  EM, EMC, EMPDF, SEM, DLE, DA,
+  // Email
+  insertSemField, semPreview, SEM2, semExportAll,
+  // Database
+  dbSaveCurrent, dbImportFile, dbLoadEntry, dbDeleteEntry, dbRenameEntry,
+  dbSetCategory, dbDuplicateEntry, dbExportEntry, dbExportAll,
+  dbMergeSelected, dbToggleEntry, dbToggleAll, dbAddCategory, dbRemoveCategory, dbRender,
+  // Quick Ops
+  qopTrimAll, qopRemoveEmpty, qopRemoveDupes, qopFillMissing,
+  qopAutoFormat, qopSortAZ, qopUpperHeaders, qopStats,
+  // Undo/Redo
+  pushUndo, UNDO, REDO, updateUndoBtn,
+  // Columns
+  XDC, XRenC, XHideC, XShowC, XShowAllC, updateHiddenBadge,
+  showHiddenCols, XMoveC, showColPicker, startResize,
+  _toggleAllDelCols, _deleteCheckedCols, _updateDelCount,
+  // Rows
+  toggleRow, toggleAllRows, showSelActions, deleteSelectedRows,
+  copySelectedRows, invertSelection, XESel,
+  // Context Menu
+  showCtxAt, hideCtx, ctxHeader, ctxCell,
+  // Cells
+  pasteToCell, clearCell, fillDown, insertRowAbove, insertRowBelow,
+  sortByClick, updateStatusBar,
+  // Demo Data
+  DEMOS, loadDemo, loadTemplates,
+  // Auto-save / Search
+  _lsUsage, autoSave, autoRestore, qSearchOpen, qSearchClose, qSearch,
+  // Error Boundary
+  safeExec,
+  // Tour
+  tourStart, tourNext, tourPrev, tourEnd,
+  // Misc UI
+  setChartType, exportChartPNG, renderErrLog, renderLSUsage, showHelp, hideHelp,
+  // Hybrid
+  trackUsage, getTopFeatures, updateQuickActions, qaRun,
+  addRecentFile, renderRecentFiles, restoreRecent,
+  loadWorkspaces, saveWorkspaces, timeAgo,
+  saveWorkspace, loadWorkspaceByName, deleteWorkspace, renameWorkspace,
+  renderWSList, renderSavedWSOnboard, toggleWSPanel,
+  toggleFavorite, isFavorite, renderFavorites, setMode,
+  saveHybridState, restoreHybridState,
+  // Dashboard
+  updateDashboard, addDashActivity, renderDashActivity,
+  // Entitlements
+  isPro, isAI, getTier, canUse, gateFeature, showUpgradePrompt,
   // Utils
   $, S, IDB, H, A, L, RL, macLog, colOpts, _appLog,
 });

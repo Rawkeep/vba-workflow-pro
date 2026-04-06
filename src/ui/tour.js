@@ -22,7 +22,7 @@ export function tourStart(){
 function _tourShow(){
   const step=TOUR_STEPS[_tourIdx];
   if(!step){tourEnd();return}
-  if(step.nav)N(step.nav);
+  if(step.nav)window.N(step.nav);
   setTimeout(()=>{
     const el=document.querySelector(step.sel);
     if(!el){_tourIdx++;_tourShow();return}
@@ -56,5 +56,5 @@ export function tourEnd(){
   document.getElementById('tour-spot').style.display='none';
   document.getElementById('tour-tip').style.display='none';
   localStorage.setItem('vbaBeastTourDone','1');
-  N('home');
+  window.N('home');
 }

@@ -240,13 +240,13 @@ export function renderTemplateCards(){
 export function loadLibTemplate(type,key){
   const t=DOC_TEMPLATES[type]?.[key];if(!t)return;
   $('w-tpl').value=t.tpl;
-  UP();
+  window.UP();
   // Smart: check how many fields match and offer auto-fix
   if(S.wH.length){
     const ms=t.tpl.match(/\{\{([^}]+)\}\}/g)||[];
     const cols=S.wH.map(h=>h.toLowerCase());
     const unmatched=[...new Set(ms.map(m=>m.replace(/[{}]/g,'').trim()))].filter(p=>!cols.includes(p.toLowerCase()));
-    const fixable=unmatched.filter(p=>_suggestField(p)).length;
+    const fixable=unmatched.filter(p=>window._suggestField(p)).length;
     if(unmatched.length>0&&fixable>0){
       toast(`📄 ${t.name} — ${fixable} Felder können zugeordnet werden`,3000);
     }else if(unmatched.length===0){
@@ -309,7 +309,7 @@ export function exportLabelsPDF(){
     doc.rect(x,y,lw,lh);
 
     // Merge template for this row
-    const text=mr(idx);
+    const text=window.mr(idx);
     const lines=text.split('\n');
     doc.setFontSize(9);
     lines.forEach((line,li)=>{
@@ -367,7 +367,7 @@ export function autoGenTemplate(){
     'Mit freundlichen Grüßen'
   ].join('\n');
   $('w-tpl').value=tpl;
-  UP();toast('⚡ Professionelles Template aus '+h.length+' Spalten generiert');
+  window.UP();toast('⚡ Professionelles Template aus '+h.length+' Spalten generiert');
 }
 
 // Save/Load user templates
@@ -393,7 +393,7 @@ export function loadUserTemplate(name){
   const t=_tplCache.find(t=>t.name===name);if(!t)return;
   $('w-tpl').value=t.tpl;
   if(t.type)setDocType(t.type);
-  UP();toast('📄 "'+name+'" geladen');
+  window.UP();toast('📄 "'+name+'" geladen');
   $('w-saved-tpl').value='';
 }
 export function renderSavedTemplates(){
@@ -407,7 +407,7 @@ export function renderSavedTemplates(){
 // const _origRW=RW;
 // RW=function(){_origRW();$('w-insert-data').style.display=S.wI?'':'none';$('w-auto-tpl').style.display=S.wI?'':'none';if(_currentDocType==='etikett')$('w-labels-pdf').style.display='';UP()}
 export function patchRW(origRW){
-  return function(){origRW();$('w-insert-data').style.display=S.wI?'':'none';$('w-auto-tpl').style.display=S.wI?'':'none';if(_currentDocType==='etikett')$('w-labels-pdf').style.display='';UP()};
+  return function(){origRW();$('w-insert-data').style.display=S.wI?'':'none';$('w-auto-tpl').style.display=S.wI?'':'none';if(_currentDocType==='etikett')$('w-labels-pdf').style.display='';window.UP()};
 }
 
 // Init
@@ -416,8 +416,8 @@ renderSavedTemplates();
 
 export function EM(){const to=$('em-to').value;if(!to)return;let u=`mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent($('em-subj').value)}&body=${encodeURIComponent($('em-body').value)}`;if($('em-cc').value)u+=`&cc=${encodeURIComponent($('em-cc').value)}`;window.open(u);toast('✓')}
 export function EMC(){navigator.clipboard.writeText(`An: ${$('em-to').value}\nBetreff: ${$('em-subj').value}\n\n${$('em-body').value}`).then(()=>toast('📋 ✓'))}
-export function EMPDF(){const subj=$('em-subj').value||'E-Mail';const body=`An: ${$('em-to').value}${$('em-cc').value?'\nCC: '+$('em-cc').value:''}\nBetreff: ${subj}\nDatum: ${new Date().toLocaleDateString('de-DE')}\n\n${$('em-body').value}`;textToPDF(body,subj.replace(/[^a-zA-Z0-9äöüÄÖÜß ]/g,'_')+'.pdf');toast('PDF ✓')}
+export function EMPDF(){const subj=$('em-subj').value||'E-Mail';const body=`An: ${$('em-to').value}${$('em-cc').value?'\nCC: '+$('em-cc').value:''}\nBetreff: ${subj}\nDatum: ${new Date().toLocaleDateString('de-DE')}\n\n${$('em-body').value}`;window.textToPDF(body,subj.replace(/[^a-zA-Z0-9äöüÄÖÜß ]/g,'_')+'.pdf');toast('PDF ✓')}
 export function checkSEM(){const h=S.wH.some(h=>h.toLowerCase().includes('mail'));$('sem-btn').disabled=!S.wI||!h;$('sem-info').textContent=S.wI?(h?S.wD.length+' ✓':'⚠ "Email"?'):''}
 export function SEM(){const subj=$('sem-subj').value||'—',tpl=$('w-tpl').value;const ei=S.wH.findIndex(h=>h.toLowerCase().includes('mail'));if(ei===-1)return;let html='';S.wD.forEach(row=>{let body=tpl,s=subj;S.wH.forEach((h,ci)=>{const re=new RegExp(`\\{\\{\\s*${h.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}\\s*\\}\\}`,'gi');body=body.replace(re,String(row[ci]??''));s=s.replace(re,String(row[ci]??''))});const em=row[ei],u=`mailto:${encodeURIComponent(em)}?subject=${encodeURIComponent(s)}&body=${encodeURIComponent(body)}`;html+=`<div style="display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid var(--bdr)"><span style="font:11px var(--mono);color:var(--blu);min-width:150px">${H(String(em))}</span><span style="font-size:10px;color:var(--tx2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${H(s)}</span><a href="${u}" target="_blank" class="b bg bs" style="text-decoration:none">📧</a></div>`});$('sem-list').innerHTML=html;toast(S.wD.length+' ✓')}
-export function DLE(){dl(new Blob([JSON.stringify({log:S.log},null,2)],{type:'application/json'}),`DSGVO_${new Date().toISOString().slice(0,10)}.json`)}
-export function DA(){S.xH=[];S.xD=[];S.xFn='';S.xBak=null;S.filtered=false;S.wH=[];S.wD=[];S.wI=false;S.wPv=null;S.calcCols=[];S.savedCases=[];S.savedIE=[];S.savedSW=[];S.macros=[];S.macSteps=[];S.macRec=false;S.pipelines=[];S.pipeSteps=[];S.selectedRows=new Set();S.hiddenCols=new Set();S.sortCol=-1;S.sortDir='asc';S.undoStack=[];S.redoStack=[];if(S.chart){S.chart.destroy();S.chart=null}$('x-empty').style.display='';$('status-bar').classList.remove('show');['x-exp','x-csv','x-add','x-acol','x-delcol','x-rencol','x-hidecol','x-selact','x-expsel','x-tbl','x-tabs','x-pdf','x-undoredo','x-quick-ops'].forEach(id=>{if($(id))$(id).style.display='none'});IDB.clear('autoSave').catch(()=>{});IDB.clear('workspaces').catch(()=>{});IDB.clear('templates').catch(()=>{});IDB.clear('hybrid').catch(()=>{});IDB.clear('docConfig').catch(()=>{});IDB.clear('docCenter').catch(()=>{});IDB.clear('database').catch(()=>{});_wsCache=[];_tplCache=[];_docxHeader=null;_docxFooter='';_dcTemplates=[];_dcCategories=[...DC_DEFAULT_CATS];_dcTriggers=[];_dbEntries=[];_dbSelected=new Set();$('x-sheet').style.display='none';_wb=null;['fm-out','pv-out','fi-info','sr-out','dd-out','vl-out','cs-result','ie-result','calc-history','cs-saved','ie-saved','mac-current','mac-list','pp-steps','pp-saved'].forEach(id=>{if($(id))$(id).innerHTML=''});$('ch-wrap').style.display='none';$('rec-badge').style.display='none';$('w-tpl').value='';UP();['w-empty'].forEach(id=>$(id).style.display='');['w-dt','w-merge','w-pvbox','w-use'].forEach(id=>{if($(id))$(id).style.display='none'});['em-to','em-cc','em-subj','em-body','sem-subj'].forEach(id=>{if($(id))$(id).value=''});$('sem-list').innerHTML='';$('sem-btn').disabled=true;$('del-cfm').style.display='none';if($('data-profile'))$('data-profile').classList.remove('show');if($('insights-panel'))$('insights-panel').classList.remove('show');if($('quick-actions'))$('quick-actions').classList.remove('show');if($('formula-bar'))$('formula-bar').classList.remove('show');if($('fs-toggle'))$('fs-toggle').classList.remove('show');if($('smart-suggest'))$('smart-suggest').classList.remove('show');_activeCell=null;_colFilters={};S._autoFitted=false;_dismissed.clear();_ssDataHash='';L('LÖSCHUNG','Art.17');toast('Gelöscht')}
+export function DLE(){window.dl(new Blob([JSON.stringify({log:S.log},null,2)],{type:'application/json'}),`DSGVO_${new Date().toISOString().slice(0,10)}.json`)}
+export function DA(){S.xH=[];S.xD=[];S.xFn='';S.xBak=null;S.filtered=false;S.wH=[];S.wD=[];S.wI=false;S.wPv=null;S.calcCols=[];S.savedCases=[];S.savedIE=[];S.savedSW=[];S.macros=[];S.macSteps=[];S.macRec=false;S.pipelines=[];S.pipeSteps=[];S.selectedRows=new Set();S.hiddenCols=new Set();S.sortCol=-1;S.sortDir='asc';S.undoStack=[];S.redoStack=[];if(S.chart){S.chart.destroy();S.chart=null}$('x-empty').style.display='';$('status-bar').classList.remove('show');['x-exp','x-csv','x-add','x-acol','x-delcol','x-rencol','x-hidecol','x-selact','x-expsel','x-tbl','x-tabs','x-pdf','x-undoredo','x-quick-ops'].forEach(id=>{if($(id))$(id).style.display='none'});IDB.clear('autoSave').catch(()=>{});IDB.clear('workspaces').catch(()=>{});IDB.clear('templates').catch(()=>{});IDB.clear('hybrid').catch(()=>{});IDB.clear('docConfig').catch(()=>{});IDB.clear('docCenter').catch(()=>{});IDB.clear('database').catch(()=>{});window._wsCache=[];_tplCache=[];window._docxHeader=null;window._docxFooter='';window._dcTemplates=[];window._dcCategories=[...window.DC_DEFAULT_CATS];window._dcTriggers=[];window._dbEntries=[];window._dbSelected=new Set();$('x-sheet').style.display='none';window._wb=null;['fm-out','pv-out','fi-info','sr-out','dd-out','vl-out','cs-result','ie-result','calc-history','cs-saved','ie-saved','mac-current','mac-list','pp-steps','pp-saved'].forEach(id=>{if($(id))$(id).innerHTML=''});$('ch-wrap').style.display='none';$('rec-badge').style.display='none';$('w-tpl').value='';window.UP();['w-empty'].forEach(id=>$(id).style.display='');['w-dt','w-merge','w-pvbox','w-use'].forEach(id=>{if($(id))$(id).style.display='none'});['em-to','em-cc','em-subj','em-body','sem-subj'].forEach(id=>{if($(id))$(id).value=''});$('sem-list').innerHTML='';$('sem-btn').disabled=true;$('del-cfm').style.display='none';if($('data-profile'))$('data-profile').classList.remove('show');if($('insights-panel'))$('insights-panel').classList.remove('show');if($('quick-actions'))$('quick-actions').classList.remove('show');if($('formula-bar'))$('formula-bar').classList.remove('show');if($('fs-toggle'))$('fs-toggle').classList.remove('show');if($('smart-suggest'))$('smart-suggest').classList.remove('show');window._activeCell=null;window._colFilters={};S._autoFitted=false;window._dismissed.clear();window._ssDataHash='';L('LÖSCHUNG','Art.17');toast('Gelöscht')}

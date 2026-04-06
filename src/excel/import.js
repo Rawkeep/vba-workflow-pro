@@ -99,7 +99,7 @@ export function loadSheet(idx){
     return r;
   }).filter(r=>r.some(c=>c!=='')); // Remove fully empty rows
   S.xBak=null;S.filtered=false;S.selectedRows=new Set();S.hiddenCols=new Set();S.sortCol=-1;S.sortDir='asc';S.undoStack=[];S.redoStack=[];
-  showX();XR();
+  window.showX();window.XR();
   $('x-info').textContent=`${S.xFn}${_wb.SheetNames.length>1?' ['+_wb.SheetNames[idx]+']':''} — ${S.xD.length}×${S.xH.length}`;
 }
 
@@ -127,7 +127,7 @@ export async function XLocal(){
   }catch(e){if(e.name!=='AbortError')toast('Fehler: '+e.message)}
 }
 export async function XSaveLocal(){
-  if(!window.showSaveFilePicker){XE();return} // fallback
+  if(!window.showSaveFilePicker){window.XE();return} // fallback
   try{
     const handle=await window.showSaveFilePicker({suggestedName:S.xFn||'export.xlsx',types:[
       {description:'Excel',accept:{'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':['.xlsx']}}
@@ -138,5 +138,5 @@ export async function XSaveLocal(){
     const writable=await handle.createWritable();
     await writable.write(buf);await writable.close();
     L('Lokal gespeichert',handle.name);toast('💾 Lokal gespeichert ✓');
-  }catch(e){if(e.name!=='AbortError')XE()} // fallback to download
+  }catch(e){if(e.name!=='AbortError')window.XE()} // fallback to download
 }

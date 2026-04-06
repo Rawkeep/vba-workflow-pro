@@ -7,6 +7,8 @@ let _typeCacheKey='';
 let _qualCache=null;
 let _qualCacheKey='';
 
+export function invalidateAnalystCache(){_typeCache=null;_qualCache=null;}
+
 // Column type detection (cached)
 export function detectColTypes(){
   if(!S.xH.length)return[];

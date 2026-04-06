@@ -9,20 +9,20 @@ import { $ } from '../utils.js';
 
 export function initKeyboardShortcuts() {
   document.addEventListener('keydown',e=>{
-  if(e.ctrlKey&&e.key==='z'&&!e.target.matches('input,textarea,select,.ci')){e.preventDefault();UNDO()}
-  if(e.ctrlKey&&e.key==='y'&&!e.target.matches('input,textarea,select,.ci')){e.preventDefault();REDO()}
-  if(e.ctrlKey&&e.key==='a'&&$('p-excel').classList.contains('a')&&!e.target.matches('input,textarea,select,.ci')){e.preventDefault();toggleAllRows(true)}
-  if(e.key==='Delete'&&S.selectedRows.size>0&&!e.target.matches('input,textarea,select,.ci')){e.preventDefault();deleteSelectedRows()}
-  if(e.key==='Escape'){hideCtx();S.selectedRows.clear();XR()}
+  if(e.ctrlKey&&e.key==='z'&&!e.target.matches('input,textarea,select,.ci')){e.preventDefault();window.UNDO()}
+  if(e.ctrlKey&&e.key==='y'&&!e.target.matches('input,textarea,select,.ci')){e.preventDefault();window.REDO()}
+  if(e.ctrlKey&&e.key==='a'&&$('p-excel').classList.contains('a')&&!e.target.matches('input,textarea,select,.ci')){e.preventDefault();window.toggleAllRows(true)}
+  if(e.key==='Delete'&&S.selectedRows.size>0&&!e.target.matches('input,textarea,select,.ci')){e.preventDefault();window.deleteSelectedRows()}
+  if(e.key==='Escape'){window.hideCtx();S.selectedRows.clear();window.XR()}
   // Tab navigation in cells
-  if(e.key==='Tab'&&e.target.classList.contains('ci')){e.preventDefault();const td=e.target.closest('td');const tr=td.closest('tr');const ri=parseInt(tr.dataset.ri);const id=td.id;const m=id.match(/c(\d+)-(\d+)/);if(m){let r=parseInt(m[1]),c=parseInt(m[2]);e.target.blur();if(e.shiftKey){c--;if(c<0){c=S.xH.length-1;r--}}else{c++;if(c>=S.xH.length){c=0;r++}}if(r>=0&&r<S.xD.length)setTimeout(()=>CE(r,c),50)}}
+  if(e.key==='Tab'&&e.target.classList.contains('ci')){e.preventDefault();const td=e.target.closest('td');const tr=td.closest('tr');const ri=parseInt(tr.dataset.ri);const id=td.id;const m=id.match(/c(\d+)-(\d+)/);if(m){let r=parseInt(m[1]),c=parseInt(m[2]);e.target.blur();if(e.shiftKey){c--;if(c<0){c=S.xH.length-1;r--}}else{c++;if(c>=S.xH.length){c=0;r++}}if(r>=0&&r<S.xD.length)setTimeout(()=>window.CE(r,c),50)}}
   // Arrow keys in cells
-  if((e.key==='ArrowDown'||e.key==='ArrowUp')&&e.target.classList.contains('ci')){e.preventDefault();const td=e.target.closest('td');const id=td.id;const m=id.match(/c(\d+)-(\d+)/);if(m){let r=parseInt(m[1]),c=parseInt(m[2]);e.target.blur();r+=e.key==='ArrowDown'?1:-1;if(r>=0&&r<S.xD.length)setTimeout(()=>CE(r,c),50)}}
+  if((e.key==='ArrowDown'||e.key==='ArrowUp')&&e.target.classList.contains('ci')){e.preventDefault();const td=e.target.closest('td');const id=td.id;const m=id.match(/c(\d+)-(\d+)/);if(m){let r=parseInt(m[1]),c=parseInt(m[2]);e.target.blur();r+=e.key==='ArrowDown'?1:-1;if(r>=0&&r<S.xD.length)setTimeout(()=>window.CE(r,c),50)}}
   });
   // Navigation history keyboard shortcuts
   document.addEventListener('keydown',e=>{
-    if(e.altKey&&e.key==='ArrowLeft'){e.preventDefault();navBack()}
-    if(e.altKey&&e.key==='ArrowRight'){e.preventDefault();navForward()}
+    if(e.altKey&&e.key==='ArrowLeft'){e.preventDefault();window.navBack()}
+    if(e.altKey&&e.key==='ArrowRight'){e.preventDefault();window.navForward()}
   });
 }
 
@@ -30,8 +30,8 @@ export function initKeyboardShortcuts() {
 export function initEnhancedKeyboard() {
   const _origKeydown=document.onkeydown;
   document.addEventListener('keydown',e=>{
-    if(e.ctrlKey&&e.key==='f'&&$('p-excel').classList.contains('a')){e.preventDefault();qSearchOpen()}
-    if(e.key==='Escape'&&$('qsearch').classList.contains('show')){qSearchClose();e.stopPropagation()}
+    if(e.ctrlKey&&e.key==='f'&&$('p-excel').classList.contains('a')){e.preventDefault();window.qSearchOpen()}
+    if(e.key==='Escape'&&$('qsearch').classList.contains('show')){window.qSearchClose();e.stopPropagation()}
     if(e.key==='?'&&!e.target.matches('input,textarea,select,.ci')&&!e.ctrlKey){$('shortcuts').classList.add('show')}
     if(e.key==='Escape'&&$('shortcuts').classList.contains('show')){$('shortcuts').classList.remove('show')}
   },true);

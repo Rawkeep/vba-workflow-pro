@@ -14,14 +14,14 @@ export function initDragDrop() {
     e.preventDefault();$('drop-zone').classList.remove('active');
     const f=e.dataTransfer.files[0];if(!f)return;
     const ext=f.name.split('.').pop().toLowerCase();
-    if(!['xlsx','xls','csv','tsv','txt'].includes(ext)){toast('Nur XLSX/CSV/TSV');return}
+    if(!['xlsx','xls','csv','tsv','txt'].includes(ext)){window.toast('Nur XLSX/CSV/TSV');return}
     const r=new FileReader();
     r.onload=ev=>{try{
       const opts={type:'array',cellDates:true,cellText:true,raw:false};
-      _wb=XLSX.read(ev.target.result,opts);
-      if(_wb.SheetNames.length>1){$('x-sheet').style.display='';$('x-sheet').innerHTML=_wb.SheetNames.map((n,i)=>`<option value="${i}">${n}</option>`).join('')}else{$('x-sheet').style.display='none'}
-      S.xFn=f.name;N('excel');loadSheet(0);
-      L('Drop Import',f.name);toast('📂 '+f.name+' ✓');
+      window._wb=XLSX.read(ev.target.result,opts);
+      if(window._wb.SheetNames.length>1){$('x-sheet').style.display='';$('x-sheet').innerHTML=window._wb.SheetNames.map((n,i)=>`<option value="${i}">${n}</option>`).join('')}else{$('x-sheet').style.display='none'}
+      S.xFn=f.name;window.N('excel');window.loadSheet(0);
+      window.L('Drop Import',f.name);window.toast('📂 '+f.name+' ✓');
     }catch(e){alert('Import-Fehler: '+e.message)}};
     r.readAsArrayBuffer(f);
   });

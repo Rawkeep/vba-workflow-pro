@@ -64,11 +64,11 @@ container:{name:'Container_Tracking.xlsx',h:['Container_ID','Typ','Kunde','Abgan
 export function loadDemo(key){
   if(!key)key='sendungen';
   const d=DEMOS[key];if(!d)return;
-  N('excel');S.xH=[...d.h];S.xD=d.d.map(r=>[...r]);S.xFn=d.name;
+  window.N('excel');S.xH=[...d.h];S.xD=d.d.map(r=>[...r]);S.xFn=d.name;
   S.selectedRows=new Set();S.hiddenCols=new Set();S.sortCol=-1;S.sortDir='asc';S.undoStack=[];S.redoStack=[];
   S.xBak=null;S.filtered=false;
-  showX();XR();autoSave();
-  L('Demo',d.name+' ('+d.d.length+' Zeilen)');toast('Demo: '+d.name+' ✓');
+  window.showX();window.XR();window.autoSave();
+  window.L('Demo',d.name+' ('+d.d.length+' Zeilen)');window.toast('Demo: '+d.name+' ✓');
   // Load template presets for this demo
   loadTemplates(key);
 }
@@ -85,5 +85,5 @@ export function loadTemplates(key){
   }else if(key==='container'){
     S.savedIE.push({tgt:'Status',elseVal:'',blocks:[{conds:[{col:'Dokumente_OK',op:'=',val:'Nein',logic:''},{col:'Gefahrgut',op:'=',val:'Ja',logic:'AND'}],res:'⚠ STOPP: DG+Docs!',type:'if'},{conds:[{col:'Dokumente_OK',op:'=',val:'Nein',logic:''}],res:'⚠ Docs fehlen',type:'elseif'}],name:'Dokument-Check'});
   }
-  renderSavedCases();renderSavedIE();
+  window.renderSavedCases();window.renderSavedIE();
 }

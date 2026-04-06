@@ -37,9 +37,9 @@ export function _autoFixAllFields(){
   UP();toast(fixed?`✨ ${fixed} Felder automatisch zugeordnet`:'Keine passenden Zuordnungen gefunden');
 }
 export function insertField(){const n=prompt('Feld:');if(!n)return;const ta=$('w-tpl'),p=ta.selectionStart;ta.value=ta.value.slice(0,p)+`{{${n}}}`+ta.value.slice(p);UP()}
-export function DI(inp){const f=inp.files?.[0];if(!f)return;const r=new FileReader();r.onload=async e=>{try{$('w-tpl').value=(await mammoth.extractRawText({arrayBuffer:e.target.result})).value;UP();L('DOCX',f.name);toast('✓')}catch(e){alert(e.message)}};r.readAsArrayBuffer(f);inp.value=''}
-export function WI(inp){const f=inp.files?.[0];if(!f)return;const r=new FileReader();r.onload=e=>{try{const wb=XLSX.read(e.target.result,{type:'array'}),ws=wb.Sheets[wb.SheetNames[0]],j=XLSX.utils.sheet_to_json(ws,{header:1});if(j.length){S.wH=j[0].map(String);S.wD=j.slice(1).map(r=>j[0].map((_,i)=>r[i]??''));S.wI=true;RW();L('WData',f.name);toast('✓');checkSEM()}}catch(e){alert(e.message)}};r.readAsArrayBuffer(f);inp.value=''}
-export function WU(){if(!S.xH.length)return;S.wH=[...S.xH];S.wD=S.xD.map(r=>[...r]);S.wI=true;RW();toast('✓');checkSEM()}
+export function DI(inp){const f=inp.files?.[0];if(!f)return;const r=new FileReader();r.onload=async e=>{try{$('w-tpl').value=(await window.mammoth.extractRawText({arrayBuffer:e.target.result})).value;UP();L('DOCX',f.name);toast('✓')}catch(e){alert(e.message)}};r.readAsArrayBuffer(f);inp.value=''}
+export function WI(inp){const f=inp.files?.[0];if(!f)return;const r=new FileReader();r.onload=e=>{try{const wb=XLSX.read(e.target.result,{type:'array'}),ws=wb.Sheets[wb.SheetNames[0]],j=XLSX.utils.sheet_to_json(ws,{header:1});if(j.length){S.wH=j[0].map(String);S.wD=j.slice(1).map(r=>j[0].map((_,i)=>r[i]??''));S.wI=true;RW();L('WData',f.name);toast('✓');window.checkSEM()}}catch(e){alert(e.message)}};r.readAsArrayBuffer(f);inp.value=''}
+export function WU(){if(!S.xH.length)return;S.wH=[...S.xH];S.wD=S.xD.map(r=>[...r]);S.wI=true;RW();toast('✓');window.checkSEM()}
 export function RW(){$('w-empty').style.display='none';$('w-dt').style.display='';$('w-merge').style.display='';$('w-dw').innerHTML=`<table><thead><tr>${S.wH.map(h=>`<th class="b">${H(h)}</th>`).join('')}</tr></thead><tbody>${S.wD.map(r=>'<tr>'+r.map(c=>`<td>${H(String(c??''))}</td>`).join('')+'</tr>').join('')}</tbody></table>`;$('w-pvs').innerHTML=S.wD.map((_,i)=>`<button class="b bo bs" onclick="WP(${i})">#${i+1}</button>`).join(' ');$('w-all').textContent=`⬇ ${S.wD.length} .docx`}
 
 export { _FIELD_ALIASES };
