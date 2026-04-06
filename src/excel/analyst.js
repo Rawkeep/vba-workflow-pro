@@ -1,8 +1,6 @@
 // ══════ CONTROLLER / DATA ANALYST ENGINE ══════
-import { S } from '../store.js';
+import { S, _appLog, _cacheKey } from '../store.js';
 import { $ } from '../utils.js';
-// TODO: XR, _appLog, _cacheKey are cross-module dependencies from core
-// TODO: _typeCache, _typeCacheKey, _qualCache, _qualCacheKey are module-level caches
 
 let _typeCache=null;
 let _typeCacheKey='';

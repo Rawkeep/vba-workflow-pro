@@ -2,19 +2,19 @@ import { S } from './store.js';
 import { VBA_BEAST_VERSION } from './store.js';
 import { $ } from './utils.js';
 import { _appLog } from './store.js';
-import { N } from './nav.js';
+import { N, RL } from './nav.js';
 import { IDB } from './idb.js';
 import { handleCheckoutReturn, syncEntitlement } from './paywall.js';
 
-// TODO: cross-module dependency — _hydrateWorkspaces, restoreHybridState, setMode, renderRecentFiles, renderSavedWSOnboard are defined in hybrid/index.js
-// TODO: cross-module dependency — _hydrateTemplates, renderSavedTemplates is defined in word/ or templates/
-// TODO: cross-module dependency — _hydrateDocConfig, _renderLetterheadPreview, _docxFooter are defined in word/
-// TODO: cross-module dependency — _hydrateDokCenter, dcInitUI are defined in doccenter/
-// TODO: cross-module dependency — _hydrateDatabase is defined in database/index.js
-// TODO: cross-module dependency — autoRestore is defined in ui/auto-save.js
-// TODO: cross-module dependency — RL, checkSEM are defined in nav.js or other modules
-// TODO: cross-module dependency — updateDashboard is defined in dashboard/index.js
-// TODO: cross-module dependency — tourStart is defined in ui/tour.js
+// Cross-module imports
+import { _hydrateWorkspaces, restoreHybridState, setMode, renderRecentFiles, renderSavedWSOnboard } from './hybrid/index.js';
+import { _hydrateTemplates, renderSavedTemplates, checkSEM } from './templates/index.js';
+import { _hydrateDocConfig, _renderLetterheadPreview, _docxFooter } from './word/docx-builder.js';
+import { _hydrateDokCenter, dcInitUI } from './doccenter/index.js';
+import { _hydrateDatabase } from './database/index.js';
+import { autoRestore } from './ui/auto-save.js';
+import { updateDashboard } from './dashboard/index.js';
+import { tourStart } from './ui/tour.js';
 
 // ══════ STARTUP (async IndexedDB) ══════
 (async function _startup(){
