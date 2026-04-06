@@ -34,8 +34,8 @@ export async function autoRestore(){
 // Auto-save after mutations
 let _asTmr=null;
 export function initAutoSaveHook() {
-  const _origXR=XR;
-  XR=function(){_origXR();if(S.xH.length){clearTimeout(_asTmr);_asTmr=setTimeout(autoSave,2000)}};
+  const _origXR=window.XR;
+  window.XR=function(){_origXR();if(S.xH.length){clearTimeout(_asTmr);_asTmr=setTimeout(autoSave,2000)}};
 }
 
 // ══════ QUICK SEARCH (Ctrl+F) ══════

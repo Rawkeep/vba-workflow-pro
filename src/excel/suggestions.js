@@ -194,8 +194,8 @@ export function suggestFillMissing(colName){
 
 // Hook suggestions into XR render cycle
 export function initSuggestionsHook() {
-  const _origXR_suggest=XR;
-  XR=function(){
+  const _origXR_suggest=window.XR;
+  window.XR=function(){
     _origXR_suggest();
     // Only re-render suggestions when data actually changed
     const newHash=S.xD.length+'-'+S.xH.length+'-'+S.undoStack.length;
@@ -203,6 +203,6 @@ export function initSuggestionsHook() {
   };
 
   // Reset dismissed on new data load
-  const _origLoadSheet=typeof loadSheet==='function'?loadSheet:null;
-  if(_origLoadSheet){loadSheet=function(){_dismissed.clear();_ssDataHash='';_origLoadSheet.apply(this,arguments)}}
+  const _origLoadSheet=typeof window.loadSheet==='function'?window.loadSheet:null;
+  if(_origLoadSheet){window.loadSheet=function(){_dismissed.clear();_ssDataHash='';_origLoadSheet.apply(this,arguments)}}
 }

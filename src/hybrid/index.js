@@ -258,42 +258,47 @@ export async function restoreHybridState(){
 }
 
 // ══════ HOOK INTO EXISTING FUNCTIONS ══════
-// Track feature usage when tabs are clicked
-// TODO: cross-module dependency — XT is defined in excel/render.js or nav.js
-const _origXT=typeof XT==='function'?XT:null;
-if(_origXT){
-  const tabToFeature={
-    'xtp-sort':'sort','xtp-filter':'filter','xtp-fnr':'snr','xtp-txtfn':'text',
-    'xtp-dedup':'dedup','xtp-case':'case','xtp-ifelse':'ifelse','xtp-calc':'calc',
-    'xtp-pipe':'pipe','xtp-pivot':'pivot','xtp-chart':'chart','xtp-vlook':'vlookup',
-    'xtp-valid':'valid','xtp-switch':'switch','xtp-macro':'macro'
-  };
-  XT=function(el,panelId){
-    _origXT(el,panelId);
-    const feat=tabToFeature[panelId];
-    if(feat)trackUsage(feat);
-  };
-}
-// Track exports
-// TODO: cross-module dependency — XE is defined in excel/export.js
-// TODO: cross-module dependency — XPDF is defined in excel/export.js
-const _origXE2=XE;XE=function(){_origXE2();trackUsage('export')};
-const _origXPDF2=XPDF;XPDF=function(){_origXPDF2();trackUsage('pdf')};
+// Deferred: Track feature usage when tabs are clicked
+queueMicrotask(()=>{
+  if(typeof window.XT==='function'){
+    const _origXT=window.XT;
+    const tabToFeature={
+      'xtp-sort':'sort','xtp-filter':'filter','xtp-fnr':'snr','xtp-txtfn':'text',
+      'xtp-dedup':'dedup','xtp-case':'case','xtp-ifelse':'ifelse','xtp-calc':'calc',
+      'xtp-pipe':'pipe','xtp-pivot':'pivot','xtp-chart':'chart','xtp-vlook':'vlookup',
+      'xtp-valid':'valid','xtp-switch':'switch','xtp-macro':'macro'
+    };
+    window.XT=function(el,panelId){
+      _origXT(el,panelId);
+      const feat=tabToFeature[panelId];
+      if(feat)trackUsage(feat);
+    };
+  }
+});
+// Monkey-patch global functions for usage tracking.
+// Must defer until window globals are set by main.js Object.assign.
+queueMicrotask(()=>{
+  // Track exports
+  const _origXE2=window.XE;window.XE=function(){_origXE2();trackUsage('export')};
+  const _origXPDF2=window.XPDF;window.XPDF=function(){_origXPDF2();trackUsage('pdf')};
 
-// Track file loads — hook into loadSheet and loadDemo
-// TODO: cross-module dependency — loadDemo, DEMOS are defined in ui/demo-data.js
-const _origLoadDemo=loadDemo;
-loadDemo=function(key){
-  _origLoadDemo(key);
-  const d=DEMOS[key||'sendungen'];
-  if(d)addRecentFile(d.name,d.d.length,d.h.length);
-};
+  // Track file loads
+  if(typeof window.loadDemo==='function'){
+    const _origLoadDemo=window.loadDemo;
+    window.loadDemo=function(key){
+      _origLoadDemo(key);
+      const d=window.DEMOS?.[key||'sendungen'];
+      if(d)addRecentFile(d.name,d.d.length,d.h.length);
+    };
+  }
 
-// Hook into showX to also show workspace button and quick actions
-// TODO: cross-module dependency — showX is defined in excel/render.js
-const _origShowX2=showX;
-showX=function(){
-  _origShowX2();
-  if(S.mode==='workspace')updateQuickActions();
-  addRecentFile(S.xFn,S.xD.length,S.xH.length);
-};
+  // Hook into showX to also show workspace button and quick actions
+  if(typeof window.showX==='function'){
+    const _origShowX2=window.showX;
+    window.showX=function(){
+      _origShowX2();
+      if(S.mode==='workspace')updateQuickActions();
+      addRecentFile(S.xFn,S.xD.length,S.xH.length);
+    };
+  }
+}); // end queueMicrotask

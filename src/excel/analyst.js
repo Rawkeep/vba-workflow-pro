@@ -133,8 +133,8 @@ export function renderInsights(){
 
 // Enhanced XR — add data bars, column types, missing value indicators, number formatting
 export function initAnalystXROverride() {
-  const _origXR_analyst=XR;
-  XR=function(){
+  const _origXR_analyst=window.XR;
+  window.XR=function(){
     _origXR_analyst();
     if(!S.xH.length||!S.xD.length)return;
     try{

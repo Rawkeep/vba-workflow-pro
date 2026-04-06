@@ -93,8 +93,8 @@ export function colStats(ci){
 
 // Update header context menu to include stats
 export function initColStatsOverride() {
-  const _origCtxHeader=ctxHeader;
-  ctxHeader=function(ev,ci){
+  const _origCtxHeader=window.ctxHeader;
+  window.ctxHeader=function(ev,ci){
     ev.preventDefault();ev.stopPropagation();
     const h=S.xH[ci];
     const stats=colStats(ci);

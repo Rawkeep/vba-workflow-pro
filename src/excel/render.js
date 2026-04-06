@@ -205,8 +205,8 @@ export function fmtNum(val,colName){
 
 // ── Enhanced Cell Editing with Active Cell ──
 export function initEnhancedCellEditing() {
-  const _origCE=CE;
-  CE=function(r,c){
+  const _origCE=window.CE;
+  window.CE=function(r,c){
     setActiveCell(r,c);
     _origCE(r,c);
     // After edit opens, sync formula bar
@@ -221,8 +221,8 @@ export function initEnhancedCellEditing() {
 
 // ── Override XR to add all enhancements ──
 export function initExcelXROverride() {
-  const _origXR_excel=XR;
-  XR=function(){
+  const _origXR_excel=window.XR;
+  window.XR=function(){
     _origXR_excel();
     if(!S.xH.length||!S.xD.length)return;
     try{
