@@ -10,12 +10,12 @@ import { NAV, N, T, toggleTheme, toast, H, A, L, RL, macLog, colOpts, navBack, n
 import { XI, XSheet, loadSheet, XLocal, XSaveLocal } from './excel/import.js';
 import { XPDF, XE, toggleExpDD, closeExpDD, showX, XR, CE, CC, XAR, XDR, XAC, XT, textToPDF, WESPDF, WEAPDF } from './excel/export.js';
 import { csAddRow, csAddCond, csSyncTargets, csAddNew, CS_RUN, CS_SAVE, renderSavedCases, runSavedCase } from './excel/select-case.js';
-import { ieAddElseIf, ieAddCond, ieAddNew, evalCond, evalBlock, IE_RUN, IE_SAVE, renderSavedIE, runSavedIE } from './excel/if-else.js';
+import { ieAddElseIf, ieAddCond, ieSyncTargets, ieAddNew, evalCond, evalBlock, IE_RUN, IE_SAVE, renderSavedIE, runSavedIE } from './excel/if-else.js';
 import { ppAdd, ppRenum, PP_RUN, PP_SAVE, renderSavedPipes, runSavedPipe } from './excel/pipeline.js';
 import { evalCalc, CALC, renderCalcH, reCalc } from './excel/calc.js';
 import { MAC_REC, MAC_STOP, MAC_SAVE, renderMacC, renderMacList, MAC_RUN } from './excel/macros.js';
 import { FM, PV, SO, FI, FIR, SR, TF, DD, VL, CH, VD_RUN } from './excel/operations.js';
-import { swAddRule, swAddNew, SW_RUN, SW_SAVE, renderSavedSW, runSavedSW } from './excel/switch.js';
+import { swAddRule, swAddCond, swSyncTargets, swAddNew, SW_RUN, SW_SAVE, renderSavedSW, runSavedSW } from './excel/switch.js';
 
 // ─── Excel Advanced ───
 import { setActiveCell, colLetter, fbKeydown, fbBlur, showColFilter, closeColFilter, filterDDSearch, filterDDToggleAll, filterDDToggle, applyColFilter, clearColFilter, applyAllFilters, initClipboardPaste, showCellTip, hideCellTip, autoFitCol, autoFitAllCols, toggleFullscreen, initEnhancedCellEditing, initExcelXROverride, initExcelKeyboardNav } from './excel/render.js';
@@ -80,7 +80,7 @@ Object.assign(window, {
   // Select Case
   csAddRow, csAddCond, csSyncTargets, csAddNew, CS_RUN, CS_SAVE, renderSavedCases, runSavedCase,
   // If/Else
-  ieAddElseIf, ieAddCond, ieAddNew, IE_RUN, IE_SAVE, renderSavedIE, runSavedIE,
+  ieAddElseIf, ieAddCond, ieSyncTargets, ieAddNew, IE_RUN, IE_SAVE, renderSavedIE, runSavedIE,
   // Pipeline
   ppAdd, ppRenum, PP_RUN, PP_SAVE, renderSavedPipes, runSavedPipe,
   // Calc / Macros
@@ -89,7 +89,7 @@ Object.assign(window, {
   // Operations
   FM, PV, SO, FI, FIR, SR, TF, DD, VL, CH, VD_RUN,
   // Switch
-  swAddRule, swAddNew, SW_RUN, SW_SAVE, renderSavedSW, runSavedSW,
+  swAddRule, swAddCond, swSyncTargets, swAddNew, SW_RUN, SW_SAVE, renderSavedSW, runSavedSW,
   // Excel Advanced
   setActiveCell, colLetter, fbKeydown, fbBlur,
   showColFilter, closeColFilter, filterDDSearch, filterDDToggleAll,

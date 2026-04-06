@@ -269,28 +269,15 @@ Beispiel: Land=DE UND Betrag&gt;1000 → schreibe <code>{Kunde} Premium</code>
 <h3 style="color:var(--ora)">IF / ELSEIF / ELSE Ketten <span class="ctx-help" onmouseenter="showHelp(event,'if-else')" onmouseleave="hideHelp()">?</span></h3>
 <p style="font-size:10px;color:var(--tx2);margin-bottom:10px">Mehrstufige Bedingungen mit AND/OR — wie VBA If...ElseIf...Else...End If</p>
 <div class="row" style="margin-bottom:6px">
-<span style="font:11px var(--mono);color:var(--tx2)">Zielspalte:</span>
-<select id="ie-tgt" style="width:130px"></select>
-<button class="b bo bs" onclick="ieAddNew()">+ Neue Zielspalte</button>
+<span style="font:11px var(--mono);color:var(--tx2)">Standard-Ziel:</span>
+<select id="ie-tgt" style="width:130px" onchange="ieSyncTargets()"></select>
+<button class="b bo bs" onclick="ieAddNew()">+ Neue Spalte</button>
 </div>
-<div id="ie-chain">
-<div class="ie-block" data-type="if">
-<div class="row" style="padding:6px 0;border-bottom:1px solid var(--bdr)">
-<span class="case-kw" style="color:var(--grn)">IF</span>
-<select class="ie-col" style="width:110px"></select>
-<select class="ie-op" style="width:60px"><option>=</option><option>≠</option><option value=">">&gt;</option><option value="<">&lt;</option><option value=">=">&gt;=</option><option value="<=">&lt;=</option><option>enthält</option><option>leer</option><option>nicht leer</option></select>
-<input type="text" class="ie-val" placeholder="Wert" style="width:100px">
-<select class="ie-logic" style="width:60px;display:none"><option>AND</option><option>OR</option></select>
-<button class="b bo bs" onclick="ieAddCond(this)">+AND/OR</button>
-<span class="case-arrow">→</span>
-<input type="text" class="ie-res" placeholder="Dann" style="width:120px">
-</div>
-</div>
-</div>
+<div id="ie-chain"></div>
 <div class="row" style="margin-top:6px">
-<button class="b bo bs" onclick="ieAddElseIf()">+ ElseIf</button>
+<button class="b bo bs" onclick="ieAddElseIf()">+ IF / ElseIf Block</button>
 <span style="font:600 11px var(--mono);color:var(--ora);margin-left:8px">Else →</span>
-<input type="text" id="ie-else" placeholder="Sonst-Wert" style="width:140px">
+<input type="text" id="ie-else" placeholder="Sonst-Wert oder {Spalte}" style="width:160px">
 </div>
 <div class="row" style="margin-top:10px">
 <button class="b bora" onclick="IE_RUN()">⚡ IF/ELSE ausführen</button>
@@ -299,6 +286,11 @@ Beispiel: Land=DE UND Betrag&gt;1000 → schreibe <code>{Kunde} Premium</code>
 </div>
 <div id="ie-saved" style="margin-top:10px"></div>
 <div class="help-box">
+<strong style="color:var(--ora)">Enhanced IF/ELSE:</strong><br>
+<code>Mehrere Bedingungen pro Block (AND/OR)</code><br>
+<code>Jeder Block kann eigene Zielspalte haben</code><br>
+<code>{Spaltenname} im Ergebnis = Wert kopieren</code><br>
+<code>12 Operatoren: = ≠ &gt; &lt; &gt;= &lt;= enthält beginnt endet leer nicht&nbsp;leer zwischen</code><br><br>
 <strong style="color:var(--ora)">VBA Equivalent:</strong><br>
 <code>If Land="DE" And Betrag&gt;1000 Then</code><br>
 &nbsp;&nbsp;<code>Status = "Premium DE"</code><br>
@@ -421,27 +413,18 @@ Beispiel: Land=DE UND Betrag&gt;1000 → schreibe <code>{Kunde} Premium</code>
 
 <!-- ⚡ SWITCH (Multi-Column Case) -->
 <div class="tpanel" id="xtp-switch"><div class="cd" style="border-color:rgba(34,211,238,.3)">
-<h3 style="color:var(--cyn)">SWITCH — Multi-Spalten-Verzweigung</h3>
-<p style="font-size:10px;color:var(--tx2);margin-bottom:10px">Wie SELECT CASE, aber prüft Kombinationen aus mehreren Spalten gleichzeitig</p>
+<h3 style="color:var(--cyn)">SWITCH — Multi-Spalten-Verzweigung <span class="ctx-help" onmouseenter="showHelp(event,'select-case')" onmouseleave="hideHelp()">?</span></h3>
+<p style="font-size:10px;color:var(--tx2);margin-bottom:10px">Mehrere Bedingungen pro Regel (AND/OR), jede Regel kann eigene Zielspalte haben</p>
 <div class="row" style="margin-bottom:6px">
-<span style="font:11px var(--mono);color:var(--tx2)">Ergebnis in:</span>
-<select id="sw-tgt" style="width:120px"></select>
+<span style="font:11px var(--mono);color:var(--tx2)">Standard-Ziel:</span>
+<select id="sw-tgt" style="width:120px" onchange="swSyncTargets()"></select>
 <button class="b bo bs" onclick="swAddNew()">+ Neue Spalte</button>
 </div>
-<div id="sw-rows">
-<div class="sw-rule"><div class="row" style="padding:6px 0;border-bottom:1px solid var(--bdr)">
-<span class="case-kw" style="color:var(--cyn)">WENN</span>
-<select class="sw-col1" style="width:100px"></select><select class="sw-op1" style="width:50px"><option>=</option><option>≠</option><option value=">">&gt;</option><option value="<">&lt;</option><option>enthält</option></select><input type="text" class="sw-val1" placeholder="Wert" style="width:70px">
-<select class="sw-logic" style="width:50px"><option>AND</option><option>OR</option></select>
-<select class="sw-col2" style="width:100px"></select><select class="sw-op2" style="width:50px"><option>=</option><option>≠</option><option value=">">&gt;</option><option value="<">&lt;</option><option>enthält</option></select><input type="text" class="sw-val2" placeholder="Wert" style="width:70px">
-<span class="case-arrow">→</span><input type="text" class="sw-res" placeholder="Dann" style="width:90px">
-<button class="b bo bs" onclick="this.closest('.sw-rule').remove()">✕</button>
-</div></div>
-</div>
+<div id="sw-rows"></div>
 <div class="row" style="margin-top:6px">
 <button class="b bo bs" onclick="swAddRule()">+ Regel</button>
 <span style="font:600 11px var(--mono);color:var(--ora)">Else →</span>
-<input type="text" id="sw-else" placeholder="Default" style="width:120px">
+<input type="text" id="sw-else" placeholder="Default oder {Spalte}" style="width:140px">
 </div>
 <div class="row" style="margin-top:8px">
 <button class="b bcyn" onclick="SW_RUN()">⚡ SWITCH ausführen</button>
@@ -450,11 +433,15 @@ Beispiel: Land=DE UND Betrag&gt;1000 → schreibe <code>{Kunde} Premium</code>
 </div>
 <div id="sw-saved" style="margin-top:8px"></div>
 <div class="help-box">
+<strong style="color:var(--cyn)">Enhanced SWITCH:</strong><br>
+<code>Unbegrenzte Bedingungen pro Regel (AND/OR)</code><br>
+<code>Jede Regel kann eigene Zielspalte haben</code><br>
+<code>{Spaltenname} im Ergebnis = Wert kopieren</code><br>
+<code>12 Operatoren: = ≠ &gt; &lt; &gt;= &lt;= enthält beginnt endet leer nicht&nbsp;leer zwischen</code><br><br>
 <strong style="color:var(--cyn)">Beispiele:</strong><br>
 WENN <code>Land=DE AND DG=Ja</code> → <code>Gefahrgut DE (ADR)</code><br>
 WENN <code>Land=US AND Betrag&gt;10000</code> → <code>US Export License</code><br>
-WENN <code>Incoterm=CIF OR Incoterm=CFR</code> → <code>Versicherung prüfen</code><br>
-Else → <code>Standard</code>
+WENN <code>Incoterm=CIF OR Incoterm=CFR</code> → <code>{Land}: Versicherung prüfen</code>
 </div>
 </div></div>
 
