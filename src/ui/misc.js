@@ -49,7 +49,7 @@ export async function renderLSUsage(){
 // ── Contextual Help Tooltips ──
 const HELP_TIPS={
   'trigger-regeln':'<strong>Trigger-Regeln</strong> verknüpfen Excel-Spalten mit Vorlagen.<br><br>Beispiel: Wenn Spalte <code>Gefahrgut</code> = <code>Ja</code>, dann wird automatisch die Gefahrgut-Vorlage generiert.<br><br>Operatoren: <code>= gleich</code>, <code>enthält</code>, <code>beginnt mit</code>',
-  'select-case':'<strong>SELECT CASE</strong> prüft einen Wert gegen mehrere Fälle — wie eine Zuordnungstabelle.<br><br>Beispiel: Land DE → Incoterm DAP, Land US → FCA, sonst → EXW.<br><br>Unterstützt auch Vergleiche: <code>>1000</code>, <code>>=5000</code>',
+  'select-case':'<strong>SELECT CASE</strong> — Multi-Condition Rules mit UND/ODER.<br><br>Jede Regel kann mehrere Bedingungen über verschiedene Spalten haben.<br>Jede Regel kann in eine eigene Zielspalte schreiben.<br><br>Im Ergebnis: <code>{Spaltenname}</code> kopiert den Wert aus einer anderen Spalte.<br>Operatoren: = ≠ > < >= <= enthält beginnt endet leer nicht&nbsp;leer zwischen',
   'if-else':'<strong>IF/ELSE</strong> erstellt mehrstufige Bedingungen mit AND/OR.<br><br>Beispiel: Wenn Land=DE UND Betrag>1000 → "Premium", sonst → "Standard"',
   'pipeline':'<strong>Pipeline</strong> verkettet mehrere Operationen automatisch nacheinander.<br><br>Beispiel: Filter → Sortieren → SELECT CASE → Export — alles in einem Klick.',
   'batch-export':'<strong>Batch-Export</strong> prüft jede Excel-Zeile gegen deine Trigger-Regeln und generiert automatisch alle passenden Dokumente als ZIP-Download.',

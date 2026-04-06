@@ -232,24 +232,21 @@
 <div class="tab" onclick="XT(this,'xtp-macro')" title="Makros aufzeichnen und wiedergeben">Makros</div>
 </div>
 
-<!-- ⚡ SELECT CASE / CASE ELSE -->
+<!-- ⚡ SELECT CASE / CASE ELSE (Advanced) -->
 <div class="tpanel" id="xtp-case"><div class="cd" style="border-color:rgba(236,72,153,.3)">
 <h3 style="color:var(--pk)">SELECT CASE / CASE ELSE <span class="ctx-help" onmouseenter="showHelp(event,'select-case')" onmouseleave="hideHelp()">?</span></h3>
-<p style="font-size:10px;color:var(--tx2);margin-bottom:10px">VBA Select Case als visueller Builder — prüfe einen Wert gegen mehrere Fälle</p>
-<div class="row" style="margin-bottom:8px">
-<span style="font:600 11px var(--mono);color:var(--pk)">SELECT CASE</span>
-<select id="cs-src" style="width:130px"></select>
-<span style="font:11px var(--mono);color:var(--tx2)">→ Ergebnis in</span>
-<select id="cs-tgt" style="width:130px"></select>
+<p style="font-size:10px;color:var(--tx2);margin-bottom:10px">Multi-Condition Rules — mehrere Bedingungen pro Case, verschiedene Zielspalten, Spalten-Referenzen mit <code>{Name}</code></p>
+<div class="row" style="margin-bottom:8px;align-items:center">
+<span style="font:600 11px var(--mono);color:var(--pk)">Standard-Ziel:</span>
+<select id="cs-tgt" style="width:130px" onchange="csSyncTargets()"></select>
 <button class="b bo bs" onclick="csAddNew()">+ Neue Zielspalte</button>
+<span style="font:10px var(--mono);color:var(--tx3);margin-left:8px">(jede Regel kann eigenes Ziel haben)</span>
 </div>
-<div id="cs-rows">
-<div class="case-row"><span class="case-kw" style="color:var(--pk)">Case</span><input type="text" placeholder="Wert (z.B. DE)" style="width:120px" class="cs-val"><span class="case-arrow">→</span><input type="text" placeholder="Dann (z.B. DAP)" style="width:150px" class="cs-res"><button class="b bo bs" onclick="this.closest('.case-row').remove()">✕</button></div>
-</div>
-<div class="row" style="margin-top:8px">
-<button class="b bo bs" onclick="csAddRow()">+ Case hinzufügen</button>
-<span style="font:600 11px var(--mono);color:var(--ora);margin-left:8px">Case Else →</span>
-<input type="text" id="cs-else" placeholder="Default-Wert" style="width:150px">
+<div id="cs-rows"></div>
+<div class="row" style="margin-top:8px;flex-wrap:wrap;gap:6px">
+<button class="b bo bs" onclick="csAddRow()">+ Regel hinzufügen</button>
+<span style="font:600 11px var(--mono);color:var(--ora)">Case Else →</span>
+<input type="text" id="cs-else" placeholder="Default-Wert oder {Spalte}" style="width:170px" title="Wird in Standard-Ziel geschrieben wenn keine Regel passt">
 </div>
 <div class="row" style="margin-top:10px">
 <button class="b bpk" onclick="CS_RUN()">⚡ SELECT CASE ausführen</button>
@@ -258,14 +255,12 @@
 </div>
 <div id="cs-saved" style="margin-top:10px"></div>
 <div class="help-box">
-<strong style="color:var(--pk)">VBA Equivalent:</strong><br>
-<code>Select Case [Spalte]</code><br>
-&nbsp;&nbsp;<code>Case "DE": Incoterm = "DAP"</code><br>
-&nbsp;&nbsp;<code>Case "US": Incoterm = "FCA"</code><br>
-&nbsp;&nbsp;<code>Case "NG": Incoterm = "CFR"</code><br>
-&nbsp;&nbsp;<code>Case Else: Incoterm = "EXW"</code><br>
-<code>End Select</code><br><br>
-<strong>Erweitert:</strong> Bereiche mit <code>&gt;</code> <code>&lt;</code> <code>&gt;=</code> <code>&lt;=</code> in Case-Wert, z.B. <code>&gt;1000</code> oder <code>&gt;=5000</code>
+<strong style="color:var(--pk)">Neu: Multi-Condition Cases</strong><br>
+Jede Regel kann <strong>mehrere Bedingungen</strong> haben (UND/ODER verknüpft).<br>
+Jede Regel kann in eine <strong>andere Zielspalte</strong> schreiben.<br><br>
+<strong>Operatoren:</strong> <code>=</code> <code>≠</code> <code>&gt;</code> <code>&lt;</code> <code>&gt;=</code> <code>&lt;=</code> <code>enthält</code> <code>beginnt</code> <code>endet</code> <code>leer</code> <code>nicht leer</code> <code>zwischen</code><br><br>
+<strong>Spalten-Referenzen:</strong> <code>{Betrag_EUR}</code> im Ergebnis kopiert den Wert aus dieser Spalte.<br>
+Beispiel: Land=DE UND Betrag&gt;1000 → schreibe <code>{Kunde} Premium</code>
 </div>
 </div></div>
 

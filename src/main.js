@@ -9,7 +9,7 @@ import { NAV, N, T, toggleTheme, toast, H, A, L, RL, macLog, colOpts, navBack, n
 // ─── Excel ───
 import { XI, XSheet, loadSheet, XLocal, XSaveLocal } from './excel/import.js';
 import { XPDF, XE, toggleExpDD, closeExpDD, showX, XR, CE, CC, XAR, XDR, XAC, XT, textToPDF, WESPDF, WEAPDF } from './excel/export.js';
-import { csAddRow, csAddNew, CS_RUN, CS_SAVE, renderSavedCases, runSavedCase } from './excel/select-case.js';
+import { csAddRow, csAddCond, csSyncTargets, csAddNew, CS_RUN, CS_SAVE, renderSavedCases, runSavedCase } from './excel/select-case.js';
 import { ieAddElseIf, ieAddCond, ieAddNew, evalCond, evalBlock, IE_RUN, IE_SAVE, renderSavedIE, runSavedIE } from './excel/if-else.js';
 import { ppAdd, ppRenum, PP_RUN, PP_SAVE, renderSavedPipes, runSavedPipe } from './excel/pipeline.js';
 import { evalCalc, CALC, renderCalcH, reCalc } from './excel/calc.js';
@@ -78,7 +78,7 @@ Object.assign(window, {
   XPDF, XE, toggleExpDD, closeExpDD, showX, XR,
   CE, CC, XAR, XDR, XAC, XT, textToPDF, WESPDF, WEAPDF,
   // Select Case
-  csAddRow, csAddNew, CS_RUN, CS_SAVE, renderSavedCases, runSavedCase,
+  csAddRow, csAddCond, csSyncTargets, csAddNew, CS_RUN, CS_SAVE, renderSavedCases, runSavedCase,
   // If/Else
   ieAddElseIf, ieAddCond, ieAddNew, IE_RUN, IE_SAVE, renderSavedIE, runSavedIE,
   // Pipeline
