@@ -214,7 +214,7 @@
 <div class="tab" onclick="XT(this,'xtp-valid')" title="Datenvalidierung: Pflichtfelder, Formate, Regeln">Validierung</div>
 <span class="tab-group-sep"></span>
 <span class="tab-group-label">TRANSFORMIEREN</span>
-<div class="tab" onclick="XT(this,'xtp-rules')" title="Bedingte Regeln — WENN/DANN mit UND/ODER, Vorschau, Vorlagen">Regeln</div>
+<div class="tab" onclick="XT(this,'xtp-rules')" title="SELECT CASE · IF/ELSE · SWITCH — vereint als bedingte Regeln mit UND/ODER, Vorschau, Vorlagen">CASE / IF</div>
 <div class="tab" onclick="XT(this,'xtp-txtfn')" title="Textfunktionen: Groß/Klein, Trim, Split, Verketten">Text</div>
 <div class="tab" onclick="XT(this,'xtp-calc')" title="Berechnete Spalten mit Formeln erstellen">Berechnet</div>
 <div class="tab" onclick="XT(this,'xtp-form')" title="Excel-Formeln: SUMME, WENN, ZÄHLENWENN, etc.">Formeln</div>
@@ -232,8 +232,8 @@
 
 <!-- REGELN — Unified Rule Engine (IF/ELSE + SELECT CASE + SWITCH) -->
 <div class="tpanel" id="xtp-rules"><div class="cd" style="border-color:rgba(236,72,153,.3)">
-<h3 style="color:var(--pk)">Regeln — WENN / DANN <span class="ctx-help" onmouseenter="showHelp(event,'select-case')" onmouseleave="hideHelp()">?</span></h3>
-<p style="font-size:10px;color:var(--tx2);margin-bottom:10px">Bedingte Logik mit UND/ODER — mehrere Regeln, verschiedene Zielspalten, Live-Vorschau, Vorlagen</p>
+<h3 style="color:var(--pk)">SELECT CASE / IF-ELSE / SWITCH <span class="ctx-help" onmouseenter="showHelp(event,'select-case')" onmouseleave="hideHelp()">?</span></h3>
+<p style="font-size:10px;color:var(--tx2);margin-bottom:10px">Bedingte Logik mit UND/ODER — alle drei VBA-Konstrukte vereint: mehrere Regeln, verschiedene Zielspalten, Live-Vorschau, Vorlagen</p>
 
 <!-- Vorlagen (Phase 4) -->
 <div style="margin-bottom:8px">

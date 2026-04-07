@@ -44,8 +44,8 @@ export function genSuggestions(){
       const unique=new Set(S.xD.map(r=>String(r[ci])));
       if(unique.size>=2&&unique.size<=15){
         sg.push({key:'case-'+ci,ico:'🔀',cls:'',
-          text:`<strong>${S.xH[ci]}</strong> hat ${unique.size} Kategorien<small>Regeln f\u00fcr automatische Zuordnung nutzen</small>`,
-          go:'Regeln',action:()=>{navToTab('xtp-rules');prefillCase(ci)}});
+          text:`<strong>${S.xH[ci]}</strong> hat ${unique.size} Kategorien<small>SELECT CASE f\u00fcr automatische Zuordnung</small>`,
+          go:'CASE / IF',action:()=>{navToTab('xtp-rules');prefillCase(ci)}});
       }
     }
   });
@@ -84,8 +84,8 @@ export function genSuggestions(){
     const name=S.xH[ci].toLowerCase();
     if(name.includes('betrag')||name.includes('eur')||name.includes('preis')||name.includes('umsatz')||name.includes('wert')||name.includes('brutto')||name.includes('netto')){
       sg.push({key:'ifelse-'+ci,ico:'⚡',cls:'',
-        text:`<strong>${S.xH[ci]}</strong> als Schwellwert nutzen<small>Regeln f\u00fcr automatische Kategorisierung (z.B. >10.000 \u2192 "Premium")</small>`,
-        go:'Regeln',action:()=>{navToTab('xtp-rules');prefillIE(ci)}});
+        text:`<strong>${S.xH[ci]}</strong> als Schwellwert nutzen<small>IF/ELSE f\u00fcr Kategorisierung (z.B. >10.000 \u2192 "Premium")</small>`,
+        go:'CASE / IF',action:()=>{navToTab('xtp-rules');prefillIE(ci)}});
     }
   });
 
