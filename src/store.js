@@ -1,6 +1,6 @@
 export const VBA_BEAST_VERSION='3.1.0';
 export let S={xH:[],xD:[],xFn:'',xBak:null,wH:[],wD:[],wI:false,wPv:null,log:[],chart:null,filtered:false,
-calcCols:[],savedCases:[],savedIE:[],savedSW:[],macros:[],macRec:false,macSteps:[],pipelines:[],pipeSteps:[],
+calcCols:[],savedCases:[],savedIE:[],savedSW:[],savedRules:[],macros:[],macRec:false,macSteps:[],pipelines:[],pipeSteps:[],
 selectedRows:new Set(),hiddenCols:new Set(),sortCol:-1,sortDir:'asc',undoStack:[],redoStack:[],
 // Hybrid: Workspace + Schreibtisch
 mode:'workspace', // 'desk' or 'workspace'

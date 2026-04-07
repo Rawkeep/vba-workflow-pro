@@ -6,7 +6,7 @@ import { $ } from '../utils.js';
 export const TOUR_STEPS=[
   {sel:'#sb-nav',title:'📍 Navigation',text:'Wechsle zwischen Excel, Word, Dokumenten-Center, E-Mail und mehr. Bei eingeklappter Sidebar zeigen Tooltips den Namen.',pos:'right'},
   {sel:'#x-empty, #x-tbl',title:'📊 Excel-Bereich',text:'Ziehe eine XLSX-/CSV-Datei hierher oder klicke Import. Alle Daten bleiben lokal auf deinem Rechner.',pos:'bottom'},
-  {sel:'#x-tabs',title:'⚡ Daten transformieren',text:'Sortieren, Filtern, SELECT CASE, IF/ELSE, Formeln, Pivot, Charts — über 25 Funktionen direkt verfügbar.',pos:'bottom',nav:'excel'},
+  {sel:'#x-tabs',title:'⚡ Daten transformieren',text:'Sortieren, Filtern, Regeln (WENN/DANN), Formeln, Pivot, Charts — über 25 Funktionen direkt verfügbar.',pos:'bottom',nav:'excel'},
   {sel:'#p-word h2',title:'✉ Serienbriefe',text:'Erstelle echte DOCX-Dateien mit Platzhaltern aus deinen Excel-Daten. Briefkopf und Footer werden automatisch eingebettet.',pos:'bottom',nav:'word'},
   {sel:'#p-doccenter h2',title:'📁 Dokumenten-Center',text:'Verwalte Vorlagen nach Kategorie (Gefahrgut, Labels, Formulare). Definiere Trigger-Regeln und generiere Dokumente automatisch per Batch.',pos:'bottom',nav:'doccenter'},
   {sel:'#theme-toggle',title:'🎨 Design',text:'Wechsle zwischen Dark und Light Mode — je nach Vorliebe.',pos:'left'}

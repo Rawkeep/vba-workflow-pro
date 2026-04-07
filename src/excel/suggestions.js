@@ -36,7 +36,7 @@ export function genSuggestions(){
       go:'Entfernen',action:()=>{navToTab('xtp-dedup')}});
   }
 
-  // 3. Country/category columns → suggest SELECT CASE
+  // 3. Country/category columns → suggest Regeln
   types.forEach((t,ci)=>{
     if(t.type!=='category')return;
     const name=S.xH[ci].toLowerCase();
@@ -44,8 +44,8 @@ export function genSuggestions(){
       const unique=new Set(S.xD.map(r=>String(r[ci])));
       if(unique.size>=2&&unique.size<=15){
         sg.push({key:'case-'+ci,ico:'🔀',cls:'',
-          text:`<strong>${S.xH[ci]}</strong> hat ${unique.size} Kategorien<small>SELECT CASE für automatische Zuordnung nutzen</small>`,
-          go:'CASE Builder',action:()=>{navToTab('xtp-case');prefillCase(ci)}});
+          text:`<strong>${S.xH[ci]}</strong> hat ${unique.size} Kategorien<small>Regeln f\u00fcr automatische Zuordnung nutzen</small>`,
+          go:'Regeln',action:()=>{navToTab('xtp-rules');prefillCase(ci)}});
       }
     }
   });
@@ -72,20 +72,20 @@ export function genSuggestions(){
   });
 
   // 6. Many rows → suggest pipeline
-  if(S.xD.length>=20&&S.savedCases.length===0&&S.savedIE.length===0){
+  if(S.xD.length>=20&&(S.savedRules||[]).length===0&&S.savedCases.length===0&&S.savedIE.length===0){
     sg.push({key:'pipeline',ico:'🔗',cls:'ss-success',
       text:`<strong>${S.xD.length} Zeilen</strong> — ideal für Batch-Verarbeitung<small>Pipeline kombiniert Filter→Sort→CASE→Export in einem Klick</small>`,
       go:'Pipeline',action:()=>{navToTab('xtp-pipe')}});
   }
 
-  // 7. IF/ELSE suggestion for numeric thresholds
+  // 7. Regeln suggestion for numeric thresholds
   types.forEach((t,ci)=>{
     if(t.type!=='number')return;
     const name=S.xH[ci].toLowerCase();
     if(name.includes('betrag')||name.includes('eur')||name.includes('preis')||name.includes('umsatz')||name.includes('wert')||name.includes('brutto')||name.includes('netto')){
       sg.push({key:'ifelse-'+ci,ico:'⚡',cls:'',
-        text:`<strong>${S.xH[ci]}</strong> als Schwellwert nutzen<small>IF/ELSE für automatische Kategorisierung (z.B. >10.000 → "Premium")</small>`,
-        go:'IF/ELSE',action:()=>{navToTab('xtp-ifelse');prefillIE(ci)}});
+        text:`<strong>${S.xH[ci]}</strong> als Schwellwert nutzen<small>Regeln f\u00fcr automatische Kategorisierung (z.B. >10.000 \u2192 "Premium")</small>`,
+        go:'Regeln',action:()=>{navToTab('xtp-rules');prefillIE(ci)}});
     }
   });
 
@@ -156,10 +156,10 @@ export function navToTab(tabId){
   if(tabEl)tabEl.click();
 }
 
-// Helper: prefill SELECT CASE with detected column
+// Helper: prefill Rule builder with detected column
 export function prefillCase(ci){
   setTimeout(()=>{
-    const src=$('cs-src');if(src)src.value=S.xH[ci];
+    const tgt=$('rl-tgt');if(tgt)tgt.value=S.xH[ci];
   },100);
 }
 
@@ -174,10 +174,10 @@ export function prefillPivot(ci){
   },100);
 }
 
-// Helper: prefill IF/ELSE with numeric column
+// Helper: prefill IF/ELSE → now redirects to unified Regeln
 export function prefillIE(ci){
   setTimeout(()=>{
-    const tgt=$('ie-tgt');if(tgt)tgt.value=S.xH[ci];
+    const tgt=$('rl-tgt');if(tgt)tgt.value=S.xH[ci];
   },100);
 }
 

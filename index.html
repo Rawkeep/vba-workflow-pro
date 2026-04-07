@@ -214,9 +214,7 @@
 <div class="tab" onclick="XT(this,'xtp-valid')" title="Datenvalidierung: Pflichtfelder, Formate, Regeln">Validierung</div>
 <span class="tab-group-sep"></span>
 <span class="tab-group-label">TRANSFORMIEREN</span>
-<div class="tab" onclick="XT(this,'xtp-case')" title="VBA SELECT CASE — Wert gegen mehrere Fälle prüfen">SELECT CASE</div>
-<div class="tab" onclick="XT(this,'xtp-ifelse')" title="IF/ELSEIF/ELSE — Bedingungsketten mit AND/OR">IF / ELSE</div>
-<div class="tab" onclick="XT(this,'xtp-switch')" title="SWITCH — Spalteninhalt per Mapping umschreiben">SWITCH</div>
+<div class="tab" onclick="XT(this,'xtp-rules')" title="Bedingte Regeln — WENN/DANN mit UND/ODER, Vorschau, Vorlagen">Regeln</div>
 <div class="tab" onclick="XT(this,'xtp-txtfn')" title="Textfunktionen: Groß/Klein, Trim, Split, Verketten">Text</div>
 <div class="tab" onclick="XT(this,'xtp-calc')" title="Berechnete Spalten mit Formeln erstellen">Berechnet</div>
 <div class="tab" onclick="XT(this,'xtp-form')" title="Excel-Formeln: SUMME, WENN, ZÄHLENWENN, etc.">Formeln</div>
@@ -232,73 +230,62 @@
 <div class="tab" onclick="XT(this,'xtp-macro')" title="Makros aufzeichnen und wiedergeben">Makros</div>
 </div>
 
-<!-- ⚡ SELECT CASE / CASE ELSE (Advanced) -->
-<div class="tpanel" id="xtp-case"><div class="cd" style="border-color:rgba(236,72,153,.3)">
-<h3 style="color:var(--pk)">SELECT CASE / CASE ELSE <span class="ctx-help" onmouseenter="showHelp(event,'select-case')" onmouseleave="hideHelp()">?</span></h3>
-<p style="font-size:10px;color:var(--tx2);margin-bottom:10px">Multi-Condition Rules — mehrere Bedingungen pro Case, verschiedene Zielspalten, Spalten-Referenzen mit <code>{Name}</code></p>
-<div class="row" style="margin-bottom:8px;align-items:center">
-<span style="font:600 11px var(--mono);color:var(--pk)">Standard-Ziel:</span>
-<select id="cs-tgt" style="width:130px" onchange="csSyncTargets()"></select>
-<button class="b bo bs" onclick="csAddNew()">+ Neue Zielspalte</button>
-<span style="font:10px var(--mono);color:var(--tx3);margin-left:8px">(jede Regel kann eigenes Ziel haben)</span>
-</div>
-<div id="cs-rows"></div>
-<div class="row" style="margin-top:8px;flex-wrap:wrap;gap:6px">
-<button class="b bo bs" onclick="csAddRow()">+ Regel hinzufügen</button>
-<span style="font:600 11px var(--mono);color:var(--ora)">Case Else →</span>
-<input type="text" id="cs-else" placeholder="Default-Wert oder {Spalte}" style="width:170px" title="Wird in Standard-Ziel geschrieben wenn keine Regel passt">
-</div>
-<div class="row" style="margin-top:10px">
-<button class="b bpk" onclick="CS_RUN()">⚡ SELECT CASE ausführen</button>
-<button class="b bo" onclick="CS_SAVE()">💾 Speichern</button>
-<span id="cs-result" style="font-size:11px;color:var(--tx2)"></span>
-</div>
-<div id="cs-saved" style="margin-top:10px"></div>
-<div class="help-box">
-<strong style="color:var(--pk)">Neu: Multi-Condition Cases</strong><br>
-Jede Regel kann <strong>mehrere Bedingungen</strong> haben (UND/ODER verknüpft).<br>
-Jede Regel kann in eine <strong>andere Zielspalte</strong> schreiben.<br><br>
-<strong>Operatoren:</strong> <code>=</code> <code>≠</code> <code>&gt;</code> <code>&lt;</code> <code>&gt;=</code> <code>&lt;=</code> <code>enthält</code> <code>beginnt</code> <code>endet</code> <code>leer</code> <code>nicht leer</code> <code>zwischen</code><br><br>
-<strong>Spalten-Referenzen:</strong> <code>{Betrag_EUR}</code> im Ergebnis kopiert den Wert aus dieser Spalte.<br>
-Beispiel: Land=DE UND Betrag&gt;1000 → schreibe <code>{Kunde} Premium</code>
-</div>
-</div></div>
+<!-- REGELN — Unified Rule Engine (IF/ELSE + SELECT CASE + SWITCH) -->
+<div class="tpanel" id="xtp-rules"><div class="cd" style="border-color:rgba(236,72,153,.3)">
+<h3 style="color:var(--pk)">Regeln — WENN / DANN <span class="ctx-help" onmouseenter="showHelp(event,'select-case')" onmouseleave="hideHelp()">?</span></h3>
+<p style="font-size:10px;color:var(--tx2);margin-bottom:10px">Bedingte Logik mit UND/ODER — mehrere Regeln, verschiedene Zielspalten, Live-Vorschau, Vorlagen</p>
 
-<!-- ⚡ IF/ELSEIF/ELSE mit AND/OR -->
-<div class="tpanel" id="xtp-ifelse"><div class="cd" style="border-color:rgba(249,115,22,.3)">
-<h3 style="color:var(--ora)">IF / ELSEIF / ELSE Ketten <span class="ctx-help" onmouseenter="showHelp(event,'if-else')" onmouseleave="hideHelp()">?</span></h3>
-<p style="font-size:10px;color:var(--tx2);margin-bottom:10px">Mehrstufige Bedingungen mit AND/OR — wie VBA If...ElseIf...Else...End If</p>
-<div class="row" style="margin-bottom:6px">
-<span style="font:11px var(--mono);color:var(--tx2)">Standard-Ziel:</span>
-<select id="ie-tgt" style="width:130px" onchange="ieSyncTargets()"></select>
-<button class="b bo bs" onclick="ieAddNew()">+ Neue Spalte</button>
+<!-- Vorlagen (Phase 4) -->
+<div style="margin-bottom:8px">
+<span style="font:600 10px var(--mono);color:var(--tx3)">VORLAGEN:</span>
+<span id="rl-templates"></span>
 </div>
-<div id="ie-chain"></div>
-<div class="row" style="margin-top:6px">
-<button class="b bo bs" onclick="ieAddElseIf()">+ IF / ElseIf Block</button>
-<span style="font:600 11px var(--mono);color:var(--ora);margin-left:8px">Else →</span>
-<input type="text" id="ie-else" placeholder="Sonst-Wert oder {Spalte}" style="width:160px">
+
+<!-- Standard-Ziel + Name -->
+<div class="row" style="margin-bottom:8px;align-items:center;flex-wrap:wrap;gap:6px">
+<span style="font:600 11px var(--mono);color:var(--pk)">Zielspalte:</span>
+<select id="rl-tgt" style="width:130px" onchange="rlSyncTargets()"></select>
+<button class="b bo bs" onclick="rlAddNewCol()">+ Neue Spalte</button>
+<span style="font:10px var(--mono);color:var(--tx3)">(jede Regel kann eigenes Ziel haben)</span>
+<input type="text" id="rl-name" placeholder="Regelset-Name (optional)" style="width:160px;margin-left:auto">
 </div>
+
+<!-- Rule Rows (drag & drop) -->
+<div id="rl-rows" style="min-height:20px"></div>
+
+<!-- Add Rule + Else -->
+<div class="row" style="margin-top:8px;flex-wrap:wrap;gap:6px">
+<button class="b bpk bs" onclick="rlAddRule()">+ Regel hinzufugen</button>
+<span style="font:600 11px var(--mono);color:var(--ora)">Sonst &#8594;</span>
+<input type="text" id="rl-else" placeholder="Default-Wert oder {Spalte}" style="width:170px" title="Wird geschrieben wenn keine Regel passt" oninput="window._rlPreview&&window._rlPreview()">
+</div>
+
+<!-- Live Preview (Phase 2) -->
+<div id="rl-preview" style="margin-top:10px"></div>
+
+<!-- Actions -->
 <div class="row" style="margin-top:10px">
-<button class="b bora" onclick="IE_RUN()">⚡ IF/ELSE ausführen</button>
-<button class="b bo" onclick="IE_SAVE()">💾 Speichern</button>
-<span id="ie-result" style="font-size:11px;color:var(--tx2)"></span>
+<button class="b bpk" onclick="RULES_RUN()">Regeln ausfuhren</button>
+<button class="b bo" onclick="RULES_SAVE()">Speichern</button>
+<span id="rl-result" style="font-size:11px;color:var(--tx2)"></span>
 </div>
-<div id="ie-saved" style="margin-top:10px"></div>
+
+<!-- Saved Rules -->
+<div id="rl-saved" style="margin-top:10px"></div>
+
+<!-- Help -->
 <div class="help-box">
-<strong style="color:var(--ora)">Enhanced IF/ELSE:</strong><br>
-<code>Mehrere Bedingungen pro Block (AND/OR)</code><br>
-<code>Jeder Block kann eigene Zielspalte haben</code><br>
-<code>{Spaltenname} im Ergebnis = Wert kopieren</code><br>
-<code>12 Operatoren: = ≠ &gt; &lt; &gt;= &lt;= enthält beginnt endet leer nicht&nbsp;leer zwischen</code><br><br>
-<strong style="color:var(--ora)">VBA Equivalent:</strong><br>
-<code>If Land="DE" And Betrag&gt;1000 Then</code><br>
-&nbsp;&nbsp;<code>Status = "Premium DE"</code><br>
-<code>ElseIf Land="US" Then</code><br>
-&nbsp;&nbsp;<code>Status = "US Standard"</code><br>
-<code>Else</code><br>
-&nbsp;&nbsp;<code>Status = "International"</code><br>
-<code>End If</code>
+<strong style="color:var(--pk)">So funktioniert es:</strong><br>
+<code>+ Regel</code> &#8594; WENN Bedingung(en) &#8594; schreibe Wert in Zielspalte<br>
+<code>+ Bedingung</code> &#8594; UND/ODER verknupfte Bedingungen pro Regel<br>
+<code>Sonst</code> &#8594; Default-Wert wenn keine Regel passt<br><br>
+<strong>Operatoren:</strong> <code>=</code> <code>!=</code> <code>&gt;</code> <code>&lt;</code> <code>&gt;=</code> <code>&lt;=</code> <code>enthalt</code> <code>beginnt</code> <code>endet</code> <code>leer</code> <code>nicht leer</code> <code>zwischen</code><br><br>
+<strong>Spalten-Referenzen:</strong> <code>{Betrag_EUR}</code> im Ergebnis kopiert den Wert aus dieser Spalte.<br><br>
+<strong>Tipps:</strong><br>
+&#8226; Regeln per Drag&amp;Drop umsortieren (Reihenfolge = Prioritat)<br>
+&#8226; Vorlagen nutzen fur haufige Muster<br>
+&#8226; Vorschau zeigt live welche Zeilen betroffen sind<br>
+&#8226; Gespeicherte Regeln konnen in Pipelines verwendet werden
 </div>
 </div></div>
 
@@ -314,9 +301,10 @@ Beispiel: Land=DE UND Betrag&gt;1000 → schreibe <code>{Kunde} Premium</code>
 <option value="text">Text-Funktion</option>
 <option value="sr">Suchen/Ersetzen</option>
 <option value="dedup">Duplikate entf.</option>
-<option value="case">SELECT CASE (gespeichert)</option>
-<option value="ifelse">IF/ELSE (gespeichert)</option>
-<option value="switch">SWITCH (gespeichert)</option>
+<option value="rules">Regel (gespeichert)</option>
+<option value="case">SELECT CASE (Legacy)</option>
+<option value="ifelse">IF/ELSE (Legacy)</option>
+<option value="switch">SWITCH (Legacy)</option>
 <option value="export">Export XLSX</option>
 </select>
 <button class="b bcyn" onclick="ppAdd()">+ Schritt</button>
@@ -411,39 +399,6 @@ Beispiel: Land=DE UND Betrag&gt;1000 → schreibe <code>{Kunde} Premium</code>
 </div>
 </div></div>
 
-<!-- ⚡ SWITCH (Multi-Column Case) -->
-<div class="tpanel" id="xtp-switch"><div class="cd" style="border-color:rgba(34,211,238,.3)">
-<h3 style="color:var(--cyn)">SWITCH — Multi-Spalten-Verzweigung <span class="ctx-help" onmouseenter="showHelp(event,'select-case')" onmouseleave="hideHelp()">?</span></h3>
-<p style="font-size:10px;color:var(--tx2);margin-bottom:10px">Mehrere Bedingungen pro Regel (AND/OR), jede Regel kann eigene Zielspalte haben</p>
-<div class="row" style="margin-bottom:6px">
-<span style="font:11px var(--mono);color:var(--tx2)">Standard-Ziel:</span>
-<select id="sw-tgt" style="width:120px" onchange="swSyncTargets()"></select>
-<button class="b bo bs" onclick="swAddNew()">+ Neue Spalte</button>
-</div>
-<div id="sw-rows"></div>
-<div class="row" style="margin-top:6px">
-<button class="b bo bs" onclick="swAddRule()">+ Regel</button>
-<span style="font:600 11px var(--mono);color:var(--ora)">Else →</span>
-<input type="text" id="sw-else" placeholder="Default oder {Spalte}" style="width:140px">
-</div>
-<div class="row" style="margin-top:8px">
-<button class="b bcyn" onclick="SW_RUN()">⚡ SWITCH ausführen</button>
-<button class="b bo" onclick="SW_SAVE()">💾 Speichern</button>
-<span id="sw-result" style="font-size:11px;color:var(--tx2)"></span>
-</div>
-<div id="sw-saved" style="margin-top:8px"></div>
-<div class="help-box">
-<strong style="color:var(--cyn)">Enhanced SWITCH:</strong><br>
-<code>Unbegrenzte Bedingungen pro Regel (AND/OR)</code><br>
-<code>Jede Regel kann eigene Zielspalte haben</code><br>
-<code>{Spaltenname} im Ergebnis = Wert kopieren</code><br>
-<code>12 Operatoren: = ≠ &gt; &lt; &gt;= &lt;= enthält beginnt endet leer nicht&nbsp;leer zwischen</code><br><br>
-<strong style="color:var(--cyn)">Beispiele:</strong><br>
-WENN <code>Land=DE AND DG=Ja</code> → <code>Gefahrgut DE (ADR)</code><br>
-WENN <code>Land=US AND Betrag&gt;10000</code> → <code>US Export License</code><br>
-WENN <code>Incoterm=CIF OR Incoterm=CFR</code> → <code>{Land}: Versicherung prüfen</code>
-</div>
-</div></div>
 
 <div class="tpanel" id="xtp-chart"><div class="cd"><h3 style="color:var(--acc)">Charts</h3>
 <div class="chart-type-grid">

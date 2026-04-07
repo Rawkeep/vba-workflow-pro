@@ -85,5 +85,5 @@ export function loadTemplates(key){
   }else if(key==='container'){
     S.savedIE.push({tgt:'Status',elseVal:'',blocks:[{conds:[{col:'Dokumente_OK',op:'=',val:'Nein',logic:''},{col:'Gefahrgut',op:'=',val:'Ja',logic:'AND'}],res:'⚠ STOPP: DG+Docs!',type:'if'},{conds:[{col:'Dokumente_OK',op:'=',val:'Nein',logic:''}],res:'⚠ Docs fehlen',type:'elseif'}],name:'Dokument-Check'});
   }
-  window.renderSavedCases();window.renderSavedIE();
+  window.renderSavedCases();window.renderSavedIE();if(window.renderSavedRules)window.renderSavedRules();
 }
