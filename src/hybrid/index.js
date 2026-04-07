@@ -14,16 +14,15 @@ const FEATURE_MAP={
   snr:{label:'Suchen & Ersetzen',ico:'🔍',tab:'xtp-fnr',fn:()=>document.querySelector('[onclick*="XT(this,\'xtp-fnr\')"]')?.click()},
   text:{label:'Textfunktionen',ico:'Aa',tab:'xtp-txtfn',fn:()=>document.querySelector('[onclick*="XT(this,\'xtp-txtfn\')"]')?.click()},
   dedup:{label:'Duplikate',ico:'🧹',tab:'xtp-dedup',fn:()=>document.querySelector('[onclick*="XT(this,\'xtp-dedup\')"]')?.click()},
-  rules:{label:'CASE / IF',ico:'🔀',tab:'xtp-rules',fn:()=>document.querySelector('[onclick*="XT(this,\'xtp-rules\')"]')?.click()},
-  case:{label:'CASE / IF',ico:'🔀',tab:'xtp-rules',fn:()=>document.querySelector('[onclick*="XT(this,\'xtp-rules\')"]')?.click()},
-  ifelse:{label:'CASE / IF',ico:'🔀',tab:'xtp-rules',fn:()=>document.querySelector('[onclick*="XT(this,\'xtp-rules\')"]')?.click()},
+  case:{label:'SELECT CASE',ico:'🔀',tab:'xtp-case',fn:()=>document.querySelector('[onclick*="XT(this,\'xtp-case\')"]')?.click()},
+  ifelse:{label:'IF/ELSE',ico:'⚡',tab:'xtp-ifelse',fn:()=>document.querySelector('[onclick*="XT(this,\'xtp-ifelse\')"]')?.click()},
   calc:{label:'Berechnet',ico:'🧮',tab:'xtp-calc',fn:()=>document.querySelector('[onclick*="XT(this,\'xtp-calc\')"]')?.click()},
   pipe:{label:'Pipeline',ico:'🔗',tab:'xtp-pipe',fn:()=>document.querySelector('[onclick*="XT(this,\'xtp-pipe\')"]')?.click()},
   pivot:{label:'Pivot',ico:'📊',tab:'xtp-pivot',fn:()=>document.querySelector('[onclick*="XT(this,\'xtp-pivot\')"]')?.click()},
   chart:{label:'Charts',ico:'📈',tab:'xtp-chart',fn:()=>document.querySelector('[onclick*="XT(this,\'xtp-chart\')"]')?.click()},
   vlookup:{label:'VLOOKUP',ico:'🔗',tab:'xtp-vlook',fn:()=>document.querySelector('[onclick*="XT(this,\'xtp-vlook\')"]')?.click()},
   valid:{label:'Prüfen',ico:'✓',tab:'xtp-valid',fn:()=>document.querySelector('[onclick*="XT(this,\'xtp-valid\')"]')?.click()},
-  switch:{label:'CASE / IF',ico:'🔀',tab:'xtp-rules',fn:()=>document.querySelector('[onclick*="XT(this,\'xtp-rules\')"]')?.click()},
+  switch:{label:'SWITCH',ico:'🔄',tab:'xtp-switch',fn:()=>document.querySelector('[onclick*="XT(this,\'xtp-switch\')"]')?.click()},
   export:{label:'Export XLSX',ico:'⬇',fn:()=>XE()},
   pdf:{label:'PDF Export',ico:'📄',fn:()=>XPDF()},
   macro:{label:'Makros',ico:'⏺',tab:'xtp-macro',fn:()=>document.querySelector('[onclick*="XT(this,\'xtp-macro\')"]')?.click()},
@@ -41,25 +40,13 @@ export function getTopFeatures(n){
 export function updateQuickActions(){
   const qa=$('quick-actions');if(!qa)return;
   if(S.mode==='desk'||!S.xH.length){qa.classList.remove('show');return}
-  // Merge legacy case/ifelse/switch counts into rules
-  if(S.usage){
-    const legacyKeys=['case','ifelse','switch'];
-    const legacySum=legacyKeys.reduce((s,k)=>s+(S.usage[k]||0),0);
-    if(legacySum>0){
-      S.usage.rules=(S.usage.rules||0)+legacySum;
-      legacyKeys.forEach(k=>delete S.usage[k]);
-    }
-  }
   const top=getTopFeatures(6);
   if(top.length<2){qa.classList.remove('show');return}
   qa.classList.add('show');
-  let html='<span class="qa-label">H\u00e4ufig \u2192</span>';
-  const seen=new Set();
+  let html='<span class="qa-label">Häufig →</span>';
   top.forEach(([key,count])=>{
     const f=FEATURE_MAP[key];if(!f)return;
-    if(seen.has(f.label))return; // skip duplicates
-    seen.add(f.label);
-    html+=`<button class="qa-btn" onclick="qaRun('${key}')">${f.ico} ${f.label} <span class="qa-count">${count}\u00d7</span></button>`;
+    html+=`<button class="qa-btn" onclick="qaRun('${key}')">${f.ico} ${f.label} <span class="qa-count">${count}×</span></button>`;
   });
   qa.innerHTML=html;
 }
@@ -277,9 +264,9 @@ queueMicrotask(()=>{
     const _origXT=window.XT;
     const tabToFeature={
       'xtp-sort':'sort','xtp-filter':'filter','xtp-fnr':'snr','xtp-txtfn':'text',
-      'xtp-dedup':'dedup','xtp-rules':'rules','xtp-case':'rules','xtp-ifelse':'rules','xtp-calc':'calc',
+      'xtp-dedup':'dedup','xtp-case':'case','xtp-ifelse':'ifelse','xtp-calc':'calc',
       'xtp-pipe':'pipe','xtp-pivot':'pivot','xtp-chart':'chart','xtp-vlook':'vlookup',
-      'xtp-valid':'valid','xtp-switch':'rules','xtp-macro':'macro'
+      'xtp-valid':'valid','xtp-switch':'switch','xtp-macro':'macro'
     };
     window.XT=function(el,panelId){
       _origXT(el,panelId);

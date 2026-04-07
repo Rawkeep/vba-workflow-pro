@@ -13,10 +13,9 @@ export function safeExec(fn,label){
 
 // Wrap critical functions
 export function initErrorBoundaries() {
-  if(typeof window.RULES_RUN==='function'){const _rl=window.RULES_RUN;window.RULES_RUN=safeExec(_rl,'Regeln')}
-  if(typeof window.CS_RUN==='function'){const _cs=window.CS_RUN;window.CS_RUN=safeExec(_cs,'Regeln')}
-  if(typeof window.IE_RUN==='function'){const _ie=window.IE_RUN;window.IE_RUN=safeExec(_ie,'Regeln')}
-  if(typeof window.SW_RUN==='function'){const _sw=window.SW_RUN;window.SW_RUN=safeExec(_sw,'Regeln')}
+  if(typeof window.CS_RUN==='function'){const _cs=window.CS_RUN;window.CS_RUN=safeExec(_cs,'SELECT CASE')}
+  if(typeof window.IE_RUN==='function'){const _ie=window.IE_RUN;window.IE_RUN=safeExec(_ie,'IF/ELSE')}
+  if(typeof window.SW_RUN==='function'){const _sw=window.SW_RUN;window.SW_RUN=safeExec(_sw,'SWITCH')}
   if(typeof window.SO==='function'){const _so=window.SO;window.SO=safeExec(_so,'Sortieren')}
   if(typeof window.SR==='function'){const _sr=window.SR;window.SR=safeExec(_sr,'Suchen & Ersetzen')}
   if(typeof window.TF==='function'){const _tf=window.TF;window.TF=safeExec(_tf,'Text')}

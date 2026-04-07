@@ -9,11 +9,13 @@ import { NAV, N, T, toggleTheme, toast, H, A, L, RL, macLog, colOpts, navBack, n
 // ─── Excel ───
 import { XI, XSheet, loadSheet, XLocal, XSaveLocal } from './excel/import.js';
 import { XPDF, XE, toggleExpDD, closeExpDD, showX, XR, CE, CC, XAR, XDR, XAC, XT, textToPDF, WESPDF, WEAPDF } from './excel/export.js';
-import { csAddRow, csAddCond, csSyncTargets, csAddNew, CS_RUN, CS_SAVE, renderSavedCases, runSavedCase, ieAddElseIf, ieAddCond, ieSyncTargets, ieAddNew, evalCond, evalBlock, IE_RUN, IE_SAVE, renderSavedIE, runSavedIE, swAddRule, swAddCond, swSyncTargets, swAddNew, SW_RUN, SW_SAVE, renderSavedSW, runSavedSW, rlAddRule, rlAddCond, rlSyncTargets, rlAddNewCol, RULES_RUN, RULES_SAVE, renderSavedRules, runSavedRule, editSavedRule, rlApplyTemplate, renderTemplates, evalRule } from './excel/rules.js';
+import { csAddRow, csAddCond, csSyncTargets, csAddNew, CS_RUN, CS_SAVE, renderSavedCases, runSavedCase } from './excel/select-case.js';
+import { ieAddElseIf, ieAddCond, ieSyncTargets, ieAddNew, evalCond, evalBlock, IE_RUN, IE_SAVE, renderSavedIE, runSavedIE } from './excel/if-else.js';
 import { ppAdd, ppRenum, PP_RUN, PP_SAVE, renderSavedPipes, runSavedPipe } from './excel/pipeline.js';
 import { evalCalc, CALC, renderCalcH, reCalc } from './excel/calc.js';
 import { MAC_REC, MAC_STOP, MAC_SAVE, renderMacC, renderMacList, MAC_RUN } from './excel/macros.js';
 import { FM, PV, SO, FI, FIR, SR, TF, DD, VL, CH, VD_RUN } from './excel/operations.js';
+import { swAddRule, swAddCond, swSyncTargets, swAddNew, SW_RUN, SW_SAVE, renderSavedSW, runSavedSW } from './excel/switch.js';
 
 // ─── Excel Advanced ───
 import { setActiveCell, colLetter, fbKeydown, fbBlur, showColFilter, closeColFilter, filterDDSearch, filterDDToggleAll, filterDDToggle, applyColFilter, clearColFilter, applyAllFilters, initClipboardPaste, showCellTip, hideCellTip, autoFitCol, autoFitAllCols, toggleFullscreen, initEnhancedCellEditing, initExcelXROverride, initExcelKeyboardNav } from './excel/render.js';
@@ -86,11 +88,8 @@ Object.assign(window, {
   MAC_REC, MAC_STOP, MAC_SAVE, renderMacC, renderMacList, MAC_RUN,
   // Operations
   FM, PV, SO, FI, FIR, SR, TF, DD, VL, CH, VD_RUN,
-  // Switch (legacy)
+  // Switch
   swAddRule, swAddCond, swSyncTargets, swAddNew, SW_RUN, SW_SAVE, renderSavedSW, runSavedSW,
-  // Unified Rules
-  rlAddRule, rlAddCond, rlSyncTargets, rlAddNewCol, RULES_RUN, RULES_SAVE,
-  renderSavedRules, runSavedRule, editSavedRule, rlApplyTemplate, renderTemplates, evalRule,
   // Excel Advanced
   setActiveCell, colLetter, fbKeydown, fbBlur,
   showColFilter, closeColFilter, filterDDSearch, filterDDToggleAll,
