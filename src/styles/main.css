@@ -576,3 +576,43 @@ body.light #nav-history button:hover:not(:disabled){background:rgba(0,0,0,.08);c
 .ai-result-modal{background:var(--s1);border:1px solid var(--brd);border-radius:16px;padding:28px 24px;max-width:560px;width:90vw;color:var(--tx);position:relative;box-shadow:0 20px 60px rgba(0,0,0,.5)}
 .ai-result-modal h3{font-size:18px;margin:0 0 12px;color:var(--acc)}
 .ai-result-pre{background:var(--s3);border:1px solid var(--brd);border-radius:8px;padding:14px;font:12px/1.6 var(--mono);color:var(--tx);white-space:pre-wrap;word-break:break-word;max-height:400px;overflow-y:auto}
+
+/* ─── Email Status Badges ─── */
+.es-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:6px;font:600 10px var(--mono);white-space:nowrap;min-width:56px;justify-content:center}
+.es-pending{background:rgba(255,255,255,.08);color:var(--tx3)}
+.es-sending{background:rgba(10,132,255,.2);color:var(--blu);animation:pulse 1.5s infinite}
+.es-sent{background:rgba(48,209,88,.15);color:var(--grn)}
+.es-error{background:rgba(255,69,58,.15);color:var(--red)}
+
+/* ─── Progress Bar ─── */
+.progress-bar{height:6px;border-radius:3px;background:var(--s2);overflow:hidden}
+.progress-fill{height:100%;border-radius:3px;transition:width .3s ease}
+
+/* ─── Wizard / Stepper ─── */
+.wizard-steps{display:flex;align-items:flex-start;justify-content:center;gap:0;margin-bottom:20px;flex-wrap:wrap}
+.wz-step{display:flex;flex-direction:column;align-items:center;gap:4px;position:relative;min-width:80px}
+.wz-circle{width:36px;height:36px;border-radius:50%;border:2px solid var(--bdr);background:var(--s2);display:flex;align-items:center;justify-content:center;font:700 13px var(--mono);color:var(--tx3);transition:all .3s;cursor:pointer;position:relative;z-index:1}
+.wz-circle.active{border-color:var(--cyn);background:rgba(100,210,255,.15);color:var(--cyn);box-shadow:0 0 16px rgba(100,210,255,.25)}
+.wz-circle.done{border-color:var(--grn);background:rgba(48,209,88,.15);color:var(--grn)}
+.wz-label{font:500 10px var(--mono);color:var(--tx3);text-align:center;max-width:80px;transition:color .3s}
+.wz-label.active{color:var(--cyn)}.wz-label.done{color:var(--grn)}
+.wz-line{flex:1;height:2px;background:var(--bdr);margin-top:18px;min-width:20px;max-width:60px;transition:background .3s}
+.wz-line.done{background:var(--grn)}
+.wz-body{min-height:200px;animation:fadeIn .25s ease}
+.wz-nav{display:flex;justify-content:space-between;margin-top:16px;gap:8px}
+
+/* ─── Merge Field Sidebar ─── */
+.merge-field-sidebar{background:var(--s2);border:1px solid var(--bdr);border-radius:10px;padding:10px;min-width:140px;max-width:180px;max-height:340px;overflow-y:auto}
+.merge-field-chip{padding:4px 10px;border-radius:6px;background:rgba(100,210,255,.1);color:var(--cyn);font:500 11px var(--mono);cursor:grab;border:1px solid rgba(100,210,255,.2);transition:all .2s;user-select:none;text-align:center}
+.merge-field-chip:hover{background:rgba(100,210,255,.2);border-color:rgba(100,210,255,.4)}
+.merge-field-chip:active{cursor:grabbing;transform:scale(.95)}
+.merge-field-chip.dragging{opacity:.5}
+
+/* ─── Drag Drop Zone ─── */
+.drop-zone{border:2px dashed var(--bdr);border-radius:12px;padding:28px;text-align:center;color:var(--tx3);font:500 12px var(--mono);transition:all .2s;cursor:pointer}
+.drop-zone:hover,.drop-zone.dragover{border-color:var(--cyn);background:rgba(100,210,255,.05);color:var(--cyn)}
+
+/* ─── Wizard Mode Toggle ─── */
+.mode-toggle{display:inline-flex;background:var(--s2);border-radius:8px;border:1px solid var(--bdr);overflow:hidden;font:500 11px var(--mono)}
+.mode-toggle span{padding:6px 14px;cursor:pointer;color:var(--tx3);transition:all .2s}
+.mode-toggle span.active{background:rgba(100,210,255,.15);color:var(--cyn)}

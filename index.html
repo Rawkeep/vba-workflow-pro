@@ -487,7 +487,20 @@ WENN <code>Incoterm=CIF OR Incoterm=CFR</code> → <code>{Land}: Versicherung pr
 </div>
 
 <!-- WORD -->
-<div class="pg" id="p-word"><h2 style="color:var(--blu)">Word / Mail-Merge / Etiketten</h2>
+<div class="pg" id="p-word">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+<h2 style="color:var(--blu);margin:0">Word / Mail-Merge / Etiketten</h2>
+<div class="mode-toggle" id="word-mode-toggle">
+<span class="active" data-mode="wizard" onclick="setWordMode('wizard')">Wizard</span>
+<span data-mode="pro" onclick="setWordMode('pro')">Profi</span>
+</div>
+</div>
+
+<!-- Wizard Mode -->
+<div id="word-wizard-container"></div>
+
+<!-- Pro Mode -->
+<div id="word-pro-container" style="display:none">
 
 <!-- Workflow Steps Hint -->
 <div class="cd" style="padding:10px 16px;border-color:rgba(10,132,255,.2);background:rgba(10,132,255,.03)">
@@ -606,7 +619,9 @@ Mit freundlichen Grüßen</textarea><div id="w-ph" style="margin-top:8px"></div>
 </div>
 <div id="w-pvbox" style="display:none" class="pv"></div>
 </div>
-<div class="cd empty" id="w-empty"><p>Datenquelle laden oder "Excel übern." klicken</p></div></div>
+<div class="cd empty" id="w-empty"><p>Datenquelle laden oder "Excel übern." klicken</p></div>
+</div><!-- /word-pro-container -->
+</div><!-- /p-word -->
 
 <!-- DOKUMENTEN-CENTER -->
 <div class="pg" id="p-doccenter">
@@ -828,21 +843,105 @@ Mit freundlichen Grüßen</textarea><div id="w-ph" style="margin-top:8px"></div>
 </div>
 
 <!-- EMAIL -->
-<div class="pg" id="p-email"><h2 style="color:var(--cyn)">E-Mail / Serien-Mail</h2>
+<div class="pg" id="p-email">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+<h2 style="color:var(--cyn);margin:0">E-Mail / Serien-Mail</h2>
+<div class="mode-toggle" id="email-mode-toggle">
+<span class="active" data-mode="wizard" onclick="setEmailMode('wizard')">Wizard</span>
+<span data-mode="pro" onclick="setEmailMode('pro')">Profi</span>
+</div>
+</div>
+
+<!-- Wizard Mode -->
+<div id="email-wizard-container"></div>
+
+<!-- Pro Mode -->
+<div id="email-pro-container" style="display:none">
+
+<!-- Offline Banner -->
+<div id="email-offline-banner" style="display:none;padding:8px 12px;background:rgba(255,69,58,.12);border:1px solid rgba(255,69,58,.3);border-radius:8px;margin-bottom:10px;font:500 11px var(--mono);color:var(--red)">Offline — SMTP-Versand nicht verfügbar. Mail-Client als Fallback nutzen.</div>
+
+<!-- SMTP/IMAP Settings (collapsible) -->
+<div class="cd" style="border-color:rgba(100,210,255,.15);margin-bottom:12px">
+<div style="display:flex;justify-content:space-between;align-items:center;cursor:pointer" onclick="toggleEmailSettings()">
+<h3 style="color:var(--cyn);margin:0">Verbindung</h3>
+<div style="display:flex;gap:8px;align-items:center">
+<span id="smtp-status-badge" class="tg tg-r">Kein SMTP</span>
+<span style="font-size:14px;color:var(--tx3);transition:transform .2s">&#9660;</span>
+</div>
+</div>
+
+<div id="email-settings-card" style="display:none;margin-top:12px">
+<p style="font:11px var(--mono);color:var(--tx3);margin-bottom:10px">Credentials bleiben lokal in deinem Browser (IndexedDB). Kein Server-Speicher.</p>
+
+<div id="ecfg-tabs" class="tabs" style="margin-bottom:10px">
+<span class="tab a" onclick="emailCfgTab(this,'ecfg-smtp')">SMTP</span>
+<span class="tab" onclick="emailCfgTab(this,'ecfg-imap')">IMAP</span>
+<span class="tab" onclick="emailCfgTab(this,'ecfg-rules')">Regeln</span>
+</div>
+
+<!-- SMTP Tab -->
+<div id="ecfg-smtp">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px">
+<div><label style="font:500 10px var(--mono);color:var(--tx3);text-transform:uppercase">Host</label><input type="text" id="smtp-host" placeholder="smtp.gmail.com"></div>
+<div><label style="font:500 10px var(--mono);color:var(--tx3);text-transform:uppercase">Port</label><input type="text" id="smtp-port" placeholder="587" value="587"></div>
+<div><label style="font:500 10px var(--mono);color:var(--tx3);text-transform:uppercase">User</label><input type="text" id="smtp-user" placeholder="user@example.com"></div>
+<div><label style="font:500 10px var(--mono);color:var(--tx3);text-transform:uppercase">Passwort</label><input type="password" id="smtp-pass" placeholder="App-Passwort"></div>
+<div><label style="font:500 10px var(--mono);color:var(--tx3);text-transform:uppercase">Absender (Von)</label><input type="email" id="smtp-from" placeholder="noreply@firma.de"></div>
+<div style="display:flex;align-items:end;padding-bottom:4px"><label style="font:11px var(--mono);color:var(--tx2);display:flex;align-items:center;gap:4px"><input type="checkbox" id="smtp-secure" style="accent-color:var(--cyn)"> SSL/TLS</label></div>
+</div>
+<div class="row" style="gap:6px;align-items:center">
+<button class="b bcyn bs" onclick="saveSmtpConfig()">Speichern</button>
+<button class="b bb bs" onclick="testSmtpConnection()">Testen</button>
+<button class="b bd bs" onclick="clearSmtpConfig()">Entfernen</button>
+<span id="smtp-test-result" style="font:10px var(--mono);color:var(--tx3)"></span>
+</div>
+</div>
+
+<!-- IMAP Tab -->
+<div id="ecfg-imap" style="display:none">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px">
+<div><label style="font:500 10px var(--mono);color:var(--tx3);text-transform:uppercase">Host</label><input type="text" id="imap-host" placeholder="imap.gmail.com"></div>
+<div><label style="font:500 10px var(--mono);color:var(--tx3);text-transform:uppercase">Port</label><input type="text" id="imap-port" placeholder="993" value="993"></div>
+<div><label style="font:500 10px var(--mono);color:var(--tx3);text-transform:uppercase">User</label><input type="text" id="imap-user" placeholder="user@example.com"></div>
+<div><label style="font:500 10px var(--mono);color:var(--tx3);text-transform:uppercase">Passwort</label><input type="password" id="imap-pass" placeholder="App-Passwort"></div>
+</div>
+<div style="display:flex;align-items:center;gap:4px;margin-bottom:8px"><label style="font:11px var(--mono);color:var(--tx2);display:flex;align-items:center;gap:4px"><input type="checkbox" id="imap-secure" checked style="accent-color:var(--cyn)"> SSL/TLS</label></div>
+<div class="row" style="gap:6px;align-items:center">
+<button class="b bcyn bs" onclick="saveImapConfig()">Speichern</button>
+<button class="b bb bs" onclick="testImapConnection()">Testen</button>
+<button class="b bd bs" onclick="clearImapConfig()">Entfernen</button>
+<span id="imap-test-result" style="font:10px var(--mono);color:var(--tx3)"></span>
+</div>
+</div>
+
+<!-- Rules Tab -->
+<div id="ecfg-rules" style="display:none">
+<div style="display:grid;gap:6px;margin-bottom:8px">
+<div><label style="font:500 10px var(--mono);color:var(--tx3);text-transform:uppercase">Weiterleiten an</label><input type="email" id="imap-fwd-to" placeholder="archiv@firma.de"></div>
+<div><label style="font:500 10px var(--mono);color:var(--tx3);text-transform:uppercase">Umbenennung</label><input type="text" id="imap-rename" placeholder="{Von}_{Betreff}_{Original}" value="{Von}_{Betreff}_{Original}"></div>
+</div>
+<p style="font:10px var(--mono);color:var(--tx3);margin-bottom:6px">Tokens: <code>{Von}</code> <code>{Betreff}</code> <code>{Datum}</code> <code>{Original}</code></p>
+<div style="display:flex;align-items:center;gap:6px;margin-bottom:8px"><label style="font:11px var(--mono);color:var(--tx2);display:flex;align-items:center;gap:4px"><input type="checkbox" id="imap-rules-enabled" checked style="accent-color:var(--cyn)"> Regeln aktiv</label></div>
+<button class="b bcyn bs" onclick="saveImapRules()">Regeln speichern</button>
+</div>
+
+</div><!-- /email-settings-card -->
+</div>
 
 <!-- Single Email -->
-<div class="cd"><h3 style="color:var(--cyn)">📧 EINZEL-MAIL</h3>
+<div class="cd"><h3 style="color:var(--cyn)">EINZEL-MAIL</h3>
 <div class="email-form"><label>An</label><input type="email" id="em-to"><label>CC</label><input type="email" id="em-cc"><label>Betreff</label><input type="text" id="em-subj"><label>Nachricht</label><textarea id="em-body" rows="10" style="width:100%;resize:vertical;line-height:1.7;font-size:13px"></textarea>
-<div class="row"><button class="b bg" onclick="EM()">📧 Mail-Client</button><button class="b bpur" onclick="EMPDF()">📄 Als PDF</button><button class="b bo" onclick="EMC()">📋 Kopieren</button></div>
+<div class="row"><button class="b bg" onclick="EM()">Mail-Client</button><button class="b bpur" onclick="EMPDF()">Als PDF</button><button class="b bo" onclick="EMC()">Kopieren</button></div>
 </div></div>
 
 <!-- Merge Email -->
-<div class="cd"><h3 style="color:var(--cyn)">📬 SERIEN-E-MAIL MIT MERGE</h3>
+<div class="cd"><h3 style="color:var(--cyn)">SERIEN-E-MAIL MIT MERGE</h3>
 <p style="font-size:11px;color:var(--tx2);margin-bottom:8px">Personalisierte E-Mails an alle Datensätze — nutze <code style="color:var(--acc)">{{Spaltenname}}</code> als Platzhalter</p>
 
 <div class="row" style="margin-bottom:8px;gap:8px">
-<input type="text" id="sem-subj" placeholder="Betreff mit {{Felder}}…" style="flex:1;min-width:200px">
-<select id="sem-col-email" style="width:140px"><option value="">E-Mail-Spalte…</option></select>
+<input type="text" id="sem-subj" placeholder="Betreff mit {{Felder}}..." style="flex:1;min-width:200px">
+<select id="sem-col-email" style="width:140px"><option value="">E-Mail-Spalte...</option></select>
 </div>
 
 <div style="margin-bottom:8px">
@@ -852,17 +951,16 @@ Mit freundlichen Grüßen</textarea><div id="w-ph" style="margin-top:8px"></div>
 </div>
 
 <div class="row" style="margin-bottom:8px;gap:8px;align-items:center">
-<button class="b bg" onclick="SEM2()" id="sem-btn2" disabled>📧 Alle öffnen</button>
-<button class="b bpur" onclick="semPreview()" id="sem-pv-btn" disabled>👁 Vorschau</button>
-<button class="b bo" onclick="semExportAll()">📄 Alle als PDF</button>
+<button class="b bcyn" onclick="sendBatchEmails()" id="sem-btn2" disabled>Alle senden</button>
+<button class="b bo bs" onclick="SEM2()">Mail-Client</button>
+<button class="b bpur bs" onclick="semPreview()" id="sem-pv-btn" disabled>Vorschau</button>
+<button class="b bo bs" onclick="semExportAll()">Alle als PDF</button>
 <span id="sem-info2" style="font-size:11px;color:var(--tx2)"></span>
-<!-- Legacy hidden buttons for backwards compat -->
-<button class="b bg" onclick="SEM()" id="sem-btn" disabled style="display:none">📧</button>
 </div>
 
 <!-- Attachment mapping -->
 <div class="em-merge-panel" id="sem-att-panel" style="display:none">
-<h3 style="color:var(--blu);margin-bottom:6px">📎 ANHANG-ZUORDNUNG</h3>
+<h3 style="color:var(--blu);margin-bottom:6px">ANHANG-ZUORDNUNG</h3>
 <p style="font-size:10px;color:var(--tx2);margin-bottom:6px">PDF-Typ pro Empfänger automatisch anhängen (wird als separate Datei generiert)</p>
 <div class="row" style="gap:6px">
 <label style="font:11px var(--mono);color:var(--tx2)"><input type="checkbox" id="sem-att-doc" style="accent-color:var(--blu)"> Serienbrief</label>
@@ -871,14 +969,31 @@ Mit freundlichen Grüßen</textarea><div id="w-ph" style="margin-top:8px"></div>
 </div>
 </div>
 
+<!-- Batch Send Progress -->
+<div id="sem-batch-progress" style="display:none;margin-top:10px"></div>
+
 <!-- Preview Cards -->
 <div id="sem-preview" style="max-height:340px;overflow-y:auto"></div>
+</div>
 
-<!-- Legacy list -->
-<div id="sem-list" style="margin-top:8px;max-height:260px;overflow:auto"></div>
-<span id="sem-info" style="display:none"></span>
+<!-- IMAP Monitor -->
+<div class="cd" id="imap-monitor-card" style="border-color:rgba(100,210,255,.15)">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+<h3 style="color:var(--cyn);margin:0">IMAP-MONITOR</h3>
+<span id="imap-status-badge"><span class="tg tg-r">Inaktiv</span></span>
+</div>
+<p style="font:11px var(--mono);color:var(--tx3);margin-bottom:8px">Eingehende E-Mails mit PDF-Anhang automatisch umbenennen und weiterleiten.</p>
+<div class="row" style="gap:6px;margin-bottom:8px">
+<button class="b bcyn bs" id="imap-start-btn" onclick="startImapWatch()">Starten</button>
+<button class="b bd bs" id="imap-stop-btn" onclick="stopImapWatch()" disabled>Stoppen</button>
+</div>
+<div id="imap-log" style="max-height:260px;overflow-y:auto">
+<p style="font:11px var(--mono);color:var(--tx3);text-align:center;padding:12px">Noch keine Weiterleitungen</p>
 </div>
 </div>
+
+</div><!-- /email-pro-container -->
+</div><!-- /p-email -->
 
 <!-- DSGVO -->
 <div class="pg" id="p-dsgvo"><h2 style="color:var(--red)">Datenschutz &amp; DSGVO</h2>

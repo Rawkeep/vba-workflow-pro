@@ -7,6 +7,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import stripeRouter from './api/stripe.js';
 import aiRouter from './api/ai.js';
+import emailRouter from './api/email.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -45,6 +46,7 @@ app.get('/api/health', (_req, res) => {
 
 app.use('/api/stripe', stripeRouter);
 app.use('/api/ai', aiRouter);
+app.use('/api/email', emailRouter);
 
 // ---------------------------------------------------------------------------
 // Static files — serve built PWA from dist/

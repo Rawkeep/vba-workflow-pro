@@ -33,6 +33,7 @@ const PRO_FEATURES = new Set([
   'pivot',
   'analyst',
   'smart-suggestions',
+  'imap-monitor',
 ]);
 
 const FREE_LIMITS = {

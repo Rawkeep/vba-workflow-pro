@@ -4,7 +4,9 @@ calcCols:[],savedCases:[],savedIE:[],savedSW:[],savedRules:[],macros:[],macRec:f
 selectedRows:new Set(),hiddenCols:new Set(),sortCol:-1,sortDir:'asc',undoStack:[],redoStack:[],
 // Hybrid: Workspace + Schreibtisch
 mode:'workspace', // 'desk' or 'workspace'
-usage:{},recentFiles:[],favorites:[],activeWS:null,_errLog:[]};
+usage:{},recentFiles:[],favorites:[],activeWS:null,_errLog:[],
+// Email
+smtpCfg:null,imapCfg:null,imapRules:null,emailStatus:[],imapWatchActive:false,imapForwards:[]};
 // ══════ APP ERROR LOG ══════
 export function _appLog(msg){S._errLog.push({t:new Date().toISOString(),m:msg});if(S._errLog.length>100)S._errLog.shift();console.warn('[VBA-BEAST]',msg)}
 // ══════ PERFORMANCE: Type/Quality Cache ══════

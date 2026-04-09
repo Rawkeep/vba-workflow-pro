@@ -37,10 +37,17 @@ import { dcTab, dcAddCategory, dcRemoveCategory, dcRenderCategories, dcUploadTem
 import { setDocType, renderTemplateCards, loadLibTemplate, setLabelLayout, updateLabelPreview, exportLabelsPDF, insertFieldFromData, autoGenTemplate, _hydrateTemplates, saveUserTemplate, loadUserTemplate, renderSavedTemplates, checkSEM, EM, EMC, EMPDF, SEM, DLE, DA } from './templates/index.js';
 
 // ─── Email ───
-import { initEmailMerge, insertSemField, semPreview, SEM2, semExportAll } from './email/index.js';
+import { initEmailMerge, insertSemField, semPreview, SEM2, semExportAll, sendBatchEmails, updateEmailStatus, renderBatchProgress } from './email/index.js';
+import { _hydrateEmailConfig, saveSmtpConfig, testSmtpConnection, clearSmtpConfig, hasSmtpConfigured, saveImapConfig, testImapConnection, clearImapConfig, hasImapConfigured, saveImapRules, renderSmtpSettings, renderImapSettings, renderImapRules, toggleEmailSettings, emailCfgTab } from './email/settings.js';
+import { startImapWatch, stopImapWatch, renderImapStatus } from './email/imap-monitor.js';
+import { initEmailWizard, setEmailMode } from './email/wizard.js';
 
 // ─── Database ───
 import { dbSaveCurrent, dbImportFile, dbLoadEntry, dbDeleteEntry, dbRenameEntry, dbSetCategory, dbDuplicateEntry, dbExportEntry, dbExportAll, dbMergeSelected, dbToggleEntry, dbToggleAll, dbAddCategory, dbRemoveCategory, dbRender } from './database/index.js';
+
+// ─── Wizards ───
+import { createWizard } from './ui/wizard.js';
+import { initWordWizard, setWordMode } from './word/wizard.js';
 
 // ─── UI ───
 import { qopTrimAll, qopRemoveEmpty, qopRemoveDupes, qopFillMissing, qopAutoFormat, qopSortAZ, qopUpperHeaders, qopStats } from './ui/quick-ops.js';
@@ -115,7 +122,15 @@ Object.assign(window, {
   saveUserTemplate, loadUserTemplate, renderSavedTemplates, checkSEM,
   EM, EMC, EMPDF, SEM, DLE, DA,
   // Email
-  insertSemField, semPreview, SEM2, semExportAll,
+  insertSemField, semPreview, SEM2, semExportAll, sendBatchEmails,
+  // Email Settings
+  saveSmtpConfig, testSmtpConnection, clearSmtpConfig,
+  saveImapConfig, testImapConnection, clearImapConfig,
+  saveImapRules, toggleEmailSettings, emailCfgTab,
+  // IMAP Monitor
+  startImapWatch, stopImapWatch,
+  // Wizards
+  initWordWizard, setWordMode, initEmailWizard, setEmailMode,
   // Database
   dbSaveCurrent, dbImportFile, dbLoadEntry, dbDeleteEntry, dbRenameEntry,
   dbSetCategory, dbDuplicateEntry, dbExportEntry, dbExportAll,
