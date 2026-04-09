@@ -17,6 +17,9 @@ import { MAC_REC, MAC_STOP, MAC_SAVE, renderMacC, renderMacList, MAC_RUN, _hydra
 import { FM, PV, SO, FI, FIR, SR, TF, DD, VL, CH, VD_RUN } from './excel/operations.js';
 import { swAddRule, swAddCond, swSyncTargets, swAddNew, SW_RUN, SW_SAVE, renderSavedSW, runSavedSW } from './excel/switch.js';
 
+// ─── Excel: Conditional Formatting & Comments ───
+import { cfAddRule, cfRemoveRule, cfApply, renderCFRules, cfTypeChanged, addComment, getComment, applyComments, _hydrateCF, _hydrateComments } from './excel/conditional-format.js';
+
 // ─── Excel Advanced ───
 import { setActiveCell, colLetter, fbKeydown, fbBlur, showColFilter, closeColFilter, filterDDSearch, filterDDToggleAll, filterDDToggle, applyColFilter, clearColFilter, applyAllFilters, initClipboardPaste, showCellTip, hideCellTip, autoFitCol, autoFitAllCols, toggleFullscreen, initEnhancedCellEditing, initExcelXROverride, initExcelKeyboardNav } from './excel/render.js';
 import { genSuggestions, renderSuggestions, execSuggestion, dismissSuggestion, navToTab, prefillCase, prefillPivot, prefillIE, suggestFillMissing, initSuggestionsHook } from './excel/suggestions.js';
@@ -97,6 +100,8 @@ Object.assign(window, {
   FM, PV, SO, FI, FIR, SR, TF, DD, VL, CH, VD_RUN,
   // Switch
   swAddRule, swAddCond, swSyncTargets, swAddNew, SW_RUN, SW_SAVE, renderSavedSW, runSavedSW,
+  // Conditional Formatting & Comments
+  cfAddRule, cfRemoveRule, cfApply, renderCFRules, cfTypeChanged, addComment, getComment, applyComments,
   // Excel Advanced
   setActiveCell, colLetter, fbKeydown, fbBlur,
   showColFilter, closeColFilter, filterDDSearch, filterDDToggleAll,

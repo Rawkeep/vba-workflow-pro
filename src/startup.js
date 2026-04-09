@@ -13,6 +13,7 @@ import { _hydrateDocConfig, _renderLetterheadPreview, _docxFooter } from './word
 import { _hydrateDokCenter, dcInitUI } from './doccenter/index.js';
 import { _hydrateDatabase } from './database/index.js';
 import { _hydrateMacros, renderMacList } from './excel/macros.js';
+import { _hydrateCF, _hydrateComments, cfApply, applyComments, renderCFRules } from './excel/conditional-format.js';
 import { _hydrateEmailConfig, renderSmtpSettings, renderImapSettings, renderImapRules } from './email/settings.js';
 import { autoRestore } from './ui/auto-save.js';
 import { updateDashboard } from './dashboard/index.js';
@@ -24,14 +25,14 @@ import { initEmailWizard } from './email/wizard.js';
 (async function _startup(){
   try{
     await IDB.open();
-    await Promise.all([_hydrateWorkspaces(),_hydrateTemplates(),restoreHybridState(),_hydrateDocConfig(),_hydrateDokCenter(),_hydrateDatabase(),_hydrateEmailConfig(),_hydrateMacros()]);
+    await Promise.all([_hydrateWorkspaces(),_hydrateTemplates(),restoreHybridState(),_hydrateDocConfig(),_hydrateDokCenter(),_hydrateDatabase(),_hydrateEmailConfig(),_hydrateMacros(),_hydrateCF(),_hydrateComments()]);
     setMode(S.mode||'workspace');
     renderRecentFiles();
     renderSavedWSOnboard();
     renderSavedTemplates();
     _renderLetterheadPreview();
     if(_docxFooter&&$('w-footer-input'))$('w-footer-input').value=_docxFooter;
-    dcInitUI();renderMacList();
+    dcInitUI();renderMacList();renderCFRules();cfApply();applyComments();
     const restored=await autoRestore();
     if(!restored){/* Show welcome state */}
     RL();checkSEM();

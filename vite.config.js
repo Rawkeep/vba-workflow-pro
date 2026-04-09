@@ -7,14 +7,6 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     emptyOutDir: true,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          vendor: ['xlsx','jspdf','jspdf-autotable','chart.js'],
-          email: ['nodemailer','imapflow','mailparser'],
-        },
-      },
-    },
   },
   server: {
     port: 5173,

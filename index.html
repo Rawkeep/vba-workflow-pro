@@ -86,30 +86,33 @@
 
 <!-- Dashboard KPI Stats -->
 <div id="dash-stats">
-<div class="dash-kpi"><div class="dk-ico">📊</div><div class="dk-val" id="dk-rows">0</div><div class="dk-lbl">Datensätze</div><div class="dk-bar" style="width:0"></div></div>
-<div class="dash-kpi dk-blu"><div class="dk-ico">📋</div><div class="dk-val" id="dk-cols">0</div><div class="dk-lbl">Spalten</div><div class="dk-bar" style="width:0"></div></div>
-<div class="dash-kpi dk-grn"><div class="dk-ico">✅</div><div class="dk-val" id="dk-quality">—</div><div class="dk-lbl">Datenqualität</div><div class="dk-bar" style="width:0"></div></div>
-<div class="dash-kpi dk-pur"><div class="dk-ico">⚡</div><div class="dk-val" id="dk-actions">0</div><div class="dk-lbl">Aktionen heute</div><div class="dk-bar" style="width:0"></div></div>
-<div class="dash-kpi dk-red"><div class="dk-ico">💾</div><div class="dk-val" id="dk-ws">0</div><div class="dk-lbl">Workspaces</div><div class="dk-bar" style="width:0"></div></div>
+<div class="dash-kpi" title="Geladene Zeilen. Virtuelles Scrolling ab 200 Zeilen aktiv." aria-label="Datensaetze"><div class="dk-ico">📊</div><div class="dk-val" id="dk-rows">0</div><div class="dk-lbl">Datensätze</div><div class="dk-bar" style="width:0"></div></div>
+<div class="dash-kpi dk-blu" title="Anzahl der Spalten im aktiven Sheet." aria-label="Spalten"><div class="dk-ico">📋</div><div class="dk-val" id="dk-cols">0</div><div class="dk-lbl">Spalten</div><div class="dk-bar" style="width:0"></div></div>
+<div class="dash-kpi dk-grn" title="Prozent ausgefuellter Zellen. 100% = keine Luecken." aria-label="Datenqualitaet"><div class="dk-ico">✅</div><div class="dk-val" id="dk-quality">—</div><div class="dk-lbl">Datenqualität</div><div class="dk-bar" style="width:0"></div></div>
+<div class="dash-kpi dk-pur" title="Heute ausgefuehrte Aktionen (Sort, Filter, Export, etc.)" aria-label="Aktionen heute"><div class="dk-ico">⚡</div><div class="dk-val" id="dk-actions">0</div><div class="dk-lbl">Aktionen heute</div><div class="dk-bar" style="width:0"></div></div>
+<div class="dash-kpi dk-red" title="Gespeicherte Arbeitsbereiche mit eigenen Daten." aria-label="Workspaces"><div class="dk-ico">💾</div><div class="dk-val" id="dk-ws">0</div><div class="dk-lbl">Workspaces</div><div class="dk-bar" style="width:0"></div></div>
 </div>
 
+<div id="dash-file-info" style="display:none;margin-bottom:8px;padding:8px 14px;background:var(--s2);border-radius:8px;border:1px solid var(--bdr)"></div>
 <div id="home-cards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:10px"></div>
 
 <!-- Quick Access -->
-<div class="cd" id="dash-quick" style="display:none">
+<div class="cd" id="dash-quick">
 <h3 style="color:var(--blu)">⚡ SCHNELLZUGRIFF</h3>
 <div class="row" style="gap:8px;margin-top:8px">
-<button class="b bp" onclick="N('excel');loadDemo()">▶ Demo laden</button>
-<button class="b bb" onclick="N('excel');$('xf').click()">⬆ Import</button>
-<button class="b bpur" onclick="N('word')">✉ Serienbrief</button>
-<button class="b bg" onclick="N('email')">📧 E-Mail</button>
+<button class="b bp" onclick="N('excel');loadDemo()" title="Testdaten laden um Features auszuprobieren">▶ Demo laden</button>
+<button class="b bb" onclick="N('excel');$('xf').click()" title="CSV, XLSX oder XLS importieren">⬆ Import</button>
+<button class="b bpur" onclick="N('word')" title="Serienbrief-Wizard mit Drag&Drop Merge-Fields">✉ Serienbrief</button>
+<button class="b bg" onclick="N('email')" title="Serienemail mit SMTP-Hintergrundversand">📧 E-Mail</button>
+<button class="b bora" onclick="N('doccenter')" title="Vorlagen-basierte Dokumentgenerierung">📂 Dok-Center</button>
+<button class="b bcyn" onclick="N('database')" title="Datenbank mit Kategorien und Suche">🗄 Datenbank</button>
 </div>
 </div>
 
 <!-- Recent Activity -->
 <div class="cd" id="dash-activity-wrap">
 <h3 style="color:var(--acc)">📊 LETZTE AKTIVITÄTEN</h3>
-<div id="dash-activity"><p style="color:var(--tx2);font-size:11px">Noch keine Aktivitäten — lade Daten, um loszulegen</p></div>
+<div id="dash-activity"><div class="empty-state"><div class="es-ico">📋</div><div class="es-msg">Noch keine Aktivitäten.<br>Importiere Daten oder lade eine Demo, um loszulegen.</div><button class="b bp bs es-cta" onclick="N('excel');loadDemo()">▶ Demo laden</button></div></div>
 </div>
 
 <!-- Saved Workspaces Grid -->
@@ -347,7 +350,32 @@ Beispiel: Land=DE UND Betrag&gt;1000 → schreibe <code>{Kunde} Premium</code>
 
 <!-- EXISTING TABS -->
 <div class="tpanel" id="xtp-form"><div class="cd"><h3 style="color:var(--acc)">Formeln</h3><p style="font-size:10px;color:var(--tx2);margin-bottom:8px">SUM·AVG·COUNT·COUNTIF·MIN·MAX·MEDIAN·STDEV·SUMIF — auch deutsch: SUMME·MITTELWERT·ANZAHL·STABW·SUMMEWENN</p><div class="row"><input type="text" id="fm-in" placeholder="SUM(Umsatz)" style="width:300px" onkeydown="if(event.key==='Enter')FM()"><button class="b bp" onclick="FM()">▶</button><span id="fm-out"></span></div></div></div>
-<div class="tpanel" id="xtp-cond"><div class="cd"><h3 style="color:var(--acc)">Bedingte Formatierung</h3><div class="row"><select id="cc-col" onchange="XR()" style="width:120px"></select><select id="cc-op" onchange="XR()" style="width:55px"><option value=">">&gt;</option><option>&lt;</option><option value=">=">&gt;=</option><option>&lt;=</option><option>=</option><option>≠</option><option>enthält</option></select><input type="text" id="cc-val" placeholder="Wert" style="width:90px" oninput="XR()"><span id="cc-st"></span></div></div></div>
+<div class="tpanel" id="xtp-cond"><div class="cd" style="border-color:rgba(0,224,142,.3)">
+<h3 style="color:var(--grn)">🎨 Bedingte Formatierung <span class="ctx-help" onmouseenter="showHelp(event,'cond-format')" onmouseleave="hideHelp()">?</span></h3>
+<p style="font-size:10px;color:var(--tx2);margin-bottom:10px">Zellen automatisch einfärben — wie Excel Bedingte Formatierung</p>
+<div class="row" style="gap:6px;flex-wrap:wrap;margin-bottom:8px">
+<select id="cf-col" style="width:120px"><option value="">Spalte…</option></select>
+<select id="cf-type" style="width:130px" onchange="cfTypeChanged()">
+<option value="threshold">≥ Schwellwert</option>
+<option value="below">&lt; Unter Wert</option>
+<option value="between">Zwischen X–Y</option>
+<option value="text_contains">Text enthält</option>
+<option value="duplicates">Duplikate</option>
+<option value="empty">Leere Zellen</option>
+<option value="top_n">Top N</option>
+<option value="gradient">Farbverlauf (Balken)</option>
+</select>
+<input type="text" id="cf-val1" placeholder="Wert / N" style="width:80px">
+<input type="text" id="cf-val2" placeholder="bis" style="width:70px;display:none">
+<select id="cf-style" style="width:90px">
+<option value="green">🟢 Grün</option>
+<option value="yellow">🟡 Gelb</option>
+<option value="red">🔴 Rot</option>
+</select>
+<button class="b bp bs" onclick="cfAddRule()">+ Regel</button>
+</div>
+<div id="cf-rules" style="display:flex;flex-direction:column;gap:4px"></div>
+</div></div>
 <div class="tpanel" id="xtp-pivot"><div class="cd"><h3 style="color:var(--acc)">Pivot</h3><div class="row" style="margin-bottom:10px"><select id="pv-g" style="width:120px"></select><select id="pv-a" style="width:120px"></select><select id="pv-f" style="width:80px"><option>SUM</option><option>AVG</option><option>COUNT</option><option>MIN</option><option>MAX</option><option>MEDIAN</option></select><button class="b bp" onclick="PV()">▶</button></div><div id="pv-out"></div></div></div>
 <div class="tpanel a" id="xtp-sort"><div class="cd"><h3 style="color:var(--acc)">Sortieren</h3><div class="row"><select id="so-col" style="width:140px"></select><select id="so-dir" style="width:80px"><option value="asc">A→Z</option><option value="desc">Z→A</option></select><button class="b bp" onclick="SO()">▶</button></div></div></div>
 <div class="tpanel" id="xtp-filter"><div class="cd"><h3 style="color:var(--acc)">AutoFilter</h3><div class="row" style="margin-bottom:6px"><select id="fi-col" style="width:110px"></select><select id="fi-op" style="width:85px"><option>enthält</option><option>beginnt mit</option><option>endet mit</option><option>=</option><option>≠</option><option value=">">&gt;</option><option>&lt;</option><option>leer</option><option>nicht leer</option></select><input type="text" id="fi-val" placeholder="Wert" style="width:90px"><button class="b bp" onclick="FI()">▶</button><button class="b bo" onclick="FIR()">✕</button></div><div id="fi-info" style="font-size:11px;color:var(--tx2)"></div></div></div>
