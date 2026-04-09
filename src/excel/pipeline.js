@@ -29,23 +29,32 @@ $('pp-steps').appendChild(el.firstChild);
 export function ppRenum(){let n=1;$('pp-steps').querySelectorAll('.pipe-num').forEach(el=>{el.textContent=n++});S.pipeSteps=[];$('pp-steps').querySelectorAll('.pipe-step').forEach(el=>S.pipeSteps.push(el.dataset.type))}
 export function PP_RUN(){
   const steps=$('pp-steps').querySelectorAll('.pipe-step');
-  steps.forEach(step=>{
+  let ok=0,fail=0;
+  steps.forEach((step,i)=>{
     const type=step.dataset.type;
-    switch(type){
-      case'sort':{const c=step.querySelector('.pp-col').value,d=step.querySelector('.pp-dir').value;if(c){$('so-col').value=c;$('so-dir').value=d;window.SO()}}break;
-      case'filter':{const c=step.querySelector('.pp-col').value,o=step.querySelector('.pp-op').value,v=step.querySelector('.pp-val').value;if(c){$('fi-col').value=c;$('fi-op').value=o;$('fi-val').value=v;window.FI()}}break;
-      case'text':{const c=step.querySelector('.pp-col').value,f=step.querySelector('.pp-fn').value;if(c){$('tf-col').value=c;$('tf-fn').value=f;window.TF()}}break;
-      case'sr':{const f=step.querySelector('.pp-find').value,r=step.querySelector('.pp-rep').value;$('sr-find').value=f;$('sr-rep').value=r;$('sr-col').value='__ALL__';window.SR()}break;
-      case'dedup':{const c=step.querySelector('.pp-col').value;if(c){$('dd-col').value=c;window.DD()}}break;
-      case'case':{const idx=parseInt(step.querySelector('.pp-idx').value)-1;if(S.savedCases[idx])runSavedCase(idx)}break;
-      case'ifelse':{const idx=parseInt(step.querySelector('.pp-idx').value)-1;if(S.savedIE[idx])runSavedIE(idx)}break;
-      case'export':XE();break;
+    try{
+      switch(type){
+        case'sort':{const c=step.querySelector('.pp-col').value,d=step.querySelector('.pp-dir').value;if(c){$('so-col').value=c;$('so-dir').value=d;window.SO()}}break;
+        case'filter':{const c=step.querySelector('.pp-col').value,o=step.querySelector('.pp-op').value,v=step.querySelector('.pp-val').value;if(c){$('fi-col').value=c;$('fi-op').value=o;$('fi-val').value=v;window.FI()}}break;
+        case'text':{const c=step.querySelector('.pp-col').value,f=step.querySelector('.pp-fn').value;if(c){$('tf-col').value=c;$('tf-fn').value=f;window.TF()}}break;
+        case'sr':{const f=step.querySelector('.pp-find').value,r=step.querySelector('.pp-rep').value;$('sr-find').value=f;$('sr-rep').value=r;$('sr-col').value='__ALL__';window.SR()}break;
+        case'dedup':{const c=step.querySelector('.pp-col').value;if(c){$('dd-col').value=c;window.DD()}}break;
+        case'case':{const idx=parseInt(step.querySelector('.pp-idx').value)-1;if(S.savedCases[idx])runSavedCase(idx);else throw new Error('Case #'+(idx+1)+' nicht gefunden')}break;
+        case'ifelse':{const idx=parseInt(step.querySelector('.pp-idx').value)-1;if(S.savedIE[idx])runSavedIE(idx);else throw new Error('IF/ELSE #'+(idx+1)+' nicht gefunden')}break;
+        case'export':XE();break;
+      }
+      ok++;step.style.borderColor='var(--grn)';
+    }catch(e){
+      fail++;step.style.borderColor='var(--red)';
+      toast(`Step ${i+1} (${type}): ${e.message}`,'error');
     }
   });
-  toast(`Pipeline (${steps.length} Schritte) ✓`);L('Pipeline',`${steps.length} Schritte`);
+  if(fail)toast(`Pipeline: ${ok}/${steps.length} OK, ${fail} Fehler`,'warning');
+  else toast(`Pipeline (${steps.length} Schritte) ✓`);
+  L('Pipeline',`${ok}/${steps.length} OK`);
 }
 export function PP_SAVE(){const name=$('pp-name').value.trim()||`Pipeline ${S.pipelines.length+1}`;const steps=[];$('pp-steps').querySelectorAll('.pipe-step').forEach(s=>{const t=s.dataset.type;const d={type:t};switch(t){case'sort':d.col=s.querySelector('.pp-col').value;d.dir=s.querySelector('.pp-dir').value;break;case'filter':d.col=s.querySelector('.pp-col').value;d.op=s.querySelector('.pp-op').value;d.val=s.querySelector('.pp-val').value;break;case'text':d.col=s.querySelector('.pp-col').value;d.fn=s.querySelector('.pp-fn').value;break;case'sr':d.find=s.querySelector('.pp-find').value;d.rep=s.querySelector('.pp-rep').value;break;case'dedup':d.col=s.querySelector('.pp-col').value;break;case'case':case'ifelse':d.idx=parseInt(s.querySelector('.pp-idx').value)-1;break}steps.push(d)});
 if(!steps.length)return;S.pipelines.push({name,steps});renderSavedPipes();toast('Pipeline gespeichert ✓')}
 export function renderSavedPipes(){if(!S.pipelines.length){$('pp-saved').innerHTML='';return}
 $('pp-saved').innerHTML=S.pipelines.map((p,i)=>`<div class="rule-card"><span class="tg tg-c">${H(p.name)}</span><span class="rt">${p.steps.map(s=>s.type).join(' → ')}</span><button class="b bcyn bs" onclick="runSavedPipe(${i})">🚀</button><button class="b bo bs" onclick="S.pipelines.splice(${i},1);renderSavedPipes()">✕</button></div>`).join('')}
-export function runSavedPipe(idx){const p=S.pipelines[idx];p.steps.forEach(s=>{switch(s.type){case'sort':$('so-col').value=s.col;$('so-dir').value=s.dir;window.SO();break;case'filter':$('fi-col').value=s.col;$('fi-op').value=s.op;$('fi-val').value=s.val;window.FI();break;case'text':$('tf-col').value=s.col;$('tf-fn').value=s.fn;window.TF();break;case'sr':$('sr-find').value=s.find;$('sr-rep').value=s.rep;$('sr-col').value='__ALL__';window.SR();break;case'dedup':$('dd-col').value=s.col;window.DD();break;case'case':if(S.savedCases[s.idx])runSavedCase(s.idx);break;case'ifelse':if(S.savedIE[s.idx])runSavedIE(s.idx);break;case'export':XE();break}});toast(`🚀 "${p.name}" ✓`);L('Pipe▶',p.name)}
+export function runSavedPipe(idx){const p=S.pipelines[idx];let ok=0,fail=0;p.steps.forEach((s,i)=>{try{switch(s.type){case'sort':$('so-col').value=s.col;$('so-dir').value=s.dir;window.SO();break;case'filter':$('fi-col').value=s.col;$('fi-op').value=s.op;$('fi-val').value=s.val;window.FI();break;case'text':$('tf-col').value=s.col;$('tf-fn').value=s.fn;window.TF();break;case'sr':$('sr-find').value=s.find;$('sr-rep').value=s.rep;$('sr-col').value='__ALL__';window.SR();break;case'dedup':$('dd-col').value=s.col;window.DD();break;case'case':if(S.savedCases[s.idx])runSavedCase(s.idx);else throw new Error('Case nicht gefunden');break;case'ifelse':if(S.savedIE[s.idx])runSavedIE(s.idx);else throw new Error('IF/ELSE nicht gefunden');break;case'export':XE();break}ok++}catch(e){fail++;toast(`Step ${i+1}: ${e.message}`,'error')}});if(fail)toast(`"${p.name}": ${ok}/${p.steps.length} OK`,'warning');else toast(`🚀 "${p.name}" ✓`);L('Pipe▶',p.name)}

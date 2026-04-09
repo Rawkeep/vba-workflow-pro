@@ -10,15 +10,23 @@ export function qopTrimAll(){
   window.XR();window.toast(`✂ ${c} Zellen getrimmt`);window.L('Trim','Alle Zellen')
 }
 export function qopRemoveEmpty(){
-  window.pushUndo();const b=S.xD.length;
-  S.xD=S.xD.filter(r=>r.some(v=>String(v??'').trim()!==''));
-  const d=b-S.xD.length;window.XR();window.toast(`🗑 ${d} leere Zeilen entfernt`);window.L('Leere Zeilen',d+'')
+  // Count first to show in confirm
+  const empties=S.xD.filter(r=>!r.some(v=>String(v??'').trim()!=='')).length;
+  if(!empties){window.toast('Keine leeren Zeilen','info');return}
+  window.confirmAction(`${empties} leere Zeilen löschen?`,()=>{
+    window.pushUndo();S.xD=S.xD.filter(r=>r.some(v=>String(v??'').trim()!==''));
+    window.XR();window.toast(`🗑 ${empties} leere Zeilen entfernt`);window.L('Leere Zeilen',empties+'')
+  })
 }
 export function qopRemoveDupes(){
   if(!S.xH.length)return;
-  window.pushUndo();const b=S.xD.length,seen=new Set();
-  S.xD=S.xD.filter(r=>{const k=String(r[0]??'');if(seen.has(k))return false;seen.add(k);return true});
-  const d=b-S.xD.length;window.XR();window.toast(`♻ ${d} Duplikate entfernt (${S.xH[0]})`);window.L('Duplikate',d+'')
+  const seen=new Set();const dupeCount=S.xD.filter(r=>{const k=String(r[0]??'');if(seen.has(k))return true;seen.add(k);return false}).length;
+  if(!dupeCount){window.toast('Keine Duplikate','info');return}
+  window.confirmAction(`${dupeCount} Duplikate entfernen (nach ${S.xH[0]})?`,()=>{
+    window.pushUndo();const seen2=new Set();
+    S.xD=S.xD.filter(r=>{const k=String(r[0]??'');if(seen2.has(k))return false;seen2.add(k);return true});
+    window.XR();window.toast(`♻ ${dupeCount} Duplikate entfernt`);window.L('Duplikate',dupeCount+'')
+  })
 }
 export function qopFillMissing(){
   window.pushUndo();let c=0;

@@ -54,6 +54,10 @@ function _getEntitlement() {
       localStorage.removeItem('vba_entitlement');
       return null;
     }
+    // Integrity check: require signed source
+    if (!ent.sig || !['stripe','revenuecat'].includes(ent.source)) {
+      return null;
+    }
     return ent;
   } catch {
     return null;
@@ -87,11 +91,12 @@ export function getLimit(key) {
 
 // ─── Activation ───
 
-export function activatePro(tier, expiresAt, source) {
+export function activatePro(tier, expiresAt, source, sig) {
   localStorage.setItem('vba_entitlement', JSON.stringify({
     tier,        // 'pro' | 'ai'
     expiresAt,   // ISO string
-    source,      // 'stripe' | 'revenuecat' | 'manual'
+    source,      // 'stripe' | 'revenuecat'
+    sig,         // HMAC from server
     activatedAt: new Date().toISOString(),
   }));
   window.dispatchEvent(new CustomEvent('entitlement-change', { detail: { tier } }));

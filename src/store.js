@@ -12,5 +12,9 @@ export function _appLog(msg){S._errLog.push({t:new Date().toISOString(),m:msg});
 // ══════ PERFORMANCE: Type/Quality Cache ══════
 export let _typeCache=null,_typeCacheKey='';
 export let _qualCache=null,_qualCacheKey='';
-export function _cacheKey(){return S.xD.length+':'+S.xH.length+':'+S.undoStack.length+':'+(S.xD[0]?S.xD[0].join(','):'')}
+export function _cacheKey(){
+  // Content-based cache key: uses first+last row + lengths (avoids undo-stack dependency)
+  const last=S.xD[S.xD.length-1];
+  return S.xD.length+':'+S.xH.length+':'+(S.xD[0]?S.xD[0].slice(0,3).join(','):'')+(last?':'+last.slice(0,3).join(','):'')
+}
 export const _origDetectColTypes_cache=null; // will be overridden after detectColTypes is defined

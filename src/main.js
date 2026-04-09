@@ -4,7 +4,7 @@ import './styles/main.css';
 import { IDB } from './idb.js';
 import { S, VBA_BEAST_VERSION, _appLog } from './store.js';
 import { $ } from './utils.js';
-import { NAV, N, T, toggleTheme, toast, H, A, L, RL, macLog, colOpts, navBack, navForward } from './nav.js';
+import { NAV, N, T, toggleTheme, toast, H, A, L, RL, macLog, colOpts, navBack, navForward, confirmAction } from './nav.js';
 
 // ─── Excel ───
 import { XI, XSheet, loadSheet, XLocal, XSaveLocal } from './excel/import.js';
@@ -13,7 +13,7 @@ import { csAddRow, csAddCond, csSyncTargets, csAddNew, CS_RUN, CS_SAVE, renderSa
 import { ieAddElseIf, ieAddCond, ieSyncTargets, ieAddNew, evalCond, evalBlock, IE_RUN, IE_SAVE, renderSavedIE, runSavedIE } from './excel/if-else.js';
 import { ppAdd, ppRenum, PP_RUN, PP_SAVE, renderSavedPipes, runSavedPipe } from './excel/pipeline.js';
 import { evalCalc, CALC, renderCalcH, reCalc } from './excel/calc.js';
-import { MAC_REC, MAC_STOP, MAC_SAVE, renderMacC, renderMacList, MAC_RUN } from './excel/macros.js';
+import { MAC_REC, MAC_STOP, MAC_SAVE, renderMacC, renderMacList, MAC_RUN, _hydrateMacros } from './excel/macros.js';
 import { FM, PV, SO, FI, FIR, SR, TF, DD, VL, CH, VD_RUN } from './excel/operations.js';
 import { swAddRule, swAddCond, swSyncTargets, swAddNew, SW_RUN, SW_SAVE, renderSavedSW, runSavedSW } from './excel/switch.js';
 
@@ -176,6 +176,7 @@ Object.assign(window, {
   isPro, isAI, getTier, canUse, gateFeature, showUpgradePrompt,
   // Utils
   $, S, IDB, H, A, L, RL, macLog, colOpts, _appLog,
+  confirmAction, _hydrateMacros,
 });
 
 console.log(`VBA BEAST ${VBA_BEAST_VERSION} loaded.`);

@@ -17,6 +17,8 @@ import { toast, L, H, A, colOpts, macLog } from '../nav.js';
 
 // ══════ ROBUST IMPORT ══════
 export let _wb=null; // keep workbook for sheet switching
+function _showLoading(msg){const el=$('x-tbl');if(el){const ov=document.createElement('div');ov.className='loading-overlay';ov.id='import-loading';ov.innerHTML=`<div class="spinner spinner-lg"></div><span>${msg||'Laden...'}</span>`;el.style.position='relative';el.appendChild(ov)}}
+function _hideLoading(){const el=document.getElementById('import-loading');if(el)el.remove()}
 export function XI(inp){
   const f=inp.files?.[0];if(!f)return;
   const ext=f.name.split('.').pop().toLowerCase();
@@ -30,19 +32,19 @@ export function XI(inp){
       const delimName=delim==='\t'?'Tab':delim===';'?'Semikolon':'Komma';
       const preview=lines.slice(0,5).map(l=>l.substring(0,120)).join('\n');
       if(!confirm(`📂 Import: ${f.name}\n\nTrennzeichen: ${delimName}\nZeilen: ${lines.length}\nSpalten: ~${(lines[0]||'').split(delim).length}\n\nVorschau:\n${preview}\n\nImportieren?`))return;
-      try{
+      _showLoading('Importiere '+f.name+'...');try{
         const opts={type:'string',raw:false};
         _wb=XLSX.read(text,opts);
         if(_wb.SheetNames.length>1){$('x-sheet').style.display='';$('x-sheet').innerHTML=_wb.SheetNames.map((n,i)=>`<option value="${i}">${n}</option>`).join('')}else{$('x-sheet').style.display='none'}
-        S.xFn=f.name;loadSheet(0);
+        S.xFn=f.name;loadSheet(0);_hideLoading();
         L('Import',`${f.name} ${S.xD.length}×${S.xH.length}`);toast('Import ✓ ('+S.xD.length+' Zeilen)');
-      }catch(err){alert('Import-Fehler: '+err.message);_appLog('CSV Import: '+err.message)}
+      }catch(err){_hideLoading();toast('Import-Fehler: '+err.message,'error');_appLog('CSV Import: '+err.message)}
     };
     r.readAsText(f,'UTF-8');inp.value='';return;
   }
   // XLSX/XLS: binary import with preview confirmation
   const r=new FileReader();
-  r.onload=e=>{try{
+  r.onload=e=>{_showLoading('Importiere '+f.name+'...');try{
     const opts={type:'array',cellDates:true,cellNF:true,cellText:true,raw:false,dense:false};
     _wb=XLSX.read(e.target.result,opts);
     const ws=_wb.Sheets[_wb.SheetNames[0]];
@@ -56,9 +58,9 @@ export function XI(inp){
     }else{$('x-sheet').style.display='none'}
     S.xFn=f.name;
     loadSheet(0);
-    L('Import',`${f.name} ${S.xD.length}×${S.xH.length}${_wb.SheetNames.length>1?' ('+_wb.SheetNames.length+' Sheets)':''}`);
+    _hideLoading();L('Import',`${f.name} ${S.xD.length}×${S.xH.length}${_wb.SheetNames.length>1?' ('+_wb.SheetNames.length+' Sheets)':''}`);
     toast('Import ✓ ('+S.xD.length+' Zeilen)');
-  }catch(e){alert('Import-Fehler: '+e.message);_appLog('Import: '+e.message)}};
+  }catch(e){_hideLoading();toast('Import-Fehler: '+e.message,'error');_appLog('Import: '+e.message)}};
   r.readAsArrayBuffer(f);inp.value='';
 }
 export function XSheet(idx){loadSheet(parseInt(idx))}

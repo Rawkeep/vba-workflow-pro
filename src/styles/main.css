@@ -616,3 +616,38 @@ body.light #nav-history button:hover:not(:disabled){background:rgba(0,0,0,.08);c
 .mode-toggle{display:inline-flex;background:var(--s2);border-radius:8px;border:1px solid var(--bdr);overflow:hidden;font:500 11px var(--mono)}
 .mode-toggle span{padding:6px 14px;cursor:pointer;color:var(--tx3);transition:all .2s}
 .mode-toggle span.active{background:rgba(100,210,255,.15);color:var(--cyn)}
+
+/* ═══ TOAST TYPES ═══ */
+#toast.toast-success{border-color:rgba(48,209,88,.3);color:var(--grn)}
+#toast.toast-error{border-color:rgba(255,69,58,.3);color:var(--red);border-left:3px solid var(--red)}
+#toast.toast-warning{border-color:rgba(255,159,10,.3);color:var(--ora);border-left:3px solid var(--ora)}
+#toast.toast-info{border-color:rgba(10,132,255,.3);color:var(--blu)}
+
+/* ═══ CONFIRM DIALOG ═══ */
+.confirm-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;animation:fadeIn .2s}
+.confirm-dialog{background:var(--s1);border:1px solid rgba(255,69,58,.3);border-radius:14px;padding:20px 24px;max-width:380px;width:90%;box-shadow:0 12px 48px rgba(0,0,0,.5)}
+.confirm-dialog p{font:600 13px var(--sans);color:var(--tx);margin-bottom:14px;line-height:1.5}
+
+/* ═══ LOADING SPINNER ═══ */
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.1);border-top-color:var(--acc);border-radius:50%;animation:spin .6s linear infinite}
+.spinner-lg{width:28px;height:28px;border-width:3px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-overlay{position:absolute;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:10;border-radius:inherit;gap:8px;font:500 12px var(--mono);color:var(--tx2)}
+
+/* ═══ EMPTY STATES ═══ */
+.empty-state{text-align:center;padding:32px 18px;color:var(--tx2)}
+.empty-state .es-ico{font-size:32px;margin-bottom:8px;opacity:.5}
+.empty-state .es-msg{font:500 13px var(--sans);margin-bottom:12px;line-height:1.5}
+.empty-state .es-cta{display:inline-flex}
+
+/* ═══ ACCESSIBILITY ═══ */
+.b:disabled,.b[disabled]{opacity:.4;cursor:not-allowed;pointer-events:none}
+.b:focus-visible,.ni:focus-visible,.tab:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--blu);outline-offset:2px}
+.ni:focus-visible{background:rgba(10,132,255,.1)}
+*:focus:not(:focus-visible){outline:none}
+
+/* ═══ UPGRADE OVERLAY ═══ */
+.upgrade-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;animation:fadeIn .2s}
+.upgrade-modal{background:var(--s1);border:1px solid var(--bdr);border-radius:14px;padding:24px;max-width:400px;width:90%;text-align:center;box-shadow:0 12px 48px rgba(0,0,0,.5)}
+.upgrade-modal h3{font:700 18px var(--mono);color:var(--acc);margin-bottom:8px}
+.upgrade-modal p{font:13px var(--sans);color:var(--tx2);line-height:1.5;margin-bottom:4px}

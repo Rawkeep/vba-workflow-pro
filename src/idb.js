@@ -1,7 +1,7 @@
 // ══════ IndexedDB Storage Layer ══════
 export const IDB={
-  _db:null,_ver:5,_name:'vbaBeastDB',
-  _stores:['autoSave','workspaces','templates','hybrid','docConfig','docCenter','database','emailConfig'],
+  _db:null,_ver:6,_name:'vbaBeastDB',
+  _stores:['autoSave','workspaces','templates','hybrid','docConfig','docCenter','database','emailConfig','macros'],
   open(){
     if(this._db)return Promise.resolve(this._db);
     return new Promise((resolve,reject)=>{
