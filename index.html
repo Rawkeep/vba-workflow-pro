@@ -240,7 +240,7 @@
 <h3 style="color:var(--pk)">SELECT CASE / CASE ELSE <span class="ctx-help" onmouseenter="showHelp(event,'select-case')" onmouseleave="hideHelp()">?</span></h3>
 <p style="font-size:10px;color:var(--tx2);margin-bottom:10px">Multi-Condition Rules — mehrere Bedingungen pro Case, verschiedene Zielspalten, Spalten-Referenzen mit <code>{Name}</code></p>
 <div class="row" style="margin-bottom:8px;align-items:center">
-<span style="font:600 11px var(--mono);color:var(--pk)">Standard-Ziel:</span>
+<span style="font:600 11px var(--mono);color:var(--pk)">Zielspalte:</span>
 <select id="cs-tgt" style="width:130px" onchange="csSyncTargets()"></select>
 <button class="b bo bs" onclick="csAddNew()">+ Neue Zielspalte</button>
 <span style="font:10px var(--mono);color:var(--tx3);margin-left:8px">(jede Regel kann eigenes Ziel haben)</span>
@@ -249,7 +249,7 @@
 <div class="row" style="margin-top:8px;flex-wrap:wrap;gap:6px">
 <button class="b bo bs" onclick="csAddRow()">+ Regel hinzufügen</button>
 <span style="font:600 11px var(--mono);color:var(--ora)">Case Else →</span>
-<input type="text" id="cs-else" placeholder="Default-Wert oder {Spalte}" style="width:170px" title="Wird in Standard-Ziel geschrieben wenn keine Regel passt">
+<input type="text" id="cs-else" placeholder="Default-Wert oder {Spalte}" style="width:170px" title="Wird geschrieben wenn keine Regel passt">
 </div>
 <div class="row" style="margin-top:10px">
 <button class="b bpk" onclick="CS_RUN()">⚡ SELECT CASE ausführen</button>
@@ -272,7 +272,7 @@ Beispiel: Land=DE UND Betrag&gt;1000 → schreibe <code>{Kunde} Premium</code>
 <h3 style="color:var(--ora)">IF / ELSEIF / ELSE Ketten <span class="ctx-help" onmouseenter="showHelp(event,'if-else')" onmouseleave="hideHelp()">?</span></h3>
 <p style="font-size:10px;color:var(--tx2);margin-bottom:10px">Mehrstufige Bedingungen mit AND/OR — wie VBA If...ElseIf...Else...End If</p>
 <div class="row" style="margin-bottom:6px">
-<span style="font:11px var(--mono);color:var(--tx2)">Standard-Ziel:</span>
+<span style="font:11px var(--mono);color:var(--tx2)">Zielspalte:</span>
 <select id="ie-tgt" style="width:130px" onchange="ieSyncTargets()"></select>
 <button class="b bo bs" onclick="ieAddNew()">+ Neue Spalte</button>
 </div>
@@ -444,7 +444,7 @@ Beispiel: Land=DE UND Betrag&gt;1000 → schreibe <code>{Kunde} Premium</code>
 <h3 style="color:var(--cyn)">SWITCH — Multi-Spalten-Verzweigung <span class="ctx-help" onmouseenter="showHelp(event,'select-case')" onmouseleave="hideHelp()">?</span></h3>
 <p style="font-size:10px;color:var(--tx2);margin-bottom:10px">Mehrere Bedingungen pro Regel (AND/OR), jede Regel kann eigene Zielspalte haben</p>
 <div class="row" style="margin-bottom:6px">
-<span style="font:11px var(--mono);color:var(--tx2)">Standard-Ziel:</span>
+<span style="font:11px var(--mono);color:var(--tx2)">Zielspalte:</span>
 <select id="sw-tgt" style="width:120px" onchange="swSyncTargets()"></select>
 <button class="b bo bs" onclick="swAddNew()">+ Neue Spalte</button>
 </div>
