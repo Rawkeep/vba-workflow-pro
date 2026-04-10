@@ -122,7 +122,7 @@ export function IE_RUN(){
   const parsedBlocks=blocks.map(b=>_ieParseBlock(b));
   // Validate: each block must have a target
   for(const p of parsedBlocks){if(!p.tgt){toast('Zielspalte fehlt bei einem Block');return}}
-  const elseTgt=parsedBlocks[0].tgt;
+  const elseTgt=$('ie-else-tgt')?.value||parsedBlocks[0].tgt;
   window.pushUndo();let count=0;
   S.xD.forEach(row=>{
     let matched=false;
@@ -147,7 +147,8 @@ export function IE_SAVE(){
   const blocks=[...document.querySelectorAll('#ie-chain .ie-block')].map(b=>_ieParseBlock(b));
   if(!blocks.length)return;
   const tgts=blocks.map(b=>b.tgt).filter((v,i,a)=>a.indexOf(v)===i).join(',');
-  S.savedIE.push({globalTgt:blocks[0].tgt,elseVal,blocks,name:`IF→${tgts}`});renderSavedIE();toast('IF/ELSE gespeichert ✓');
+  const elseTgt=$('ie-else-tgt')?.value||blocks[0].tgt;
+  S.savedIE.push({globalTgt:elseTgt,elseVal,blocks,name:`IF→${tgts}`});renderSavedIE();toast('IF/ELSE gespeichert ✓');
 }
 
 export function renderSavedIE(){

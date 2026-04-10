@@ -126,7 +126,7 @@ export function CS_RUN(){
     if(!r.tgt){toast('Zielspalte fehlt bei einer Regel');return}
     if(S.xH.indexOf(r.tgt)===-1){toast(`Spalte "${r.tgt}" nicht gefunden`);return}
   }
-  const elseTgt=rules[0].tgt; // Else writes to first rule's target
+  const elseTgt=$('cs-else-tgt')?.value||rules[0].tgt;
   window.pushUndo();
   let count=0;
   S.xD.forEach(row=>{
@@ -159,7 +159,8 @@ export function CS_SAVE(){
   const name=rules.length===1&&rules[0].conds.length===1
     ? `CASE ${rules[0].conds[0].col}→${rules[0].tgt}`
     : `CASE ${rules.length} Regeln→${rules.map(r=>r.tgt).filter((v,i,a)=>a.indexOf(v)===i).join(',')}`;
-  S.savedCases.push({rules,globalTgt:rules[0].tgt,elseVal,name});
+  const elseTgt=$('cs-else-tgt')?.value||rules[0].tgt;
+  S.savedCases.push({rules,globalTgt:elseTgt,elseVal,name});
   renderSavedCases();toast('Case gespeichert ✓');
 }
 

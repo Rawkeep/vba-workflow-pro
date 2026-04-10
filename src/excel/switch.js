@@ -96,7 +96,7 @@ export function SW_RUN(){
   const rules=[...document.querySelectorAll('#sw-rows .sw-rule')].map(r=>_swParseRule(r));
   if(!rules.length){toast('Regeln hinzufügen');return}
   for(const r of rules){if(!r.tgt){toast('Zielspalte fehlt bei einer Regel');return}}
-  const elseTgt=rules[0].tgt;
+  const elseTgt=$('sw-else-tgt')?.value||rules[0].tgt;
   window.pushUndo();let count=0;
   S.xD.forEach(row=>{
     let matched=false;
@@ -121,7 +121,8 @@ export function SW_SAVE(){
   const rules=[...document.querySelectorAll('#sw-rows .sw-rule')].map(r=>_swParseRule(r));
   if(!rules.length)return;
   const tgts=rules.map(r=>r.tgt).filter((v,i,a)=>a.indexOf(v)===i).join(',');
-  S.savedSW.push({globalTgt:rules[0].tgt,elseVal,rules,name:`SW→${tgts}`});renderSavedSW();toast('SWITCH gespeichert ✓');
+  const elseTgt=$('sw-else-tgt')?.value||rules[0].tgt;
+  S.savedSW.push({globalTgt:elseTgt,elseVal,rules,name:`SW→${tgts}`});renderSavedSW();toast('SWITCH gespeichert ✓');
 }
 
 export function renderSavedSW(){
