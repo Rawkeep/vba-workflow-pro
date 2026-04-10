@@ -53,7 +53,8 @@ for (const line of lines) {
       let js = fs.readFileSync(jsPath, 'utf8');
       js = escapeForScript(js);
       // No type="module" — Vite already outputs IIFE, works as regular script
-      out.push('<script>/* app */');
+      // Keep type="module" — inline modules work from file://, they just can't import external files
+      out.push('<script type="module">/* app */');
       out.push(js);
       out.push('</script>');
       console.log(`  ✓ assets/${jsMatch[1]} (${Math.round(js.length/1024)}KB)`);
