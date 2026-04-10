@@ -140,7 +140,7 @@
 </div>
 
 <!-- EXCEL -->
-<div class="pg" id="p-excel">
+<div class="pg pg-office" id="p-excel">
 <h2 style="color:var(--acc)">Excel Automation</h2>
 <div class="cd row" style="flex-wrap:wrap;gap:6px;align-items:center">
 <input type="file" id="xf" accept=".xlsx,.xls,.csv,.tsv,.txt" style="display:none" onchange="XI(this)">
@@ -205,7 +205,7 @@
 <button class="b bo bs" onclick="qopStats()" title="Zusammenfassung aller numerischen Spalten generieren">📊 Statistik</button>
 </div>
 </div>
-<div class="cd" id="x-tbl" style="display:none;padding:0"><div class="tw" id="x-tw" style="max-height:520px"></div></div>
+<div class="cd" id="x-tbl" style="display:none;padding:0;border-radius:4px"><div class="tw" id="x-tw"></div></div>
 <div id="status-bar"><span class="sb-item">Zeilen: <span class="sb-val" id="sb-rows">0</span></span><span class="sb-item">Spalten: <span class="sb-val" id="sb-cols">0</span></span><span class="sb-item" id="sb-sel-wrap" style="display:none">Auswahl: <span class="sb-val" id="sb-sel">0</span></span><span class="sb-item" id="sb-sum-wrap" style="display:none">Summe: <span class="sb-val" id="sb-sum">0</span></span><span class="sb-item" id="sb-avg-wrap" style="display:none">Ø: <span class="sb-val" id="sb-avg">0</span></span></div>
 
 <div class="tabs" id="x-tabs" style="display:none">
@@ -515,7 +515,7 @@ WENN <code>Incoterm=CIF OR Incoterm=CFR</code> → <code>{Land}: Versicherung pr
 </div>
 
 <!-- WORD -->
-<div class="pg" id="p-word">
+<div class="pg pg-office" id="p-word">
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
 <h2 style="color:var(--blu);margin:0">Word / Mail-Merge / Etiketten</h2>
 <div class="mode-toggle" id="word-mode-toggle">
@@ -871,7 +871,7 @@ Mit freundlichen Grüßen</textarea><div id="w-ph" style="margin-top:8px"></div>
 </div>
 
 <!-- EMAIL -->
-<div class="pg" id="p-email">
+<div class="pg pg-office" id="p-email">
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
 <h2 style="color:var(--cyn);margin:0">E-Mail / Serien-Mail</h2>
 <div class="mode-toggle" id="email-mode-toggle">
