@@ -28,7 +28,7 @@ export function showColPicker(ev,action){
     window.showCtxAt(ev,html);
     return;
   }
-  const items=S.xH.map((h,i)=>{if(action==='hide'&&S.hiddenCols.has(i))return'';let onclick='';if(action==='rename')onclick=`XRenC(${i})`;else if(action==='hide')onclick=`XHideC(${i})`;return`<div class="ctx-item" onclick="${onclick};hideCtx()">${window.H(h)}</div>`}).join('');
+  const items=S.xH.map((h,i)=>{if(action==='hide'&&S.hiddenCols.has(i))return'';let onclick='';if(action==='rename')onclick=`hideCtx();XRenC(${i})`;else if(action==='hide')onclick=`hideCtx();XHideC(${i})`;return`<div class="ctx-item" onclick="${onclick}">${window.H(h)}</div>`}).join('');
   const label=action==='rename'?'Spalte umbenennen':'Spalte ausblenden';
   window.showCtxAt(ev,`<div class="ctx-item" style="color:var(--acc);font-weight:600;pointer-events:none">${label}</div><div class="ctx-sep"></div>${items}`);
 }
