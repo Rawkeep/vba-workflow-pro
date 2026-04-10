@@ -177,7 +177,7 @@ export function prefillPivot(ci){
 // Helper: prefill IF/ELSE with numeric column
 export function prefillIE(ci){
   setTimeout(()=>{
-    const tgt=$('ie-tgt');if(tgt)tgt.value=S.xH[ci];
+    // ie-tgt removed — each rule has its own target now
   },100);
 }
 

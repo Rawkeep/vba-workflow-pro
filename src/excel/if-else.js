@@ -58,9 +58,6 @@ export function ieAddElseIf(){
   div.innerHTML=`<div class="ie-conds">${_ieCondHTML(true)}</div><div style="display:flex;align-items:center;gap:6px;margin-top:4px"><button class="b bo bs" style="font-size:9px" onclick="ieAddCond(this.closest('.ie-block'))">+ Bedingung</button><span class="case-arrow" style="color:var(--ora)">→</span><span style="font:600 10px var(--mono);color:var(--tx2)">in</span><select class="ie-rule-tgt" style="width:100px">${colOpts()}</select><span style="font:600 10px var(--mono);color:var(--tx2)">schreibe</span><input type="text" class="ie-res" placeholder="Wert oder {Spalte}" style="width:130px"><button class="b bo bs" onclick="this.closest('.ie-block').remove()">✕</button></div>`;
   d.appendChild(div);
   _ieBindOpChange(div);
-  // Sync default target
-  const globalTgt=$('ie-tgt');
-  if(globalTgt&&globalTgt.value) div.querySelector('.ie-rule-tgt').value=globalTgt.value;
 }
 
 export function ieAddCond(blockDiv){
@@ -72,15 +69,13 @@ export function ieAddCond(blockDiv){
   _ieBindOpChange(cond);
 }
 
-export function ieSyncTargets(){
-  const v=$('ie-tgt').value;
-  document.querySelectorAll('#ie-chain .ie-rule-tgt').forEach(sel=>sel.value=v);
-}
+export function ieSyncTargets(){}
 
 export function ieAddNew(){
   const n=prompt('Neue Spalte:');if(!n)return;
-  if(S.xH.includes(n)){toast('⚠ Spalte "'+n+'" existiert bereits');$('ie-tgt').value=n;return}
-  S.xH.push(n);S.xD.forEach(r=>r.push(''));window.showX();window.XR();$('ie-tgt').value=n;
+  if(S.xH.includes(n)){toast('⚠ Spalte "'+n+'" existiert bereits');return}
+  S.xH.push(n);S.xD.forEach(r=>r.push(''));window.showX();window.XR();
+  document.querySelectorAll('#ie-chain .ie-rule-tgt').forEach(sel=>{if(!sel.value)sel.value=n});
 }
 
 // Parse block conditions from DOM
@@ -121,35 +116,38 @@ export function evalBlock(row,block){
 }
 
 export function IE_RUN(){
-  const globalTgt=$('ie-tgt').value,elseVal=$('ie-else').value;
-  if(!globalTgt){toast('Zielspalte?');return}
+  const elseVal=$('ie-else').value;
   const blocks=[...document.querySelectorAll('#ie-chain .ie-block')];
   if(!blocks.length){toast('Bedingungen hinzufügen');return}
+  const parsedBlocks=blocks.map(b=>_ieParseBlock(b));
+  // Validate: each block must have a target
+  for(const p of parsedBlocks){if(!p.tgt){toast('Zielspalte fehlt bei einem Block');return}}
+  const elseTgt=parsedBlocks[0].tgt;
   window.pushUndo();let count=0;
   S.xD.forEach(row=>{
     let matched=false;
-    for(const block of blocks){
-      const parsed=_ieParseBlock(block);
+    for(const parsed of parsedBlocks){
       if(evalBlock(row,parsed)){
-        const ti=S.xH.indexOf(parsed.tgt||globalTgt);
+        const ti=S.xH.indexOf(parsed.tgt);
         if(ti!==-1){row[ti]=_ieResolve(row,parsed.res);matched=true;count++}
         break;
       }
     }
     if(!matched&&elseVal){
-      const ti=S.xH.indexOf(globalTgt);
+      const ti=S.xH.indexOf(elseTgt);
       if(ti!==-1){row[ti]=_ieResolve(row,elseVal);count++}
     }
   });
   window.XR();$('ie-result').innerHTML=`<span class="tg tg-g">${count} Zeilen</span>`;
-  L('IF/ELSE',`→${globalTgt} (${count}×)`);toast(count+' ✓');
+  L('IF/ELSE',`→${parsedBlocks.map(p=>p.tgt).filter((v,i,a)=>a.indexOf(v)===i).join(',')} (${count}×)`);toast(count+' ✓');
 }
 
 export function IE_SAVE(){
-  const globalTgt=$('ie-tgt').value,elseVal=$('ie-else').value;if(!globalTgt)return;
+  const elseVal=$('ie-else').value;
   const blocks=[...document.querySelectorAll('#ie-chain .ie-block')].map(b=>_ieParseBlock(b));
   if(!blocks.length)return;
-  S.savedIE.push({globalTgt,elseVal,blocks,name:`IF→${globalTgt}`});renderSavedIE();toast('IF/ELSE gespeichert ✓');
+  const tgts=blocks.map(b=>b.tgt).filter((v,i,a)=>a.indexOf(v)===i).join(',');
+  S.savedIE.push({globalTgt:blocks[0].tgt,elseVal,blocks,name:`IF→${tgts}`});renderSavedIE();toast('IF/ELSE gespeichert ✓');
 }
 
 export function renderSavedIE(){

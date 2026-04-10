@@ -33,9 +33,6 @@ export function csAddRow(){
   d.appendChild(div);
   // Bind operator change
   div.querySelectorAll('.cs-cond-op').forEach(s=>s.addEventListener('change',()=>_csCondOpChange(s)));
-  // Sync default target
-  const globalTgt=$('cs-tgt');
-  if(globalTgt&&globalTgt.value) div.querySelector('.cs-rule-tgt').value=globalTgt.value;
 }
 
 // Add condition to existing rule
@@ -48,18 +45,15 @@ export function csAddCond(ruleDiv){
   cond.querySelector('.cs-cond-op').addEventListener('change',function(){_csCondOpChange(this)});
 }
 
-// Sync all rule targets when global target changes
-export function csSyncTargets(){
-  const v=$('cs-tgt').value;
-  document.querySelectorAll('#cs-rows .cs-rule-tgt').forEach(sel=>{
-    if(!sel._userChanged) sel.value=v;
-  });
-}
+// Sync targets (no-op, kept for HTML compatibility)
+export function csSyncTargets(){}
 
 export function csAddNew(){
   const n=prompt('Neue Spalte:');if(!n)return;
-  if(S.xH.includes(n)){toast('⚠ Spalte "'+n+'" existiert bereits');$('cs-tgt').value=n;return}
-  S.xH.push(n);S.xD.forEach(r=>r.push(''));window.showX();window.XR();$('cs-tgt').value=n;
+  if(S.xH.includes(n)){toast('⚠ Spalte "'+n+'" existiert bereits');return}
+  S.xH.push(n);S.xD.forEach(r=>r.push(''));window.showX();window.XR();
+  // Set new column in all rule targets that are empty
+  document.querySelectorAll('#cs-rows .cs-rule-tgt').forEach(sel=>{if(!sel.value)sel.value=n});
 }
 
 // Evaluate a single condition against a row
@@ -124,23 +118,22 @@ function _csEvalRule(row,rule){
 }
 
 export function CS_RUN(){
-  const globalTgt=$('cs-tgt').value;
   const elseVal=$('cs-else').value;
   const rules=_csParseRules();
   if(!rules.length){toast('Regeln hinzufügen');return}
-  // Validate targets
+  // Validate targets — each rule must have its own
   for(const r of rules){
-    const tgt=r.tgt||globalTgt;
-    if(!tgt){toast('Zielspalte fehlt');return}
-    if(S.xH.indexOf(tgt)===-1){toast(`Spalte "${tgt}" nicht gefunden`);return}
+    if(!r.tgt){toast('Zielspalte fehlt bei einer Regel');return}
+    if(S.xH.indexOf(r.tgt)===-1){toast(`Spalte "${r.tgt}" nicht gefunden`);return}
   }
+  const elseTgt=rules[0].tgt; // Else writes to first rule's target
   window.pushUndo();
   let count=0;
   S.xD.forEach(row=>{
     let matched=false;
     for(const rule of rules){
       if(_csEvalRule(row,rule)){
-        const ti=S.xH.indexOf(rule.tgt||globalTgt);
+        const ti=S.xH.indexOf(rule.tgt);
         if(ti!==-1){
           row[ti]=_csResolveResult(row,rule.res);
           matched=true;count++;
@@ -149,7 +142,7 @@ export function CS_RUN(){
       }
     }
     if(!matched&&elseVal){
-      const ti=S.xH.indexOf(globalTgt);
+      const ti=S.xH.indexOf(elseTgt);
       if(ti!==-1){row[ti]=_csResolveResult(row,elseVal);count++}
     }
   });
@@ -160,14 +153,13 @@ export function CS_RUN(){
 }
 
 export function CS_SAVE(){
-  const globalTgt=$('cs-tgt').value;
   const elseVal=$('cs-else').value;
   const rules=_csParseRules();
   if(!rules.length)return;
   const name=rules.length===1&&rules[0].conds.length===1
-    ? `CASE ${rules[0].conds[0].col}→${rules[0].tgt||globalTgt}`
-    : `CASE ${rules.length} Regeln→${rules.map(r=>r.tgt||globalTgt).filter((v,i,a)=>a.indexOf(v)===i).join(',')}`;
-  S.savedCases.push({rules,globalTgt,elseVal,name});
+    ? `CASE ${rules[0].conds[0].col}→${rules[0].tgt}`
+    : `CASE ${rules.length} Regeln→${rules.map(r=>r.tgt).filter((v,i,a)=>a.indexOf(v)===i).join(',')}`;
+  S.savedCases.push({rules,globalTgt:rules[0].tgt,elseVal,name});
   renderSavedCases();toast('Case gespeichert ✓');
 }
 

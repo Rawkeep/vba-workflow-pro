@@ -42,9 +42,6 @@ export function swAddRule(){
   div.innerHTML=`<div class="sw-conds">${_swCondHTML(true)}</div><div style="display:flex;align-items:center;gap:6px;margin-top:4px"><button class="b bo bs" style="font-size:9px" onclick="swAddCond(this.closest('.sw-rule'))">+ Bedingung</button><span class="case-arrow" style="color:var(--cyn)">→</span><span style="font:600 10px var(--mono);color:var(--tx2)">in</span><select class="sw-rule-tgt" style="width:100px">${colOpts()}</select><span style="font:600 10px var(--mono);color:var(--tx2)">schreibe</span><input type="text" class="sw-res" placeholder="Wert oder {Spalte}" style="width:130px"><button class="b bo bs" onclick="this.closest('.sw-rule').remove()">✕</button></div>`;
   d.appendChild(div);
   _swBindOpChange(div);
-  // Sync default target
-  const globalTgt=$('sw-tgt');
-  if(globalTgt&&globalTgt.value) div.querySelector('.sw-rule-tgt').value=globalTgt.value;
 }
 
 export function swAddCond(ruleDiv){
@@ -56,15 +53,13 @@ export function swAddCond(ruleDiv){
   _swBindOpChange(cond);
 }
 
-export function swSyncTargets(){
-  const v=$('sw-tgt').value;
-  document.querySelectorAll('#sw-rows .sw-rule-tgt').forEach(sel=>sel.value=v);
-}
+export function swSyncTargets(){}
 
 export function swAddNew(){
   const n=prompt('Neue Spalte:');if(!n)return;
-  if(S.xH.includes(n)){toast('⚠ Spalte "'+n+'" existiert bereits');$('sw-tgt').value=n;return}
-  S.xH.push(n);S.xD.forEach(r=>r.push(''));window.showX();window.XR();$('sw-tgt').value=n;
+  if(S.xH.includes(n)){toast('⚠ Spalte "'+n+'" existiert bereits');return}
+  S.xH.push(n);S.xD.forEach(r=>r.push(''));window.showX();window.XR();
+  document.querySelectorAll('#sw-rows .sw-rule-tgt').forEach(sel=>{if(!sel.value)sel.value=n});
 }
 
 // Parse rule conditions from DOM
@@ -97,34 +92,36 @@ function _swEvalRule(row,rule){
 }
 
 export function SW_RUN(){
-  const globalTgt=$('sw-tgt').value,elseVal=$('sw-else').value;
-  if(!globalTgt){toast('Zielspalte?');return}
+  const elseVal=$('sw-else').value;
   const rules=[...document.querySelectorAll('#sw-rows .sw-rule')].map(r=>_swParseRule(r));
   if(!rules.length){toast('Regeln hinzufügen');return}
+  for(const r of rules){if(!r.tgt){toast('Zielspalte fehlt bei einer Regel');return}}
+  const elseTgt=rules[0].tgt;
   window.pushUndo();let count=0;
   S.xD.forEach(row=>{
     let matched=false;
     for(const rule of rules){
       if(_swEvalRule(row,rule)){
-        const ti=S.xH.indexOf(rule.tgt||globalTgt);
+        const ti=S.xH.indexOf(rule.tgt);
         if(ti!==-1){row[ti]=_swResolve(row,rule.res);matched=true;count++}
         break;
       }
     }
     if(!matched&&elseVal){
-      const ti=S.xH.indexOf(globalTgt);
+      const ti=S.xH.indexOf(elseTgt);
       if(ti!==-1){row[ti]=_swResolve(row,elseVal);count++}
     }
   });
   window.XR();$('sw-result').innerHTML=`<span class="tg tg-g">${count} Zeilen</span>`;
-  L('SWITCH',`→${globalTgt} (${count}×)`);toast(count+' ✓');
+  L('SWITCH',`→${rules.map(r=>r.tgt).filter((v,i,a)=>a.indexOf(v)===i).join(',')} (${count}×)`);toast(count+' ✓');
 }
 
 export function SW_SAVE(){
-  const globalTgt=$('sw-tgt').value,elseVal=$('sw-else').value;if(!globalTgt)return;
+  const elseVal=$('sw-else').value;
   const rules=[...document.querySelectorAll('#sw-rows .sw-rule')].map(r=>_swParseRule(r));
   if(!rules.length)return;
-  S.savedSW.push({globalTgt,elseVal,rules,name:`SW→${globalTgt}`});renderSavedSW();toast('SWITCH gespeichert ✓');
+  const tgts=rules.map(r=>r.tgt).filter((v,i,a)=>a.indexOf(v)===i).join(',');
+  S.savedSW.push({globalTgt:rules[0].tgt,elseVal,rules,name:`SW→${tgts}`});renderSavedSW();toast('SWITCH gespeichert ✓');
 }
 
 export function renderSavedSW(){
