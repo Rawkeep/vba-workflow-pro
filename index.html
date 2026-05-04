@@ -84,6 +84,9 @@
 <h1>VBA BEAST <span style="color:var(--red)">V3</span></h1>
 <p class="sub">Excel bearbeiten · Serienbriefe erstellen · Dokumente automatisieren — 100% offline &amp; DSGVO-konform</p>
 
+<!-- Hero Quickbar (1-Klick-Aktionen) -->
+<div id="hero-quickbar" class="hero-quickbar"></div>
+
 <!-- Dashboard KPI Stats -->
 <div id="dash-stats">
 <div class="dash-kpi" title="Geladene Zeilen. Virtuelles Scrolling ab 200 Zeilen aktiv." aria-label="Datensaetze"><div class="dk-ico">📊</div><div class="dk-val" id="dk-rows">0</div><div class="dk-lbl">Datensätze</div><div class="dk-bar" style="width:0"></div></div>
@@ -1553,6 +1556,23 @@ Else → <code style="color:var(--ora)">Standard-Export</code>
 </div>
 </div>
 
+</div>
+
+<!-- Command Palette (Cmd/Ctrl+K) -->
+<div id="cmdpal" role="dialog" aria-label="Schnell-Befehl">
+  <div class="cmdpal-box">
+    <div class="cmdpal-head">
+      <span class="cmdpal-prefix">⌘</span>
+      <input type="text" id="cmdpal-input" placeholder="Was möchtest du tun? (z. B. Demo, Export, Pipeline …)" autocomplete="off" spellcheck="false">
+      <span class="cmdpal-hint">Esc</span>
+    </div>
+    <div id="cmdpal-list" class="cmdpal-list"></div>
+    <div class="cmdpal-foot">
+      <span><kbd>↑↓</kbd> wählen</span>
+      <span><kbd>↵</kbd> ausführen</span>
+      <span><kbd>Esc</kbd> schließen</span>
+    </div>
+  </div>
 </div>
 
 <script type="module" src="/src/main.js"></script>

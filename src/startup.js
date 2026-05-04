@@ -20,6 +20,9 @@ import { updateDashboard } from './dashboard/index.js';
 import { tourStart } from './ui/tour.js';
 import { initWordWizard } from './word/wizard.js';
 import { initEmailWizard } from './email/wizard.js';
+import { initKeyboardShortcuts, initEnhancedKeyboard } from './ui/keyboard.js';
+import { initDragDrop } from './ui/drag-drop.js';
+import { initCmdPalette, smartResume, renderHeroQuickbar, wireEmptyStateCTAs } from './ui/quick-launch.js';
 
 // ══════ STARTUP (async IndexedDB) ══════
 (async function _startup(){
@@ -40,6 +43,14 @@ import { initEmailWizard } from './email/wizard.js';
     // Wizards init after DOM paint settles
     setTimeout(()=>{initWordWizard();initEmailWizard()},0);
     updateDashboard();
+    // ── Init previously-dead modules + Quick Launch ──
+    initKeyboardShortcuts();
+    initEnhancedKeyboard();
+    initDragDrop();
+    initCmdPalette();
+    wireEmptyStateCTAs();
+    smartResume();
+    renderHeroQuickbar();
     handleCheckoutReturn();
     syncEntitlement();
     if(!localStorage.getItem('vbaBeastTourDone'))setTimeout(tourStart,800);
@@ -48,6 +59,7 @@ import { initEmailWizard } from './email/wizard.js';
     // Fallback: show app without restored data
     setMode(S.mode||'workspace');
     RL();checkSEM();updateDashboard();
+    try{initKeyboardShortcuts();initEnhancedKeyboard();initDragDrop();initCmdPalette();wireEmptyStateCTAs();renderHeroQuickbar();}catch(_){}
   }
 })();
 // ══════ OFFLINE DETECTION ══════

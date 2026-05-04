@@ -61,6 +61,7 @@ import { showCtxAt, hideCtx, initContextMenuListeners, ctxHeader, ctxCell } from
 import { pasteToCell, clearCell, fillDown, insertRowAbove, insertRowBelow, sortByClick, updateStatusBar } from './ui/cells.js';
 import { initKeyboardShortcuts, initEnhancedKeyboard } from './ui/keyboard.js';
 import { initDragDrop } from './ui/drag-drop.js';
+import { initCmdPalette, openCmdPalette, closeCmdPalette, smartResume, renderHeroQuickbar, wireEmptyStateCTAs } from './ui/quick-launch.js';
 import { DEMOS, loadDemo, loadTemplates } from './ui/demo-data.js';
 import { _lsUsage, autoSave, autoRestore, initAutoSaveHook, qSearchOpen, qSearchClose, qSearch } from './ui/auto-save.js';
 import { safeExec, initErrorBoundaries } from './ui/error-boundary.js';
@@ -182,6 +183,8 @@ Object.assign(window, {
   // Utils
   $, S, IDB, H, A, L, RL, macLog, colOpts, _appLog,
   confirmAction, _hydrateMacros,
+  // Quick Launch
+  openCmdPalette, closeCmdPalette, renderHeroQuickbar,
 });
 
 console.log(`VBA BEAST ${VBA_BEAST_VERSION} loaded.`);
